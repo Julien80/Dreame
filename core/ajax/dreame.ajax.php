@@ -52,7 +52,7 @@ function detectDevices() {
   $accountEmail = 	trim(config::byKey('account-email', 'dreame'));
   $accountPassword = 	trim(config::byKey('account-password', 'dreame'));
   $accountCountry = 	trim(config::byKey('account-country', 'dreame'));
-  $cmd = "micloud get-devices -u " . $accountEmail . " -p " . $accountPassword . " -c ". $accountCountry. " 2>&1";
+  $cmd = "micloud get-devices -u " .addslashes($accountEmail). " -p " .addslashes($accountPassword). " -c ". $accountCountry. " 2>&1";
 	exec($cmd,$outputArray,$resultCode);
   	if ($resultCode != 0) {
       log::add("dreame", "debug", "============================ DISCOVER ERROR============================");
