@@ -52,12 +52,12 @@ function detectDevices() {
   $accountEmail = 	trim(config::byKey('account-email', 'dreame'));
   $accountPassword = 	trim(config::byKey('account-password', 'dreame'));
   $accountCountry = 	trim(config::byKey('account-country', 'dreame'));
-  	$cmd = "micloud -u " . $accountEmail . " -p " . $accountPassword . " -c ". $accountCountry. " 2>&1";
+  	$cmd = "micloud get-devices -u " . $accountEmail . " -p " . $accountPassword . " -c ". $accountCountry. " 2>&1";
 	exec($cmd,$outputArray,$resultCode);
   	if ($resultCode != 0) {
       log::add("dreame", "debug", "============================ DISCOVER ERROR============================");
-      log::add("dreame", "debug", "============================ ERROR============================");
-      log::add("dreame", "debug", $outputArray[23]);
+      log::add("dreame", "debug", " ============================ ERROR============================");
+      log::add("dreame", "debug", json_encode($outputArray));
       log::add("dreame", "debug", "============================ ERROR============================");
       	if (strstr( $outputArray[23],'Access denied')){ //$outputArray[23] = "micloud.micloudexception.MiCloudAccessDenied: Access denied. Did you set the correct api key and/or username?")
 
