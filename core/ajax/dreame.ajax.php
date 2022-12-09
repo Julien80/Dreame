@@ -48,12 +48,14 @@ catch (Exception $e) {
 }
 
 function detectDevices() {
+  log::add("dreame", "debug", "============================ DISCOVER 1============================");
   $accountEmail = 	trim(config::byKey('account-email', 'dreame'));
   $accountPassword = 	trim(config::byKey('account-password', 'dreame'));
   $accountCountry = 	trim(config::byKey('account-country', 'dreame'));
   	$cmd = "micloud -u " . $accountEmail . " -p " . $accountPassword . " -c ". $accountCountry. " 2>&1";
 	exec($cmd,$outputArray,$resultCode);
   	if ($resultCode != 0) {
+      log::add("dreame", "debug", "============================ DISCOVER ERROR============================");
       	if (strstr( $outputArray[23],'Access denied')){ //$outputArray[23] = "micloud.micloudexception.MiCloudAccessDenied: Access denied. Did you set the correct api key and/or username?")
 
           event::add('jeedom::alert', array(
@@ -68,7 +70,7 @@ function detectDevices() {
   		}
       
     }else{
-
+      log::add("dreame", "debug", "============================ DISCOVER NO ERROR============================");
   
     $json = json_decode($outputArray[0]);
 
