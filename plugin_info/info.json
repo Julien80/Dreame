@@ -1,0 +1,52 @@
+{
+	"id" : "dreame",
+	"name" : "Dreame",
+	"specialAttributes" : {
+		"object" : {
+			"toto" : {"name" : {"fr_FR" : "Plop je suis un attribut spécial"},"type" : "input"},
+			"toto2" : {"name" : {"fr_FR" : "Plop je suis un attribut spécial number"},"type" : "number"}
+		},
+		"user" : {
+			"toto" : {"name" : {"fr_FR" : "Plop je suis un attribut spécial"},"type" : "select","values" : [{"value" : "1", "name" : "valeur 1"},{"value" : "plop", "name" : "valeur plop"}]}
+		}
+	},
+	"description" : {
+		"fr_FR": "Plugin permettant de connecter son aspirateur Robot de la marque Dreame à Jeedom. Cela permet ensuite de lui faire effectuer des actions basiques (débuter l'aspiration, arrêter, retour maison). Cela permet également de collecter les informations provenant de l'aspirateur."
+	},
+	"licence" : "AGPL",
+	"author" : "Julien",
+	"require" : "4.2.0",
+	"category" : "devicecommunication",
+	"hasDependency" : true,
+	"hasOwnDeamon" : false,
+	"maxDependancyInstallTime" : 10,
+	"changelog" : "https://jeedom.github.io/plugin-template/#language#/changelog",
+	"documentation" : "https://jeedom.github.io/plugin-template/#language#/",
+	"changelog_beta" : "https://jeedom.github.io/plugin-template/#language#/beta/changelog",
+	"documentation_beta" : "https://jeedom.github.io/plugin-template/#language#/beta/",
+	"link" : {
+		"forum":"Lien vers le forum",
+		"video" : "Lien vers une video"
+	},
+	"language": [
+		"fr_FR",
+		"en_US",
+		"es_ES",
+		"de_DE",
+		"ru_RU",
+		"id_ID",
+		"it_IT",
+		"ja_JP",
+		"pt_PT"
+	],
+	"compatibility": [
+		"miniplus",
+		"smart",
+		"rpi",
+		"docker",
+		"diy",
+		"mobile",
+		"v4",
+		"atlas"
+	]
+}
