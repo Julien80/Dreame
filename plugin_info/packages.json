@@ -4,7 +4,11 @@
   "apt": {
   },
   "pip3": {
-     "python-miio": {}
+    "crypto":{},
+     "python-miio": {},
+     "arc4":{},
+     "pycryptodome==3.0.0" :{}
+
   },
   "npm": {
   },
