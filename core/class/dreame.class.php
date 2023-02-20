@@ -349,7 +349,7 @@ class dreame extends eqLogic {
 		$lifeFilterLeft->setDisplay('forceReturnLineBefore', false);
 		$lifeFilterLeft->save();
       
-        $cleaningTime = $this->getCmd(null, 'cleaningTime');
+             $cleaningTime = $this->getCmd(null, 'cleaningTime');
 		if (!is_object($cleaningTime)) {
 			$cleaningTime = new dreameCmd();
 			$cleaningTime->setName(__('Temps de nettoyage', __FILE__));
@@ -396,7 +396,7 @@ class dreame extends eqLogic {
 		$stop->setEqLogic_id($this->getId());
 		$stop->setType('action');
 		$stop->setSubType('other');
-		$stop->setDisplay('generic_type', 'ENERGY_OFF');
+		$stop->setDisplay('generic_type', '');
 		//$info->setDisplay('forceReturnLineBefore', true);
 		$stop->setDisplay('forceReturnLineAfter', true);
 		$stop->save();
@@ -428,7 +428,7 @@ class dreame extends eqLogic {
 		$home->setEqLogic_id($this->getId());
 		$home->setType('action');
 		$home->setSubType('other');
-		$home->setDisplay('generic_type', 'ENERGY_ON');
+		$home->setDisplay('generic_type', 'ENERGY_OFF');
 		//$info->setDisplay('forceReturnLineBefore', true);
 		$home->setDisplay('forceReturnLineAfter', true);
 		$home->save();
@@ -444,7 +444,7 @@ class dreame extends eqLogic {
 		$refresh->setEqLogic_id($this->getId());
 		$refresh->setType('action');
 		$refresh->setSubType('other');
-		$refresh->setDisplay('generic_type', 'ENERGY_ON');
+		$refresh->setDisplay('generic_type', '');
 		//$info->setDisplay('forceReturnLineBefore', true);
 		$refresh->setDisplay('forceReturnLineAfter', true);
 		$refresh->save();
@@ -456,6 +456,7 @@ class dreame extends eqLogic {
     }
   
 	public function updateCmd() {
+		log::add('dreame', 'debug', 'test ');
 		$did = 			$this->getConfiguration('did');
 		$ip = 			$this->getConfiguration('ip');
 		$token = 		$this->getConfiguration('token');
@@ -463,19 +464,20 @@ class dreame extends eqLogic {
 		
 		
 		if(!empty($ip) && !empty($token)) {
+			log::add('dreame', 'debug', '[ENDPOINT] /appliance_status_with_token_key');
 			$cmd = "sudo miiocli --output json dreamevacuum --ip " . $ip . " --token " . $token ." status 2>&1";
 			exec($cmd,$outputArray,$resultCode);
 			log::add('dreame', 'debug', '[GET CMD] ' .$cmd);
 		} else {
-			log::add('dreame', 'debug', "Anomalie Token ou IP Vide");
+			log::add('dreame', 'debug', "Can't update $id, missing:<br/> Either => credentials + ip <br/> Either => token + key + ip");
 			return;
 		}
 		
-		log::add('dreame', 'debug', 'json outputArray '.json_encode($outputArray));
+		log::add('dreame', 'debug', 'a '.json_encode($outputArray));
 		$json = json_decode($outputArray[0]);
       	if ($json != null) 
         {
-          log::add('dreame', 'debug', 'json json '.json_encode($json));
+          log::add('dreame', 'debug', 'a '.json_encode($json));
 
           $this->checkAndUpdateCmd("batteryLevel", 		$json->battery_level);
           $this->checkAndUpdateCmd("isCharging", 		$json->charging_state);
@@ -492,30 +494,40 @@ class dreame extends eqLogic {
 
           if (($json->device_status == 2) AND ($json->charging_state == 1)){
               $this->checkAndUpdateCmd("statusDevice","Prêt à démarrer");
+               log::add('dreame', 'debug', '[ici223');
           }
 
           if ($json->device_status == 1){
               $this->checkAndUpdateCmd("statusDevice","Aspiration en cours");
+               log::add('dreame', 'debug', '[ici223');
           }
 
           if (($json->device_status == 2) AND ($json->charging_state != 1)){
               $this->checkAndUpdateCmd("statusDevice","Arret");
+               log::add('dreame', 'debug', '[ici223');
           }
 
           if (($json->device_status == 3) AND ($json->charging_state != 1)){
               $this->checkAndUpdateCmd("statusDevice","En Pause");
+               log::add('dreame', 'debug', '[ici223');
           }
-        if ($json->device_status == 4){
+                  if ($json->device_status == 4){
               $this->checkAndUpdateCmd("statusDevice","Erreur");
+               log::add('dreame', 'debug', '[ici223');
           }
         if (($json->device_status == 5) AND ($json->charging_state == 5)){
               $this->checkAndUpdateCmd("statusDevice","Retour Maison");
+               log::add('dreame', 'debug', '[ici223');
           }
         
               if (($json->device_status == 6) AND ($json->charging_state == 1)){
               $this->checkAndUpdateCmd("statusDevice","En Charge");
+               log::add('dreame', 'debug', '[ici223');
           }
         }
+
+		//log::add("dreame", "debug", "type" . gettype($outputArray[0]) . "last json error: " . json_last_error_msg());
+		// log::add('dreame', 'debug', '[GET STATUS JSON] ' . var_dump($json));
 	}
 
 	public function sendCmd($cmd, $val = "") {
@@ -541,7 +553,7 @@ class dreame extends eqLogic {
 				
 			default:
 			throw new Error('This should not append!');
-			log::add('dreame', 'debug', 'Error while executing cmd ' . $this->getLogicalId());
+			log::add('dreame', 'warn', 'Error while executing cmd ' . $this->getLogicalId());
 			return;
 		}
 		
@@ -549,18 +561,27 @@ class dreame extends eqLogic {
 		if($cmdLabel == "")
 		return;
 		
+		// when set a new lower temp target, a bug occurs. forcing eco-mode state fix that
+		
+		
+		
+		
+		
 		if(!empty($ip) && !empty($token)) {
+			log::add('dreame', 'debug', '[ENDPOINT] /appliance_status_with_token_key');
+			//$data = 'coucou';
+			//sudo miiocli dreamevacuum --ip 192.168.1.50 --token 75464258487539517756616e6e4f346b start
 			$cmd = "miiocli dreamevacuum --ip " . $ip . " --token " . $token ." ".$cmdLabel;
 			exec($cmd,$outputArray,$resultCode);
 			log::add('dreame', 'debug', '[GET CMD] ' .$cmd);
           	self::updateCmd();
-			} 
-		else {
-			log::add('dreame', 'debug', "Anomalie Token ou IP Vide");
-			return;
+			//$data = curlMideawifiDocker("/appliance_status_with_token_key", array("ipaddress" => $ip, "token" => $token, "key" => $key));
+		} else {
+			log::add('dreame', 'debug', "Can't update $id, missing:<br/> Either => credentials + ip <br/> Either => token + key + ip");
+			return; // can't update
 		}
 
-	} 
+	} // sendCmd
   
 }
 
@@ -594,15 +615,18 @@ class dreameCmd extends cmd {
 				$eqLogic->updateCmd();
 				break;
 			case 'start':
-            	log::add('dreame', 'debug', 'start : ' . $this->getLogicalId());
+            log::add('dreame', 'debug', 'start : ' . $this->getLogicalId());
+				//$eqLogic->start();
             	$eqLogic->sendCmd('start');
 				break;
 			case 'stop':
-            	log::add('dreame', 'debug', 'stop : ' . $this->getLogicalId());
+            log::add('dreame', 'debug', 'stop : ' . $this->getLogicalId());
+				//$eqLogic->stop();
             	$eqLogic->sendCmd('stop');
 				break;
 			case 'home':
-            	log::add('dreame', 'debug', 'home : ' . $this->getLogicalId());
+            log::add('dreame', 'debug', 'home : ' . $this->getLogicalId());
+				//$eqLogic->home();
             	$eqLogic->sendCmd('home');
 				break;
 			     

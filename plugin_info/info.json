@@ -11,12 +11,12 @@
 		}
 	},
 	"description" : {
-		"fr_FR": "Plugin permettant de connecter son aspirateur Robot de la marque Dreame à Jeedom. Cela permet ensuite de lui faire effectuer des actions basiques (débuter l'aspiration, arrêter, retour maison). Cela permet également de collecter les informations provenant de l'aspirateur."
+		"fr_FR": "Template servant de base à la création de plugins pour Jeedom"
 	},
 	"licence" : "AGPL",
 	"author" : "Julien",
 	"require" : "4.2.0",
-	"category" : "devicecommunication",
+	"category" : "programming",
 	"hasDependency" : true,
 	"hasOwnDeamon" : false,
 	"maxDependancyInstallTime" : 10,

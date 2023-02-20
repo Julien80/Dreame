@@ -116,7 +116,7 @@ function detectDevices() {
 			
 		},
 		done: function(data) {
-			console.log('Detection terminée');
+			console.log('=== Midea Discovery finished ===');
 		}
 	});
 
