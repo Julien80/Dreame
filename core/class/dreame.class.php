@@ -235,7 +235,7 @@ class dreame extends eqLogic {
 		$statusDevice->setType('info');
 		$statusDevice->setTemplate('dashboard', 'line');
       	$statusDevice->setTemplate('mobile', 'line');
-		$statusDevice->setSubType('other');
+		$statusDevice->setSubType('string');
 		$statusDevice->setIsVisible(1);
 		$statusDevice->setIsHistorized(0);
 		$statusDevice->setDisplay('forceReturnLineBefore', true);
@@ -494,36 +494,33 @@ class dreame extends eqLogic {
 
           if (($json->device_status == 2) AND ($json->charging_state == 1)){
               $this->checkAndUpdateCmd("statusDevice","Prêt à démarrer");
-               log::add('dreame', 'debug', '[ici223');
           }
 
           if ($json->device_status == 1){
               $this->checkAndUpdateCmd("statusDevice","Aspiration en cours");
-               log::add('dreame', 'debug', '[ici223');
           }
 
           if (($json->device_status == 2) AND ($json->charging_state != 1)){
               $this->checkAndUpdateCmd("statusDevice","Arret");
-               log::add('dreame', 'debug', '[ici223');
           }
 
           if (($json->device_status == 3) AND ($json->charging_state != 1)){
               $this->checkAndUpdateCmd("statusDevice","En Pause");
-               log::add('dreame', 'debug', '[ici223');
           }
                   if ($json->device_status == 4){
               $this->checkAndUpdateCmd("statusDevice","Erreur");
-               log::add('dreame', 'debug', '[ici223');
           }
         if (($json->device_status == 5) AND ($json->charging_state == 5)){
               $this->checkAndUpdateCmd("statusDevice","Retour Maison");
-               log::add('dreame', 'debug', '[ici223');
           }
         
               if (($json->device_status == 6) AND ($json->charging_state == 1)){
               $this->checkAndUpdateCmd("statusDevice","En Charge");
-               log::add('dreame', 'debug', '[ici223');
           }
+		  if ($json->device_status == 7){
+			$this->checkAndUpdateCmd("statusDevice","Aspiration et Lavage en cours.");
+			 
+			}
         }
 
 		//log::add("dreame", "debug", "type" . gettype($outputArray[0]) . "last json error: " . json_last_error_msg());
@@ -569,13 +566,10 @@ class dreame extends eqLogic {
 		
 		if(!empty($ip) && !empty($token)) {
 			log::add('dreame', 'debug', '[ENDPOINT] /appliance_status_with_token_key');
-			//$data = 'coucou';
-			//sudo miiocli dreamevacuum --ip 192.168.1.50 --token 75464258487539517756616e6e4f346b start
 			$cmd = "miiocli dreamevacuum --ip " . $ip . " --token " . $token ." ".$cmdLabel;
 			exec($cmd,$outputArray,$resultCode);
 			log::add('dreame', 'debug', '[GET CMD] ' .$cmd);
           	self::updateCmd();
-			//$data = curlMideawifiDocker("/appliance_status_with_token_key", array("ipaddress" => $ip, "token" => $token, "key" => $key));
 		} else {
 			log::add('dreame', 'debug', "Can't update $id, missing:<br/> Either => credentials + ip <br/> Either => token + key + ip");
 			return; // can't update
@@ -616,17 +610,14 @@ class dreameCmd extends cmd {
 				break;
 			case 'start':
             log::add('dreame', 'debug', 'start : ' . $this->getLogicalId());
-				//$eqLogic->start();
             	$eqLogic->sendCmd('start');
 				break;
 			case 'stop':
             log::add('dreame', 'debug', 'stop : ' . $this->getLogicalId());
-				//$eqLogic->stop();
             	$eqLogic->sendCmd('stop');
 				break;
 			case 'home':
             log::add('dreame', 'debug', 'home : ' . $this->getLogicalId());
-				//$eqLogic->home();
             	$eqLogic->sendCmd('home');
 				break;
 			     
