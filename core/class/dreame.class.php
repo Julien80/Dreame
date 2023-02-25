@@ -465,7 +465,7 @@ class dreame extends eqLogic {
 		
 		if(!empty($ip) && !empty($token)) {
 			log::add('dreame', 'debug', '[ENDPOINT] /appliance_status_with_token_key');
-			$cmd = "sudo miiocli --output json dreamevacuum --ip " . $ip . " --token " . $token ." status 2>&1";
+			$cmd = "sudo miiocli --output json dreamevacuum -d --ip " . $ip . " --token " . $token ." status 2>&1";
 			exec($cmd,$outputArray,$resultCode);
 			log::add('dreame', 'debug', '[GET CMD] ' .$cmd);
 		} else {
