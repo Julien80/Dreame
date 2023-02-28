@@ -4,7 +4,7 @@
   "apt": {
   },
   "pip3": {
-     "python-miio": {}
+     "git+https://github.com/rytilahti/python-miio.git": {}
   },
   "npm": {
   },
