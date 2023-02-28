@@ -463,61 +463,73 @@ class dreame extends eqLogic {
 		$model = 		$this->getConfiguration('model'); 
 		
 		
-		if(!empty($ip) && !empty($token)) {
+		if (!empty($ip) && !empty($token)) {
 			log::add('dreame', 'debug', '[ENDPOINT] /appliance_status_with_token_key');
-			$cmd = "sudo miiocli --output json dreamevacuum --ip " . $ip . " --token " . $token ." status 2>&1";
-			exec($cmd,$outputArray,$resultCode);
+			$cmd = "sudo miiocli -o json_pretty genericmiot --ip " . $ip . " --token " . $token ." status 2>&1";
+			exec($cmd, $outputArray, $resultCode);
 			log::add('dreame', 'debug', '[GET CMD] ' .$cmd);
 		} else {
 			log::add('dreame', 'debug', "Can't update $id, missing:<br/> Either => credentials + ip <br/> Either => token + key + ip");
 			return;
 		}
 		
-		log::add('dreame', 'debug', 'a '.json_encode($outputArray));
-		$json = json_decode($outputArray[0]);
+		$log_output = implode(PHP_EOL, $outputArray);
+		log::add('dreame', 'debug', 'JSON Complet ' . $log_output);
+		
+		// Chercher la position du premier caractère de la première ligne qui contient le JSON
+		$pos = strpos($log_output, '{');
+		$json_string = substr($log_output, $pos);
+		$json = json_decode($json_string);
+		
+		if ($json === null) {
+			log::add('dreame', 'error', 'Error decoding JSON: ' . json_last_error_msg());
+			return;
+		}
+		
+		log::add('dreame', 'debug', 'JSON ' . json_encode($json));
+		log::add('dreame', 'debug', 'Battery ' . $json->{"battery:battery-level"});
+		
       	if ($json != null) 
         {
-          log::add('dreame', 'debug', 'a '.json_encode($json));
+          $this->checkAndUpdateCmd("batteryLevel", 		$json->{"battery:battery-level"});
+          $this->checkAndUpdateCmd("isCharging", 		$json->{"battery:charging-state"});
+          $this->checkAndUpdateCmd("error", 		$json->{"vacuum:fault"});
+          $this->checkAndUpdateCmd("stateDevice", 		$json->{"vacuum:status"});
+          $this->checkAndUpdateCmd("timeBrush", 		$json->{"brush-cleaner:brush-left-time"});
+          $this->checkAndUpdateCmd("lifeBrush", 		$json->{"brush-cleaner:brush-life-level"});
+          $this->checkAndUpdateCmd("timeBrushLeft", 		"0");
+          $this->checkAndUpdateCmd("lifeBrushLeft", 		"0");
+          $this->checkAndUpdateCmd("timeFilterLeft", 		$json->{"filter:filter-life-level"});
+          $this->checkAndUpdateCmd("lifeFilterLeft", 		$json->{"filter:filter-left-time"});
+          $this->checkAndUpdateCmd("cleaningTime", 		$json->{"vacuum-extend:cleaning-time"});
+          $this->checkAndUpdateCmd("cleaningArea", 		$json->{"vacuum-extend:cleaning-area"});
 
-          $this->checkAndUpdateCmd("batteryLevel", 		$json->battery_level);
-          $this->checkAndUpdateCmd("isCharging", 		$json->charging_state);
-          $this->checkAndUpdateCmd("error", 		$json->device_faults);
-          $this->checkAndUpdateCmd("stateDevice", 		$json->device_status);
-          $this->checkAndUpdateCmd("timeBrush", 		$json->brush_left_time);
-          $this->checkAndUpdateCmd("lifeBrush", 		$json->brush_life_level);
-          $this->checkAndUpdateCmd("timeBrushLeft", 		$json->brush_left_time2);
-          $this->checkAndUpdateCmd("lifeBrushLeft", 		$json->brush_life_level2);
-          $this->checkAndUpdateCmd("timeFilterLeft", 		$json->filter_left_time);
-          $this->checkAndUpdateCmd("lifeFilterLeft", 		$json->filter_life_level);
-          $this->checkAndUpdateCmd("cleaningTime", 		$json->cleaning_time);
-          $this->checkAndUpdateCmd("cleaningArea", 		$json->cleaning_area);
-
-          if (($json->device_status == 2) AND ($json->charging_state == 1)){
+          if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} == 1)){
               $this->checkAndUpdateCmd("statusDevice","Prêt à démarrer");
           }
 
-          if ($json->device_status == 1){
+          if ($json->{"vacuum:status"} == 1){
               $this->checkAndUpdateCmd("statusDevice","Aspiration en cours");
           }
 
-          if (($json->device_status == 2) AND ($json->charging_state != 1)){
+          if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} != 1)){
               $this->checkAndUpdateCmd("statusDevice","Arret");
           }
 
-          if (($json->device_status == 3) AND ($json->charging_state != 1)){
+          if (($json->{"vacuum:status"} == 3) AND ($json->{"battery:charging-state"} != 1)){
               $this->checkAndUpdateCmd("statusDevice","En Pause");
           }
-                  if ($json->device_status == 4){
+        if ($json->{"vacuum:status"} == 4){
               $this->checkAndUpdateCmd("statusDevice","Erreur");
           }
-        if (($json->device_status == 5) AND ($json->charging_state == 5)){
+        if (($json->{"vacuum:status"} == 5) AND ($json->{"battery:charging-state"} == 5)){
               $this->checkAndUpdateCmd("statusDevice","Retour Maison");
           }
         
-              if (($json->device_status == 6) AND ($json->charging_state == 1)){
+              if (($json->{"vacuum:status"} == 6) AND ($json->{"battery:charging-state"} == 1)){
               $this->checkAndUpdateCmd("statusDevice","En Charge");
           }
-		  if ($json->device_status == 7){
+		  if ($json->{"vacuum:status"} == 7){
 			$this->checkAndUpdateCmd("statusDevice","Aspiration et Lavage en cours.");
 			 
 			}
@@ -539,13 +551,13 @@ class dreame extends eqLogic {
 		$cmdValue = "";
 		switch ($cmd) {
 			case "home":
-				$cmdLabel = "home";
+				$cmdLabel = "battery:start-charge";
 				break;
 			case "start":
-				$cmdLabel = "start";
+				$cmdLabel = "vacuum:start-sweep";
 				break;
 			case "stop":
-				$cmdLabel = "stop";
+				$cmdLabel = "vacuum:stop-sweeping";
 				break;
 				
 			default:
@@ -566,7 +578,7 @@ class dreame extends eqLogic {
 		
 		if(!empty($ip) && !empty($token)) {
 			log::add('dreame', 'debug', '[ENDPOINT] /appliance_status_with_token_key');
-			$cmd = "miiocli dreamevacuum --ip " . $ip . " --token " . $token ." ".$cmdLabel;
+			$cmd = "miiocli genericmiot --ip " . $ip . " --token " . $token ." call ".$cmdLabel;
 			exec($cmd,$outputArray,$resultCode);
 			log::add('dreame', 'debug', '[GET CMD] ' .$cmd);
           	self::updateCmd();
