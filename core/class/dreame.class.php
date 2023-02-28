@@ -499,8 +499,8 @@ class dreame extends eqLogic {
           $this->checkAndUpdateCmd("lifeBrush", 		$json->{"brush-cleaner:brush-life-level"});
           $this->checkAndUpdateCmd("timeBrushLeft", 		"0");
           $this->checkAndUpdateCmd("lifeBrushLeft", 		"0");
-          $this->checkAndUpdateCmd("timeFilterLeft", 		$json->{"filter:filter-life-time"});
-          $this->checkAndUpdateCmd("lifeFilterLeft", 		$json->{"filter:filter-left-level"});
+          $this->checkAndUpdateCmd("timeFilterLeft", 		$json->{"filter:filter-left-time"});
+          $this->checkAndUpdateCmd("lifeFilterLeft", 		$json->{"filter:filter-life-level"});
           $this->checkAndUpdateCmd("cleaningTime", 		$json->{"vacuum-extend:cleaning-time"});
           $this->checkAndUpdateCmd("cleaningArea", 		$json->{"vacuum-extend:cleaning-area"});
 
