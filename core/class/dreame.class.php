@@ -250,7 +250,7 @@ class dreame extends eqLogic {
 		$timeBrush->setLogicalId('timeBrush');
 		$timeBrush->setEqLogic_id($this->getId());
 		$timeBrush->setType('info');
-		$timeBrush->setUnite('min');
+		$timeBrush->setUnite('h');
       	$timeBrush->setTemplate('dashboard', 'line');
       	$timeBrush->setTemplate('mobile', 'line');
 		$timeBrush->setSubType('numeric');
@@ -286,7 +286,7 @@ class dreame extends eqLogic {
 		$timeBrushLeft->setLogicalId('timeBrushLeft');
 		$timeBrushLeft->setEqLogic_id($this->getId());
 		$timeBrushLeft->setType('info');
-		$timeBrushLeft->setUnite('min');
+		$timeBrushLeft->setUnite('h');
 		$timeBrushLeft->setSubType('numeric');
         $timeBrushLeft->setTemplate('dashboard', 'line');
       	$timeBrushLeft->setTemplate('mobile', 'line');
@@ -322,7 +322,7 @@ class dreame extends eqLogic {
 		$timeFilterLeft->setLogicalId('timeFilterLeft');
 		$timeFilterLeft->setEqLogic_id($this->getId());
 		$timeFilterLeft->setType('info');
-		$timeFilterLeft->setUnite('min');
+		$timeFilterLeft->setUnite('h');
 		$timeFilterLeft->setSubType('numeric');
         $timeFilterLeft->setTemplate('dashboard', 'line');
      	$timeFilterLeft->setTemplate('mobile', 'line');
@@ -499,8 +499,8 @@ class dreame extends eqLogic {
           $this->checkAndUpdateCmd("lifeBrush", 		$json->{"brush-cleaner:brush-life-level"});
           $this->checkAndUpdateCmd("timeBrushLeft", 		"0");
           $this->checkAndUpdateCmd("lifeBrushLeft", 		"0");
-          $this->checkAndUpdateCmd("timeFilterLeft", 		$json->{"filter:filter-life-level"});
-          $this->checkAndUpdateCmd("lifeFilterLeft", 		$json->{"filter:filter-left-time"});
+          $this->checkAndUpdateCmd("timeFilterLeft", 		$json->{"filter:filter-life-time"});
+          $this->checkAndUpdateCmd("lifeFilterLeft", 		$json->{"filter:filter-left-level"});
           $this->checkAndUpdateCmd("cleaningTime", 		$json->{"vacuum-extend:cleaning-time"});
           $this->checkAndUpdateCmd("cleaningArea", 		$json->{"vacuum-extend:cleaning-area"});
 
