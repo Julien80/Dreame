@@ -432,6 +432,36 @@ class dreame extends eqLogic {
 		//$info->setDisplay('forceReturnLineBefore', true);
 		$home->setDisplay('forceReturnLineAfter', true);
 		$home->save();
+
+		$position = $this->getCmd('action', 'position');
+		if (!is_object($position)) {
+			$position = new dreameCmd();
+			$position->setName(__('Cherche Moi', __FILE__));
+		}
+		$position->setOrder($order++);
+		$position->setIsVisible(1);
+		$position->setLogicalId('position');
+		$position->setEqLogic_id($this->getId());
+		$position->setType('action');
+		$position->setSubType('other');
+		$position->setDisplay('generic_type', '');
+		$position->setDisplay('forceReturnLineAfter', true);
+		$position->save();
+
+		$play_sound = $this->getCmd('action', 'play-sound');
+		if (!is_object($play_sound)) {
+			$play_sound = new dreameCmd();
+			$play_sound->setName(__('Cherche Moi', __FILE__));
+		}
+		$play_sound->setOrder($order++);
+		$play_sound->setIsVisible(1);
+		$play_sound->setLogicalId('position');
+		$play_sound->setEqLogic_id($this->getId());
+		$play_sound->setType('action');
+		$play_sound->setSubType('other');
+		$play_sound->setDisplay('generic_type', '');
+		p$$play_sound->setDisplay('forceReturnLineAfter', true);
+		$play_sound->save();
       
         $refresh = $this->getCmd('action', 'refresh');
 		if (!is_object($refresh)) {
@@ -535,6 +565,10 @@ class dreame extends eqLogic {
 			}
         }
 
+		//error 106 Demande de vidage de bac a poussière+ nettoyage de la planche de lavage de serpillière
+		//statut 8 sechage de la serpillere
+		//statut 
+
 		//log::add("dreame", "debug", "type" . gettype($outputArray[0]) . "last json error: " . json_last_error_msg());
 		// log::add('dreame', 'debug', '[GET STATUS JSON] ' . var_dump($json));
 	}
@@ -559,7 +593,12 @@ class dreame extends eqLogic {
 			case "stop":
 				$cmdLabel = "vacuum:stop-sweeping";
 				break;
-				
+			case "position":
+				$cmdLabel = "audio:position";
+				break;
+			case "play-sound":
+				$cmdLabel = "audio:play-sound";
+				break;
 			default:
 			throw new Error('This should not append!');
 			log::add('dreame', 'warn', 'Error while executing cmd ' . $this->getLogicalId());
@@ -631,8 +670,15 @@ class dreameCmd extends cmd {
 			case 'home':
             log::add('dreame', 'debug', 'home : ' . $this->getLogicalId());
             	$eqLogic->sendCmd('home');
+				break;		
+			case 'position':
+				log::add('dreame', 'debug', 'position : ' . $this->getLogicalId());
+            	$eqLogic->sendCmd('position');
 				break;
-			     
+			case 'play-sound':
+				log::add('dreame', 'debug', 'play-sound : ' . $this->getLogicalId());
+				$eqLogic->sendCmd('play-sound');
+				break;
 			default:
 				throw new Error('This should not append!');
 				log::add('dreame', 'error', 'Aucune commande associée : ' . $this->getLogicalId());
