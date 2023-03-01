@@ -578,7 +578,7 @@ class dreame extends eqLogic {
 		
 		if(!empty($ip) && !empty($token)) {
 			log::add('dreame', 'debug', '[ENDPOINT] /appliance_status_with_token_key');
-			$cmd = "miiocli genericmiot --ip " . $ip . " --token " . $token ." call ".$cmdLabel;
+			$cmd = "sudo miiocli genericmiot --ip " . $ip . " --token " . $token ." call ".$cmdLabel;
 			exec($cmd,$outputArray,$resultCode);
 			log::add('dreame', 'debug', '[GET CMD] ' .$cmd);
           	self::updateCmd();
