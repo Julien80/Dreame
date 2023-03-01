@@ -1,11 +1,27 @@
 {
   "pre-install": {
   },
-  "apt": {
-  },
-  "pip3": {
-     "git+https://github.com/rytilahti/python-miio.git": {}
-  },
+   {
+   "pip3": {
+     "pyudev" : {},
+     "construct" : {},
+     "requests" : {},
+     "pyserial" : {},
+     "future" : {},
+     "pycrypto" : {},
+     "cryptography" : {},
+     "enum34" : {},
+     "enum-compat" : {},
+     "wheel" : {},
+     "python-miio" : {}
+    },
+    "apt" : {
+      "python3-cryptography" : {},
+      "libffi-dev" : {},
+      "libssl-dev" : {}
+    }
+  }
+
   "npm": {
   },
   "yarn": {
