@@ -18,13 +18,19 @@
 require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement après l'installation du plugin
-function template_install() {
+function dreame_install() {
+    log::add('dreame', 'debug', 'Installation Python-miio');
+    $cmd = "sudo pip install git+https://github.com/rytilahti/python-miio.git 2>&1";
+    exec($cmd, $outputArray, $resultCode);
+    log::add('dreame', 'debug', '[GET CMD] ' .$cmd);
 }
 
+
+
 // Fonction exécutée automatiquement après la mise à jour du plugin
-function template_update() {
+function dreame_update() {
 }
 
 // Fonction exécutée automatiquement après la suppression du plugin
-function template_remove() {
+function dreame_remove() {
 }
