@@ -206,6 +206,29 @@ class dreame extends eqLogic {
 		$error->setIsHistorized(1);
 		$error->setDisplay('forceReturnLineBefore', false);
 		$error->save();
+
+		$errorDevice = $this->getCmd(null, 'errorDevice');
+		if (!is_object($errorDevice)) {
+			$errorDevice = new dreameCmd();
+			$errorDevice->setName(__('ErreurDevice', __FILE__));
+		}
+		$errorDevice->setOrder($order++);
+		$errorDevice->setLogicalId('errorDevice');
+		$errorDevice->setEqLogic_id($this->getId());
+		$errorDevice->setType('info');
+		$errorDevice->setTemplate('dashboard', 'line');
+      	$errorDevice->setTemplate('mobile', 'line');
+		$errorDevice->setSubType('numeric');
+		$errorDevice->setIsVisible(1);
+		$errorDevice->setIsHistorized(1);
+		$errorDevice->setDisplay('forceReturnLineBefore', false);
+		$errorDevice->save();
+      
+        $statusDevice = $this->getCmd(null, 'statusDevice');
+		if (!is_object($statusDevice)) {
+			$statusDevice = new dreameCmd();
+			$statusDevice->setName(__('Etat', __FILE__));
+		}
       
         $stateDevice = $this->getCmd(null, 'stateDevice');
 		if (!is_object($stateDevice)) {
@@ -494,83 +517,89 @@ class dreame extends eqLogic {
 		
 		
 		if (!empty($ip) && !empty($token)) {
-			log::add('dreame', 'debug', '[ENDPOINT] /appliance_status_with_token_key');
 			$cmd = "sudo miiocli -o json_pretty genericmiot --ip " . $ip . " --token " . $token ." status 2>&1";
 			exec($cmd, $outputArray, $resultCode);
 			log::add('dreame', 'debug', '[GET CMD] ' .$cmd);
 		} else {
-			log::add('dreame', 'debug', "Can't update $id, missing:<br/> Either => credentials + ip <br/> Either => token + key + ip");
+			log::add('dreame', 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
 			return;
 		}
 		
 		$log_output = implode(PHP_EOL, $outputArray);
 		log::add('dreame', 'debug', 'JSON Complet ' . $log_output);
-		
-		// Chercher la position du premier caractère de la première ligne qui contient le JSON
 		$pos = strpos($log_output, '{');
 		$json_string = substr($log_output, $pos);
 		$json = json_decode($json_string);
 		
 		if ($json === null) {
-			log::add('dreame', 'error', 'Error decoding JSON: ' . json_last_error_msg());
+			log::add('dreame', 'error', 'Erreur JSON (null) : ' . json_last_error_msg());
 			return;
 		}
-		
 		log::add('dreame', 'debug', 'JSON ' . json_encode($json));
-		log::add('dreame', 'debug', 'Battery ' . $json->{"battery:battery-level"});
 		
       	if ($json != null) 
         {
-          $this->checkAndUpdateCmd("batteryLevel", 		$json->{"battery:battery-level"});
-          $this->checkAndUpdateCmd("isCharging", 		$json->{"battery:charging-state"});
-          $this->checkAndUpdateCmd("error", 		$json->{"vacuum:fault"});
-          $this->checkAndUpdateCmd("stateDevice", 		$json->{"vacuum:status"});
-          $this->checkAndUpdateCmd("timeBrush", 		$json->{"brush-cleaner:brush-left-time"});
-          $this->checkAndUpdateCmd("lifeBrush", 		$json->{"brush-cleaner:brush-life-level"});
-          $this->checkAndUpdateCmd("timeBrushLeft", 		"0");
-          $this->checkAndUpdateCmd("lifeBrushLeft", 		"0");
-          $this->checkAndUpdateCmd("timeFilterLeft", 		$json->{"filter:filter-left-time"});
-          $this->checkAndUpdateCmd("lifeFilterLeft", 		$json->{"filter:filter-life-level"});
-          $this->checkAndUpdateCmd("cleaningTime", 		$json->{"vacuum-extend:cleaning-time"});
-          $this->checkAndUpdateCmd("cleaningArea", 		$json->{"vacuum-extend:cleaning-area"});
+			$this->checkAndUpdateCmd("batteryLevel", 		$json->{"battery:battery-level"});
+			$this->checkAndUpdateCmd("isCharging", 		$json->{"battery:charging-state"});
+			$this->checkAndUpdateCmd("error", 		$json->{"vacuum:fault"});
+			$this->checkAndUpdateCmd("stateDevice", 		$json->{"vacuum:status"});
+			$this->checkAndUpdateCmd("timeBrush", 		$json->{"brush-cleaner:brush-left-time"});
+			$this->checkAndUpdateCmd("lifeBrush", 		$json->{"brush-cleaner:brush-life-level"});
+			$this->checkAndUpdateCmd("timeBrushLeft", 		"0");
+			$this->checkAndUpdateCmd("lifeBrushLeft", 		"0");
+			$this->checkAndUpdateCmd("timeFilterLeft", 		$json->{"filter:filter-left-time"});
+			$this->checkAndUpdateCmd("lifeFilterLeft", 		$json->{"filter:filter-life-level"});
+			$this->checkAndUpdateCmd("cleaningTime", 		$json->{"vacuum-extend:cleaning-time"});
+			$this->checkAndUpdateCmd("cleaningArea", 		$json->{"vacuum-extend:cleaning-area"});
 
-          if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} == 1)){
-              $this->checkAndUpdateCmd("statusDevice","Prêt à démarrer");
-          }
+			if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} == 1)){
+			$this->checkAndUpdateCmd("statusDevice","Prêt à démarrer");
+			}
 
-          if ($json->{"vacuum:status"} == 1){
-              $this->checkAndUpdateCmd("statusDevice","Aspiration en cours");
-          }
+			if ($json->{"vacuum:status"} == 1){
+			$this->checkAndUpdateCmd("statusDevice","Aspiration en cours");
+			}
 
-          if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} != 1)){
-              $this->checkAndUpdateCmd("statusDevice","Arret");
-          }
+			if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} != 1)){
+			$this->checkAndUpdateCmd("statusDevice","Arret");
+			}
 
-          if (($json->{"vacuum:status"} == 3) AND ($json->{"battery:charging-state"} != 1)){
-              $this->checkAndUpdateCmd("statusDevice","En Pause");
-          }
-        if ($json->{"vacuum:status"} == 4){
-              $this->checkAndUpdateCmd("statusDevice","Erreur");
-          }
-        if (($json->{"vacuum:status"} == 5) AND ($json->{"battery:charging-state"} == 5)){
-              $this->checkAndUpdateCmd("statusDevice","Retour Maison");
-          }
-        
-              if (($json->{"vacuum:status"} == 6) AND ($json->{"battery:charging-state"} == 1)){
-              $this->checkAndUpdateCmd("statusDevice","En Charge");
-          }
-		  if ($json->{"vacuum:status"} == 7){
-			$this->checkAndUpdateCmd("statusDevice","Aspiration et Lavage en cours.");
-			 
+			if (($json->{"vacuum:status"} == 3) AND ($json->{"battery:charging-state"} != 1)){
+			$this->checkAndUpdateCmd("statusDevice","En Pause");
+			}
+
+			if ($json->{"vacuum:status"} == 4){
+			$this->checkAndUpdateCmd("statusDevice","Erreur");
+			}
+
+			if (($json->{"vacuum:status"} == 5) AND ($json->{"battery:charging-state"} == 5)){
+			$this->checkAndUpdateCmd("statusDevice","Retour Maison");
+			}
+
+			if (($json->{"vacuum:status"} == 6) AND ($json->{"battery:charging-state"} == 1)){
+			$this->checkAndUpdateCmd("statusDevice","En Charge");
+			}
+
+			if ($json->{"vacuum:status"} == 7){
+			$this->checkAndUpdateCmd("statusDevice","Aspiration et Lavage en cours");
+			}
+
+			if ($json->{"vacuum:status"} == 8){
+			$this->checkAndUpdateCmd("statusDevice","Séchage de la serpillère");	
+			}
+			if ($json->{"vacuum:status"} == 12){
+				$this->checkAndUpdateCmd("statusDevice","Nettoyage en cours de la Zone");	
+			}
+			
+			if ($json->{"vacuum:fault"} == 51){
+				$this->checkAndUpdateCmd("errorDevice","Filtre est mouillé");
+			}
+
+			if ($json->{"vacuum:fault"} == 106){
+				$this->checkAndUpdateCmd("errorDevice","Vider le bac et nettoyer la planche de lavage.");
 			}
         }
 
-		//error 106 Demande de vidage de bac a poussière+ nettoyage de la planche de lavage de serpillière
-		//statut 8 sechage de la serpillere
-		//statut 
-
-		//log::add("dreame", "debug", "type" . gettype($outputArray[0]) . "last json error: " . json_last_error_msg());
-		// log::add('dreame', 'debug', '[GET STATUS JSON] ' . var_dump($json));
 	}
 
 	public function sendCmd($cmd, $val = "") {
@@ -601,7 +630,7 @@ class dreame extends eqLogic {
 				break;
 			default:
 			throw new Error('This should not append!');
-			log::add('dreame', 'warn', 'Error while executing cmd ' . $this->getLogicalId());
+			log::add('dreame', 'warn', 'Erreur pour action : ' . $this->getLogicalId());
 			return;
 		}
 		
@@ -609,20 +638,13 @@ class dreame extends eqLogic {
 		if($cmdLabel == "")
 		return;
 		
-		// when set a new lower temp target, a bug occurs. forcing eco-mode state fix that
-		
-		
-		
-		
-		
 		if(!empty($ip) && !empty($token)) {
-			log::add('dreame', 'debug', '[ENDPOINT] /appliance_status_with_token_key');
 			$cmd = "sudo miiocli genericmiot --ip " . $ip . " --token " . $token ." call ".$cmdLabel;
 			exec($cmd,$outputArray,$resultCode);
-			log::add('dreame', 'debug', '[GET CMD] ' .$cmd);
+			log::add('dreame', 'debug', '[CMD] ' .$cmd);
           	self::updateCmd();
 		} else {
-			log::add('dreame', 'debug', "Can't update $id, missing:<br/> Either => credentials + ip <br/> Either => token + key + ip");
+			log::add('dreame', 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
 			return; // can't update
 		}
 
