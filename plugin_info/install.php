@@ -19,10 +19,10 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement après l'installation du plugin
 function dreame_install() {
-    log::add('dreame', 'debug', 'Installation Python-miio');
-    $cmd = "sudo pip install git+https://github.com/rytilahti/python-miio.git 2>&1";
-    exec($cmd, $outputArray, $resultCode);
-    log::add('dreame', 'debug', '[GET CMD] ' .$cmd);
+
+
+
+
 }
 
 
