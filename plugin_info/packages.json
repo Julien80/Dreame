@@ -12,7 +12,7 @@
     "enum34" : {},
     "enum-compat" : {},
     "wheel" : {},
-    "python-miio" : {}
+    "git+https://github.com/rytilahti/python-miio.git" : {}
   },
   "apt" : {
     "python3-cryptography" : {},
