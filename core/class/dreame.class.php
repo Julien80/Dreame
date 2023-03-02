@@ -451,7 +451,7 @@ class dreame extends eqLogic {
 		$play_sound = $this->getCmd('action', 'play-sound');
 		if (!is_object($play_sound)) {
 			$play_sound = new dreameCmd();
-			$play_sound->setName(__('Cherche Moi', __FILE__));
+			$play_sound->setName(__('Play Sound', __FILE__));
 		}
 		$play_sound->setOrder($order++);
 		$play_sound->setIsVisible(1);
