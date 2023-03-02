@@ -455,7 +455,7 @@ class dreame extends eqLogic {
 		}
 		$play_sound->setOrder($order++);
 		$play_sound->setIsVisible(1);
-		$play_sound->setLogicalId('position');
+		$play_sound->setLogicalId('play-sound');
 		$play_sound->setEqLogic_id($this->getId());
 		$play_sound->setType('action');
 		$play_sound->setSubType('other');
