@@ -26,5 +26,6 @@
   "plugin": {
   },
   "post-install": {
+    "git clone https://github.com/rytilahti/python-miio.git && cd python-miio && python setup.py install"
   }
 }
