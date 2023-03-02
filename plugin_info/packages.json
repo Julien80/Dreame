@@ -25,6 +25,6 @@
   "plugin": {
   },
   "post-install": {
-    "pip install git+https://github.com/rytilahti/python-miio"
+    "sudo pip install git+https://github.com/rytilahti/python-miio"
   }
 }
