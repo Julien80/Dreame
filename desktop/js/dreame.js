@@ -98,34 +98,26 @@ function detectDevices() {
 			handleAjaxError(request, status, error);
 		},
 		success: function (data) {
-			//$('.eqLogicAction span:first').text("{{ Détection Automatique }}").removeAttr('style');
-			//$('.eqLogicAction i:first').removeAttr('style');
-			if (data.state != 'ok') {
-				$('#div_alert').showAlert({message: data.result, level: 'danger'});
+		  if (data.state != 'ok') {
+			  $('#div_alert').showAlert({message: data.result, level: 'danger'});
 				return;
 			}
-			console.log(data);
-			//console.log(data.result.new);
 			if(data.result.newEq == 0){
-              	$('#div_alert').showAlert({message: 'Resultat de la détection : Aucun appareil trouvé', level: 'danger'});
+        $('#div_alert').showAlert({message: 'Resultat de la détection : Aucun appareil trouvé', level: 'danger'});
 				return;
 			} else {
-              	$('#div_alert').showAlert({message: 'Resultat de la détection : '+ data.result.newEq + ' Appareil(s) detectés', level: 'warning'});
+        $('#div_alert').showAlert({message: 'Resultat de la détection : '+ data.result.newEq + ' appareil(s) ajoutés', level: 'warning'});
 				setTimeout(() => { window.location.reload(); }, 3000);
-             }
+      }
 			
 		},
 		done: function(data) {
-			console.log('=== Midea Discovery finished ===');
 		}
 	});
-
 
 }
 
 $('.eqLogicAction[data-action=detectDevicesDreame]').on('click', function() {
-//	$('.eqLogicAction span:first').text("{{Détection en cours...}}").css({'color' : 'red'});
-//	$('.eqLogicAction i:first').css({'color' : 'red'});
-  $('#div_alert').showAlert({message: "Début de la détection", level: 'warning'});
+  $('#div_alert').showAlert({message: "Début de la détection. Patientez......", level: 'warning'});
 	detectDevices();
 });
