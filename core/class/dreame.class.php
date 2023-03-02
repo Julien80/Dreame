@@ -460,7 +460,7 @@ class dreame extends eqLogic {
 		$play_sound->setType('action');
 		$play_sound->setSubType('other');
 		$play_sound->setDisplay('generic_type', '');
-		p$$play_sound->setDisplay('forceReturnLineAfter', true);
+		$play_sound->setDisplay('forceReturnLineAfter', true);
 		$play_sound->save();
       
         $refresh = $this->getCmd('action', 'refresh');
