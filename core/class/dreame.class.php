@@ -573,6 +573,7 @@ class dreame extends eqLogic {
 			$this->checkAndUpdateCmd("lifeFilterLeft", 		$json->{"filter:filter-life-level"});
 			$this->checkAndUpdateCmd("cleaningTime", 		$json->{"vacuum-extend:cleaning-time"});
 			$this->checkAndUpdateCmd("cleaningArea", 		$json->{"vacuum-extend:cleaning-area"});
+			$this->checkAndUpdateCmd("speed", 		$json->{"vacuum:mode"});
 
 			if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} == 1)){
 			$this->checkAndUpdateCmd("statusDevice","Prêt à démarrer");
@@ -652,7 +653,7 @@ class dreame extends eqLogic {
 				break;
 			case "setSpeed":
 				//Silent (0), Basic (1), Strong (2), Full Speed (3)
-				$cmdLabel = "";
+				$cmdLabel = "vacuum:mode";
 				$cmdValue = $val;
 				break;
 			default:
@@ -666,10 +667,9 @@ class dreame extends eqLogic {
 		return;
 		
 		if(!empty($ip) && !empty($token)) {
-			if($cmdLabel == "setSpeed") {
+			if($cmdLabel == "vacuum:mode") {
 				log::add('dreame', 'debug', "Label ".$cmdLabel." Value :".$cmdValue);
-				
-				//$cmd = "sudo miiocli genericmiot --ip " . $ip . " --token " . $token ." call ".$cmdLabel;
+				$cmd = "sudo miiocli genericmiot --ip " . $ip . " --token " . $token ." set ".$cmdLabel." ".$cmdValue;
 			} else {
 				$cmd = "sudo miiocli genericmiot --ip " . $ip . " --token " . $token ." call ".$cmdLabel;
 			}
