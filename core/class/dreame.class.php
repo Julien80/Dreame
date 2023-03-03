@@ -501,6 +501,28 @@ class dreame extends eqLogic {
 		//$info->setDisplay('forceReturnLineBefore', true);
 		$refresh->setDisplay('forceReturnLineAfter', true);
 		$refresh->save();
+
+		$speed = $this->getCmd('action', 'speed');
+		if (!is_object($refresh)) {
+			$speed = new dreameCmd();
+			$speed->setName(__('Vitesse', __FILE__));
+		}
+		$speed->setOrder($order++);
+		$speed->setIsVisible(1);
+		$speed->setLogicalId('speed');
+		$speed->setEqLogic_id($this->getId());
+		$speed->setType('action');
+		$speed->setSubType('select');
+		$speed->setDisplay('generic_type', '');
+
+		//Silent (0), Basic (1), Strong (2), Full Speed (3)
+
+
+		$speed->setConfiguration('listValue','0|Silencieux;1|Normal;2|Fort;3|Vitesse Maximale');
+		//$info->setDisplay('forceReturnLineBefore', true);
+		$speed->setDisplay('forceReturnLineAfter', true);
+		$speed->save();
+
       
       	self::updateCmd();
       
@@ -628,6 +650,11 @@ class dreame extends eqLogic {
 			case "play-sound":
 				$cmdLabel = "audio:play-sound";
 				break;
+			case "set-speed":
+				//Silent (0), Basic (1), Strong (2), Full Speed (3)
+				$cmdLabel = "";
+				$cmdValue = 1;
+				break;
 			default:
 			throw new Error('This should not append!');
 			log::add('dreame', 'warn', 'Erreur pour action : ' . $this->getLogicalId());
@@ -639,7 +666,11 @@ class dreame extends eqLogic {
 		return;
 		
 		if(!empty($ip) && !empty($token)) {
-			$cmd = "sudo miiocli genericmiot --ip " . $ip . " --token " . $token ." call ".$cmdLabel;
+			if($cmdLabel == "set-speed") {
+				$cmd = "sudo miiocli genericmiot --ip " . $ip . " --token " . $token ." call ".$cmdLabel;
+			} else {
+				$cmd = "sudo miiocli genericmiot --ip " . $ip . " --token " . $token ." call ".$cmdLabel;
+			}
 			exec($cmd,$outputArray,$resultCode);
 			log::add('dreame', 'debug', '[CMD] ' .$cmd);
           	self::updateCmd();
@@ -701,6 +732,10 @@ class dreameCmd extends cmd {
 				log::add('dreame', 'debug', 'play-sound : ' . $this->getLogicalId());
 				$eqLogic->sendCmd('play-sound');
 				break;
+			case 'speed':
+					log::add('dreame', 'debug', 'speed : ' . $this->getLogicalId());
+					//$eqLogic->sendCmd('play-sound');
+					break;
 			default:
 				throw new Error('This should not append!');
 				log::add('dreame', 'error', 'Aucune commande associée : ' . $this->getLogicalId());
