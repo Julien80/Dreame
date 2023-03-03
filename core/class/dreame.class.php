@@ -673,7 +673,7 @@ class dreame extends eqLogic {
 			} else {
 				$cmd = "sudo miiocli genericmiot --ip " . $ip . " --token " . $token ." call ".$cmdLabel;
 			}
-			//exec($cmd,$outputArray,$resultCode);
+			exec($cmd,$outputArray,$resultCode);
 			log::add('dreame', 'debug', '[CMD] ' .$cmd);
           	self::updateCmd();
 		} else {
