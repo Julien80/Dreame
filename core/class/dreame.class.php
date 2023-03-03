@@ -503,7 +503,7 @@ class dreame extends eqLogic {
 		$refresh->save();
 
 		$speed = $this->getCmd('action', 'speed');
-		if (!is_object($refresh)) {
+		if (!is_object($speed)) {
 			$speed = new dreameCmd();
 			$speed->setName(__('Vitesse', __FILE__));
 		}
