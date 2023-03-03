@@ -650,10 +650,10 @@ class dreame extends eqLogic {
 			case "play-sound":
 				$cmdLabel = "audio:play-sound";
 				break;
-			case "set-speed":
+			case "setSpeed":
 				//Silent (0), Basic (1), Strong (2), Full Speed (3)
 				$cmdLabel = "";
-				$cmdValue = 1;
+				$cmdValue = $val;
 				break;
 			default:
 			throw new Error('This should not append!');
@@ -666,12 +666,14 @@ class dreame extends eqLogic {
 		return;
 		
 		if(!empty($ip) && !empty($token)) {
-			if($cmdLabel == "set-speed") {
-				$cmd = "sudo miiocli genericmiot --ip " . $ip . " --token " . $token ." call ".$cmdLabel;
+			if($cmdLabel == "setSpeed") {
+				log::add('dreame', 'debug', "Label ".$cmdLabel." Value :".$cmdValue);
+				
+				//$cmd = "sudo miiocli genericmiot --ip " . $ip . " --token " . $token ." call ".$cmdLabel;
 			} else {
 				$cmd = "sudo miiocli genericmiot --ip " . $ip . " --token " . $token ." call ".$cmdLabel;
 			}
-			exec($cmd,$outputArray,$resultCode);
+			//exec($cmd,$outputArray,$resultCode);
 			log::add('dreame', 'debug', '[CMD] ' .$cmd);
           	self::updateCmd();
 		} else {
@@ -706,6 +708,7 @@ class dreameCmd extends cmd {
   public function execute($_options = array()) {
     
     $eqLogic = $this->getEqLogic(); // Récupération de l’eqlogic
+	Log::add('dreame', 'debug', '$_options[] traité: ' . json_encode($_options));
 
 		switch ($this->getLogicalId()) {                
 			case 'refresh': 
@@ -733,9 +736,12 @@ class dreameCmd extends cmd {
 				$eqLogic->sendCmd('play-sound');
 				break;
 			case 'speed':
-					log::add('dreame', 'debug', 'speed : ' . $this->getLogicalId());
-					//$eqLogic->sendCmd('play-sound');
-					break;
+				log::add('dreame', 'debug', 'speed : ' . $this->getLogicalId());
+				//$eqLogic->sendCmd('play-sound');
+				$speed = isset($_options['select']) ? $_options['select'] : $_options['slider'];
+				$eqLogic->checkAndUpdateCmd('speed', $speed);
+				$eqLogic->sendCmd('setSpeed', $speed);
+				break;
 			default:
 				throw new Error('This should not append!');
 				log::add('dreame', 'error', 'Aucune commande associée : ' . $this->getLogicalId());
