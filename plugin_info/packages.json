@@ -6,6 +6,7 @@
      "libffi-dev" : {}
   },
   "pip3" : {
+"python-miio" : {}
   },
   "post-install" : {
   }
