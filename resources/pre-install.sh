@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 RUST_VERSION="1.48.0"
@@ -6,7 +5,7 @@ PYTHON_VERSION="3.8.2"
 
 echo "Launch pre-install of dreame dependency"
 
-if ! python${PYTHON_VERSION:0:3} -c "import sys; assert sys.version_info >= (3, 8, 2)" >/dev/null 2>&1; then
+if ! python${PYTHON_VERSION:0:1}.${PYTHON_VERSION:2:1}.${PYTHON_VERSION:4:1} -c "import sys; assert sys.version_info >= (3, 8, 2)" >/dev/null 2>&1; then
     echo "Python ${PYTHON_VERSION} or later is not installed. Installing now..."
     sudo apt-get update -q
     sudo apt-get install -y curl build-essential libffi-dev libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget llvm libncurses5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
@@ -34,6 +33,6 @@ sudo chmod +x /usr/bin/rustc
 sudo chmod +x /usr/bin/cargo
 
 echo "Installing python-miio from git master branch"
-python${PYTHON_VERSION:0:3} -m ensurepip
-python${PYTHON_VERSION:0:3} -m pip install --upgrade pip
-python${PYTHON_VERSION:0:3} -m pip install git+https://github.com/rytilahti/python-miio.git@master
+python${PYTHON_VERSION:0:1}.${PYTHON_VERSION:2:1}.${PYTHON_VERSION:4:1} -m ensurepip
+python${PYTHON_VERSION:0:1}.${PYTHON_VERSION:2:1}.${PYTHON_VERSION:4:1} -m pip install --upgrade pip
+python${PYTHON_VERSION:0:1}.${PYTHON_VERSION:2:1}.${PYTHON_VERSION:4:1} -m pip install git+https://github.com/rytilahti/python-miio.git@master
