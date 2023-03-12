@@ -15,10 +15,10 @@
 	"hasDependency" : true,
 	"hasOwnDeamon" : false,
 	"maxDependancyInstallTime" : 10,
-	"changelog" : "https://jeedom.github.io/dreame/#language#/changelog",
-	"documentation" : "https://jeedom.github.io/dreame/#language#/",
-	"changelog_beta" : "https://jeedom.github.io/dreame/#language#/beta/changelog",
-	"documentation_beta" : "https://jeedom.github.io/dreame/#language#/beta/",
+	"changelog" : "https://julien80.github.io/dreame/#language#/changelog",
+	"documentation" : "https://julien80.github.io/dreame/#language#/",
+	"changelog_beta" : "https://julien80.github.io/dreame/#language#/beta/changelog",
+	"documentation_beta" : "https://julien80.github.io/dreame/#language#/beta/",
 	"link" : {
 		"forum":"Lien vers le forum",
 		"video" : "Lien vers une video"
