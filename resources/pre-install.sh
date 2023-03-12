@@ -1,7 +1,7 @@
 #!/bin/bash
 
 RUST_VERSION="1.48.0"
-PYTHON_VERSION="3.8.2"
+PYTHON_VERSION="3.8"
 
 echo "Launch pre-install of dreame dependency"
 
