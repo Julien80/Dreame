@@ -1,6 +1,6 @@
 {
   "pre-install" : {
-    "script" : "plugins/dreame/resources/pre_install.sh"
+    "script" : "plugins/dreame/resources/pre-install.sh"
   },
   "apt" : {
   },
