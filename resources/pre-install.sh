@@ -1,4 +1,3 @@
-```
 #!/bin/bash
 
 RUST_VERSION="1.48.0"
@@ -38,4 +37,4 @@ echo "Installing python-miio from git master branch"
 python${PYTHON_VERSION:0:3} -m ensurepip
 python${PYTHON_VERSION:0:3} -m pip install --upgrade pip
 python${PYTHON_VERSION:0:3} -m pip install git+https://github.com/rytilahti/python-miio.git@master
-```
+
