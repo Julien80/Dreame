@@ -80,24 +80,31 @@ function detectDevices() {
 					break;
 				}
 			}
-			$numberNewDevice= 0;
-			if ($alreadyExist) {
-				log::add("dreame", "debug", "Equipement déjà présent, il ne faut donc pas l'ajouter");
-			}else{
-				$eqlogic = new dreame();
-				$eqlogic->setName($response->name);
-				$eqlogic->setIsEnable(1);
-				$eqlogic->setIsVisible(0);
-				$eqlogic->setLogicalId($response->did);
-				$eqlogic->setEqType_name('dreame');
-				$eqlogic->setConfiguration('did', $response->did);
-				$eqlogic->setConfiguration('ip', $response->localip);
-				$eqlogic->setConfiguration('token', $response->token);      
-				$eqlogic->setConfiguration('model', $response->model);
-				$eqlogic->save();
-				$numberNewDevice++;
-				log::add("dreame", "debug", "Nouvel Equipement, ajout en cours.");
-			}
+			$$numberNewDevice = 0;
+
+if ($alreadyExist) {
+    log::add("dreame", "debug", "Equipement déjà présent, il ne faut donc pas l'ajouter");
+} else {
+    // Check if $response->model contains 'Dreame' or 'viomi'
+    if (strpos($response->model, 'Dreame') !== false || strpos($response->model, 'viomi') !== false) {
+        $eqlogic = new dreame();
+        $eqlogic->setName($response->name);
+        $eqlogic->setIsEnable(1);
+        $eqlogic->setIsVisible(0);
+        $eqlogic->setLogicalId($response->did);
+        $eqlogic->setEqType_name('dreame');
+        $eqlogic->setConfiguration('did', $response->did);
+        $eqlogic->setConfiguration('ip', $response->localip);
+        $eqlogic->setConfiguration('token', $response->token);      
+        $eqlogic->setConfiguration('model', $response->model);
+        $eqlogic->save();
+        $numberNewDevice++;
+        log::add("dreame", "debug", "Nouvel Equipement, ajout en cours.");
+    } else {
+        log::add("dreame", "debug", "Le modèle de l'équipement n'est pas pris en charge : ".$response->model);
+    }
+}
+
 			
 		}
 		
