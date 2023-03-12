@@ -36,6 +36,6 @@ sudo chmod +x /usr/bin/rustc
 sudo chmod +x /usr/bin/cargo
 
 echo "Installation de python-miio depuis la branche master de git"
-python${PYTHON_VERSION} -m ensurepip
-python${PYTHON_VERSION} -m pip install --upgrade pip
-python${PYTHON_VERSION} -m pip install git+https://github.com/rytilahti/python-miio.git@master
+sudo python${PYTHON_VERSION} -m ensurepip
+sudo python${PYTHON_VERSION} -m pip install --upgrade pip
+sudo python${PYTHON_VERSION} -m pip install git+https://github.com/rytilahti/python-miio.git@master
