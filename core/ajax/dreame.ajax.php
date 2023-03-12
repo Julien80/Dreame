@@ -87,7 +87,7 @@ if ($alreadyExist) {
     log::add("dreame", "debug", "Equipement déjà présent, il ne faut donc pas l'ajouter");
 } else {
     // Check if $response->model contains 'Dreame' or 'viomi'
-    if (strpos($response->model, 'Dreame') !== false || strpos($response->model, 'viomi') !== false) {
+    if (strpos($response->model, 'dreame') !== false || strpos($response->model, 'viomi') !== false) {
         $eqlogic = new dreame();
         $eqlogic->setName($response->name);
         $eqlogic->setIsEnable(1);
