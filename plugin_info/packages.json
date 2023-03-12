@@ -6,6 +6,7 @@
      "libffi-dev" : {}
   },
   "pip3" : {
+"git+https://github.com/rytilahti/python-miio.git" : {}
   },
   "post-install" : {
   }
