@@ -20,8 +20,7 @@
 	"changelog_beta" : "https://julien80.github.io/dreame/#language#/beta/changelog",
 	"documentation_beta" : "https://julien80.github.io/dreame/#language#/beta/",
 	"link" : {
-		"forum":"https://community.jeedom.com/tags/plugin-dreame",
-                "vidéo":""
+		"forum":"https://community.jeedom.com/tags/plugin-dreame"
 	},
 	"language": [
 		"fr_FR"
