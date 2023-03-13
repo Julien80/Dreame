@@ -53,11 +53,12 @@ function detectDevices() {
 	$accountPassword = 	trim(config::byKey('account-password', 'dreame'));
 	$accountCountry = 	trim(config::byKey('account-country', 'dreame'));
 	
-	$cmd = "micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c ". $accountCountry. " 2>&1";
+	$cmd = "sudo micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c ". $accountCountry. " 2>&1";
 	exec($cmd,$outputArray,$resultCode);
 	if ($resultCode != 0) {
 		if (strstr( $outputArray[23],'Access denied')){ //$outputArray[23] = "micloud.micloudexception.MiCloudAccessDenied: Access denied. Did you set the correct api key and/or username?")
-			
+			log::add("dreame", "debug", "Erreur Mot de Passe ou Email");
+
 			event::add('jeedom::alert', array(
 				'level' => 'danger',
 				'page' => 'dreame',
@@ -71,6 +72,7 @@ function detectDevices() {
 		
 	}else{
 		$json = json_decode($outputArray[0]);
+log::add("dreame", "debug", json_encode($json));
 		$getAllDevices = eqLogic::byType('dreame');
 		foreach($json as $response) {
 			$alreadyExist = false;
@@ -80,13 +82,13 @@ function detectDevices() {
 					break;
 				}
 			}
-			$$numberNewDevice = 0;
+			$numberNewDevice = 0;
 
 if ($alreadyExist) {
     log::add("dreame", "debug", "Equipement déjà présent, il ne faut donc pas l'ajouter");
 } else {
     // Check if $response->model contains 'Dreame' or 'viomi'
-    if (strpos($response->model, 'Dreame') !== false || strpos($response->model, 'viomi') !== false) {
+    if (strpos($response->model, 'dreame') !== false || strpos($response->model, 'viomi') !== false) {
         $eqlogic = new dreame();
         $eqlogic->setName($response->name);
         $eqlogic->setIsEnable(1);
