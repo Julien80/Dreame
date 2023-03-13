@@ -72,6 +72,7 @@ function detectDevices() {
 		
 	}else{
 		$json = json_decode($outputArray[0]);
+log::add("dreame", "debug", json_encode($json));
 		$getAllDevices = eqLogic::byType('dreame');
 		foreach($json as $response) {
 			$alreadyExist = false;
