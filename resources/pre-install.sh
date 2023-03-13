@@ -34,7 +34,8 @@ sudo chmod +x /usr/bin/rustc
 sudo chmod +x /usr/bin/cargo
 
 echo "Installing python-miio from git master branch"
-python${PYTHON_VERSION:0:3} -m ensurepip
-python${PYTHON_VERSION:0:3} -m pip install --upgrade pip
-python${PYTHON_VERSION:0:3} -m pip install git+https://github.com/rytilahti/python-miio.git@master
-
+sudo python${PYTHON_VERSION:0:3} -m ensurepip
+sudo python${PYTHON_VERSION:0:3} -m pip install --upgrade pip
+sudo python${PYTHON_VERSION:0:3} -m pip install git+https://github.com/rytilahti/python-miio.git@master
+sudo python${PYTHON_VERSION:0:3} -m pip uninstall pycrypto
+sudo python${PYTHON_VERSION:0:3} -m pip install pycryptodome
