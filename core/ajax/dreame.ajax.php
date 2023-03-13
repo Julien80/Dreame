@@ -55,6 +55,7 @@ function detectDevices() {
 	
 	$cmd = "sudo micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c ". $accountCountry. " 2>&1";
 	exec($cmd,$outputArray,$resultCode);
+log::add("dreame", "debug", json_encode($outputArray));
 	if ($resultCode != 0) {
 		if (strstr( $outputArray[23],'Access denied')){ //$outputArray[23] = "micloud.micloudexception.MiCloudAccessDenied: Access denied. Did you set the correct api key and/or username?")
 			log::add("dreame", "debug", "Erreur Mot de Passe ou Email");
