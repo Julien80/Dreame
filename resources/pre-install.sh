@@ -1,7 +1,7 @@
 #!/bin/bash
 
 RUST_VERSION="1.48.0"
-PYTHON_VERSION="3.8.2"
+PYTHON_VERSION="3.9.0"
 
 echo "Launch pre-install of dreame dependency"
 
@@ -38,4 +38,6 @@ sudo python${PYTHON_VERSION:0:3} -m ensurepip
 sudo python${PYTHON_VERSION:0:3} -m pip install --upgrade pip
 sudo python${PYTHON_VERSION:0:3} -m pip install git+https://github.com/rytilahti/python-miio.git@master
 sudo python${PYTHON_VERSION:0:3} -m pip uninstall pycrypto
-sudo python${PYTHON_VERSION:0:3} -m pip install pycryptodome
+sudo python${PYTHON_VERSION:0:3} -m pip install --upgrade --force-reinstall pycryptodome
+sudo python${PYTHON_VERSION:0:3} -m pip uninstall micloud
+sudo python${PYTHON_VERSION:0:3} -m pip install micloud
