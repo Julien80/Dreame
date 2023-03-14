@@ -570,8 +570,8 @@ class dreame extends eqLogic {
       	if ($json != null) 
         {
 			if($oldCmdStatus) {
-				$this->checkAndUpdateCmd("batteryLevel", 		$json->{"battery:battery-level"});
-				$this->checkAndUpdateCmd("isCharging", 		$json->{"battery:charging-state"});
+				$this->checkAndUpdateCmd("batteryLevel", 		$json->{"battery-level"});
+				$this->checkAndUpdateCmd("isCharging", 		$json->{"charging_state"});
 				$this->checkAndUpdateCmd("error", 		$json->{"vacuum:fault"});
 				$this->checkAndUpdateCmd("stateDevice", 		$json->{"vacuum:status"});
 				$this->checkAndUpdateCmd("timeBrush", 		$json->{"brush-cleaner:brush-left-time"});
