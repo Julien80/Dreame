@@ -37,25 +37,32 @@ class dreame extends eqLogic {
 
   
   //* Fonction exécutée automatiquement toutes les minutes par Jeedom
-	public static function cron() {
-  		$eqLogics = self::byType('dreame');
-		if(count($eqLogics) > 0) {
-			foreach($eqLogics as $eqLogic) {
-				if($eqLogic->getIsEnable() == 1) {
-					$eqLogic->updateCmd();
-				}
-			} 
-		} 
-	}
-  
+	
+  public static function cron() {
+    $eqLogics = self::byType('dreame');
+    if(count($eqLogics) > 0) {
+        foreach($eqLogics as $eqLogic) {
+            if($eqLogic->getIsEnable() == 1 && $eqLogic->getConfiguration('model') != 'dreame.vacuum.p2008') {
+                $eqLogic->updateCmd();
+            }
+        }
+    }
+}
+
 
   
  // * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
-  //public static function cron5() {
-  
-//	if($this->getIsEnable() == 1)
-	//		self::createAndUpdateCmd();
- //   }
+  public static function cron5() {
+    $eqLogics = self::byType('dreame');
+    if(count($eqLogics) > 0) {
+        foreach($eqLogics as $eqLogic) {
+            if($eqLogic->getIsEnable() == 1 && $eqLogic->getConfiguration('model') == 'dreame.vacuum.p2008') {
+                $eqLogic->updateCmd();
+            }
+        }
+    }
+}
+
   /*
   * Fonction exécutée automatiquement toutes les 10 minutes par Jeedom
   public static function cron10() {}
