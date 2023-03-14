@@ -539,7 +539,15 @@ class dreame extends eqLogic {
 		
 		
 		if (!empty($ip) && !empty($token)) {
-			$cmd = "sudo miiocli -o json_pretty genericmiot --ip " . $ip . " --token " . $token ." status 2>&1";
+			if ($model == 'dreame.vacuum.p2008') {
+				$cmd = "sudo miiocli -o json_pretty dreamevacuum --ip " . $ip . " --token " . $token ." status 2>&1";
+				log::add('dreame', 'debug', 'CMD BY DREAMEVACUUM');
+				$oldCmdStatus = true;
+			} else {
+				$cmd = "sudo miiocli -o json_pretty genericmiot --ip " . $ip . " --token " . $token ." status 2>&1";
+				log::add('dreame', 'debug', 'CMD BY GENERIMIOT');
+				$oldCmdStatus = false;
+			} 
 			exec($cmd, $outputArray, $resultCode);
 			log::add('dreame', 'debug', '[GET CMD] ' .$cmd);
 		} else {
@@ -561,65 +569,129 @@ class dreame extends eqLogic {
 		
       	if ($json != null) 
         {
-			$this->checkAndUpdateCmd("batteryLevel", 		$json->{"battery:battery-level"});
-			$this->checkAndUpdateCmd("isCharging", 		$json->{"battery:charging-state"});
-			$this->checkAndUpdateCmd("error", 		$json->{"vacuum:fault"});
-			$this->checkAndUpdateCmd("stateDevice", 		$json->{"vacuum:status"});
-			$this->checkAndUpdateCmd("timeBrush", 		$json->{"brush-cleaner:brush-left-time"});
-			$this->checkAndUpdateCmd("lifeBrush", 		$json->{"brush-cleaner:brush-life-level"});
-			$this->checkAndUpdateCmd("timeBrushLeft", 		"0");
-			$this->checkAndUpdateCmd("lifeBrushLeft", 		"0");
-			$this->checkAndUpdateCmd("timeFilterLeft", 		$json->{"filter:filter-left-time"});
-			$this->checkAndUpdateCmd("lifeFilterLeft", 		$json->{"filter:filter-life-level"});
-			$this->checkAndUpdateCmd("cleaningTime", 		$json->{"vacuum-extend:cleaning-time"});
-			$this->checkAndUpdateCmd("cleaningArea", 		$json->{"vacuum-extend:cleaning-area"});
-			$this->checkAndUpdateCmd("speed", 		$json->{"vacuum:mode"});
+			if($oldCmdStatus) {
+				$this->checkAndUpdateCmd("batteryLevel", 		$json->{"battery-level"});
+				$this->checkAndUpdateCmd("isCharging", 		$json->{"charging_state"});
+				$this->checkAndUpdateCmd("error", 		$json->{"vacuum:fault"});
+				$this->checkAndUpdateCmd("stateDevice", 		$json->{"vacuum:status"});
+				$this->checkAndUpdateCmd("timeBrush", 		$json->{"brush-cleaner:brush-left-time"});
+				$this->checkAndUpdateCmd("lifeBrush", 		$json->{"brush-cleaner:brush-life-level"});
+				$this->checkAndUpdateCmd("timeBrushLeft", 		"0");
+				$this->checkAndUpdateCmd("lifeBrushLeft", 		"0");
+				$this->checkAndUpdateCmd("timeFilterLeft", 		$json->{"filter:filter-left-time"});
+				$this->checkAndUpdateCmd("lifeFilterLeft", 		$json->{"filter:filter-life-level"});
+				$this->checkAndUpdateCmd("cleaningTime", 		$json->{"vacuum-extend:cleaning-time"});
+				$this->checkAndUpdateCmd("cleaningArea", 		$json->{"vacuum-extend:cleaning-area"});
+				$this->checkAndUpdateCmd("speed", 		$json->{"vacuum:mode"});
 
-			if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} == 1)){
-			$this->checkAndUpdateCmd("statusDevice","Prêt à démarrer");
-			}
+				if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} == 1)){
+				$this->checkAndUpdateCmd("statusDevice","Prêt à démarrer");
+				}
 
-			if ($json->{"vacuum:status"} == 1){
-			$this->checkAndUpdateCmd("statusDevice","Aspiration en cours");
-			}
+				if ($json->{"vacuum:status"} == 1){
+				$this->checkAndUpdateCmd("statusDevice","Aspiration en cours");
+				}
 
-			if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} != 1)){
-			$this->checkAndUpdateCmd("statusDevice","Arret");
-			}
+				if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} != 1)){
+				$this->checkAndUpdateCmd("statusDevice","Arret");
+				}
 
-			if (($json->{"vacuum:status"} == 3) AND ($json->{"battery:charging-state"} != 1)){
-			$this->checkAndUpdateCmd("statusDevice","En Pause");
-			}
+				if (($json->{"vacuum:status"} == 3) AND ($json->{"battery:charging-state"} != 1)){
+				$this->checkAndUpdateCmd("statusDevice","En Pause");
+				}
 
-			if ($json->{"vacuum:status"} == 4){
-			$this->checkAndUpdateCmd("statusDevice","Erreur");
-			}
+				if ($json->{"vacuum:status"} == 4){
+				$this->checkAndUpdateCmd("statusDevice","Erreur");
+				}
 
-			if (($json->{"vacuum:status"} == 5) AND ($json->{"battery:charging-state"} == 5)){
-			$this->checkAndUpdateCmd("statusDevice","Retour Maison");
-			}
+				if (($json->{"vacuum:status"} == 5) AND ($json->{"battery:charging-state"} == 5)){
+				$this->checkAndUpdateCmd("statusDevice","Retour Maison");
+				}
 
-			if (($json->{"vacuum:status"} == 6) AND ($json->{"battery:charging-state"} == 1)){
-			$this->checkAndUpdateCmd("statusDevice","En Charge");
-			}
+				if (($json->{"vacuum:status"} == 6) AND ($json->{"battery:charging-state"} == 1)){
+				$this->checkAndUpdateCmd("statusDevice","En Charge");
+				}
 
-			if ($json->{"vacuum:status"} == 7){
-			$this->checkAndUpdateCmd("statusDevice","Aspiration et Lavage en cours");
-			}
+				if ($json->{"vacuum:status"} == 7){
+				$this->checkAndUpdateCmd("statusDevice","Aspiration et Lavage en cours");
+				}
 
-			if ($json->{"vacuum:status"} == 8){
-			$this->checkAndUpdateCmd("statusDevice","Séchage de la serpillère");	
-			}
-			if ($json->{"vacuum:status"} == 12){
-				$this->checkAndUpdateCmd("statusDevice","Nettoyage en cours de la Zone");	
-			}
+				if ($json->{"vacuum:status"} == 8){
+				$this->checkAndUpdateCmd("statusDevice","Séchage de la serpillère");	
+				}
+				if ($json->{"vacuum:status"} == 12){
+					$this->checkAndUpdateCmd("statusDevice","Nettoyage en cours de la Zone");	
+				}
+				
+				if ($json->{"vacuum:fault"} == 51){
+					$this->checkAndUpdateCmd("errorDevice","Filtre est mouillé");
+				}
+
+				if ($json->{"vacuum:fault"} == 106){
+					$this->checkAndUpdateCmd("errorDevice","Vider le bac et nettoyer la planche de lavage.");
+				}
 			
-			if ($json->{"vacuum:fault"} == 51){
-				$this->checkAndUpdateCmd("errorDevice","Filtre est mouillé");
-			}
+			} else {
+				$this->checkAndUpdateCmd("batteryLevel", 		$json->{"battery:battery-level"});
+				$this->checkAndUpdateCmd("isCharging", 		$json->{"battery:charging-state"});
+				$this->checkAndUpdateCmd("error", 		$json->{"vacuum:fault"});
+				$this->checkAndUpdateCmd("stateDevice", 		$json->{"vacuum:status"});
+				$this->checkAndUpdateCmd("timeBrush", 		$json->{"brush-cleaner:brush-left-time"});
+				$this->checkAndUpdateCmd("lifeBrush", 		$json->{"brush-cleaner:brush-life-level"});
+				$this->checkAndUpdateCmd("timeBrushLeft", 		"0");
+				$this->checkAndUpdateCmd("lifeBrushLeft", 		"0");
+				$this->checkAndUpdateCmd("timeFilterLeft", 		$json->{"filter:filter-left-time"});
+				$this->checkAndUpdateCmd("lifeFilterLeft", 		$json->{"filter:filter-life-level"});
+				$this->checkAndUpdateCmd("cleaningTime", 		$json->{"vacuum-extend:cleaning-time"});
+				$this->checkAndUpdateCmd("cleaningArea", 		$json->{"vacuum-extend:cleaning-area"});
+				$this->checkAndUpdateCmd("speed", 		$json->{"vacuum:mode"});
 
-			if ($json->{"vacuum:fault"} == 106){
-				$this->checkAndUpdateCmd("errorDevice","Vider le bac et nettoyer la planche de lavage.");
+				if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} == 1)){
+				$this->checkAndUpdateCmd("statusDevice","Prêt à démarrer");
+				}
+
+				if ($json->{"vacuum:status"} == 1){
+				$this->checkAndUpdateCmd("statusDevice","Aspiration en cours");
+				}
+
+				if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} != 1)){
+				$this->checkAndUpdateCmd("statusDevice","Arret");
+				}
+
+				if (($json->{"vacuum:status"} == 3) AND ($json->{"battery:charging-state"} != 1)){
+				$this->checkAndUpdateCmd("statusDevice","En Pause");
+				}
+
+				if ($json->{"vacuum:status"} == 4){
+				$this->checkAndUpdateCmd("statusDevice","Erreur");
+				}
+
+				if (($json->{"vacuum:status"} == 5) AND ($json->{"battery:charging-state"} == 5)){
+				$this->checkAndUpdateCmd("statusDevice","Retour Maison");
+				}
+
+				if (($json->{"vacuum:status"} == 6) AND ($json->{"battery:charging-state"} == 1)){
+				$this->checkAndUpdateCmd("statusDevice","En Charge");
+				}
+
+				if ($json->{"vacuum:status"} == 7){
+				$this->checkAndUpdateCmd("statusDevice","Aspiration et Lavage en cours");
+				}
+
+				if ($json->{"vacuum:status"} == 8){
+				$this->checkAndUpdateCmd("statusDevice","Séchage de la serpillère");	
+				}
+				if ($json->{"vacuum:status"} == 12){
+					$this->checkAndUpdateCmd("statusDevice","Nettoyage en cours de la Zone");	
+				}
+				
+				if ($json->{"vacuum:fault"} == 51){
+					$this->checkAndUpdateCmd("errorDevice","Filtre est mouillé");
+				}
+
+				if ($json->{"vacuum:fault"} == 106){
+					$this->checkAndUpdateCmd("errorDevice","Vider le bac et nettoyer la planche de lavage.");
+				}
 			}
         }
 
