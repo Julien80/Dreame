@@ -22,7 +22,7 @@ fi
 
 sudo apt remove -y rustc
 sudo apt remove -y cargo
-sudo apt autoremove
+sudo apt autoremove -y
 echo "Installing rustup"
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
 echo "Updating rustup to version ${RUST_VERSION}"
