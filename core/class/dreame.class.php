@@ -642,7 +642,7 @@ class dreame extends eqLogic {
 				if ($json->{"filter_life_level"} == 106) { 
 				    $this->checkAndUpdateCmd("errorDevice", "Vider le bac et nettoyer la planche de lavage."); 
 				} 
-			} 
+			 
 
 
 			} elseif($modelType == 'viomivacuum') {
