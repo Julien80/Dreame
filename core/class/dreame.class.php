@@ -168,7 +168,7 @@ class dreame extends eqLogic {
         $accountPassword =      trim(config::byKey('account-password', __CLASS__));
         $accountCountry =       trim(config::byKey('account-country', __CLASS__));
 
-        $cmd = "sudo micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c " . $accountCountry . " 2>&1";
+        $cmd = system::getCmdSudo() . " micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c " . $accountCountry . " 2>&1";
         exec($cmd, $outputArray, $resultCode);
         log::add(__CLASS__, "debug", json_encode($outputArray));
 
@@ -204,6 +204,7 @@ class dreame extends eqLogic {
                     if ($device->getConfiguration('ip') != $response->localip || $device->getConfiguration('token') != $response->token) {
                         $device->setConfiguration('ip', $response->localip);
                         $device->setConfiguration('token', $response->token);
+                        $device->setConfiguration('modelType', self::getModelType($response->model));
                         $device->save();
                         log::add(__CLASS__, "debug", "Mise à jour de l'IP et du token pour l'équipement existant.");
                     } else {
@@ -222,6 +223,7 @@ class dreame extends eqLogic {
                         $eqlogic->setConfiguration('ip', $response->localip);
                         $eqlogic->setConfiguration('token', $response->token);
                         $eqlogic->setConfiguration('model', $response->model);
+                        $eqlogic->setConfiguration('modelType', self::getModelType($response->model));
                         $eqlogic->save();
                         $numberNewDevice++;
                         log::add(__CLASS__, "debug", "Nouvel Equipement, ajout en cours.");
@@ -589,38 +591,20 @@ class dreame extends eqLogic {
         $speed->setDisplay('forceReturnLineAfter', true);
         $speed->save();
 
-
         $this->updateCmd();
     }
 
     public function updateCmd() {
-        log::add(__CLASS__, 'debug', 'test ');
-        $did =             $this->getConfiguration('did');
-        $ip =             $this->getConfiguration('ip');
-        $token =         $this->getConfiguration('token');
-        $model =         $this->getConfiguration('model');
+        log::add(__CLASS__, 'debug', 'updating CMD');
+        $ip = $this->getConfiguration('ip');
+        $token = $this->getConfiguration('token');
+        $modelType = $this->getConfiguration('modelType');
 
 
         if (!empty($ip) && !empty($token)) {
-            if ($model == 'dreame.vacuum.p2008') {
-                $cmd = "sudo miiocli -o json_pretty dreamevacuum --ip " . $ip . " --token " . $token . " status 2>&1";
-                log::add(__CLASS__, 'debug', 'CMD BY DREAMEVACUUM');
-                $modelType = "dreamevacuum";
-            } elseif ($model == 'viomi.vacuum.v8') {
-                $cmd = "sudo miiocli -o json_pretty viomivacuum --ip " . $ip . " --token " . $token . " status 2>&1";
-                log::add(__CLASS__, 'debug', 'CMD BY VIOMIVACUUM');
-                $modelType = "viomivacuum";
-            } elseif (strpos($model, 'roborock') !== false) {
-                $cmd = "sudo miiocli -o json_pretty roborockvacuum --ip " . $ip . " --token " . $token . " status 2>&1";
-                log::add(__CLASS__, 'debug', 'CMD BY ROBOROCKVACUUM');
-                $modelType = "roborockvacuum";
-            } else {
-                $cmd = "sudo miiocli -o json_pretty genericmiot --ip " . $ip . " --token " . $token . " status 2>&1";
-                log::add(__CLASS__, 'debug', 'CMD BY GENERIMIOT');
-                $modelType = "genericmiot";
-            }
+            $cmd = system::getCmdSudo() . " miiocli -o json_pretty $modelType --ip " . $ip . " --token " . $token . " status 2>&1";
+            log::add(__CLASS__, 'debug', 'CMD BY ' . $modelType . " => " . $cmd);
             exec($cmd, $outputArray, $resultCode);
-            log::add(__CLASS__, 'debug', '[GET CMD] ' . $cmd);
         } else {
             log::add(__CLASS__, 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
             return;
@@ -726,18 +710,18 @@ class dreame extends eqLogic {
                 $this->checkAndUpdateCmd("cleaningArea", $cleanAreaFormatted);
                 $this->checkAndUpdateCmd("speed", $json->{"fan_power"});
             } else {
-                $this->checkAndUpdateCmd("batteryLevel",         $json->{"battery:battery-level"});
-                $this->checkAndUpdateCmd("isCharging",         $json->{"battery:charging-state"});
+                $this->checkAndUpdateCmd("batteryLevel",  $json->{"battery:battery-level"});
+                $this->checkAndUpdateCmd("isCharging",    $json->{"battery:charging-state"});
                 $this->checkAndUpdateCmd("error",         $json->{"vacuum:fault"});
-                $this->checkAndUpdateCmd("stateDevice",         $json->{"vacuum:status"});
-                $this->checkAndUpdateCmd("timeBrush",         $json->{"brush-cleaner:brush-left-time"});
-                $this->checkAndUpdateCmd("lifeBrush",         $json->{"brush-cleaner:brush-life-level"});
-                $this->checkAndUpdateCmd("timeBrushLeft",         "0");
-                $this->checkAndUpdateCmd("lifeBrushLeft",         "0");
-                $this->checkAndUpdateCmd("timeFilterLeft",         $json->{"filter:filter-left-time"});
-                $this->checkAndUpdateCmd("lifeFilterLeft",         $json->{"filter:filter-life-level"});
-                $this->checkAndUpdateCmd("cleaningTime",         $json->{"vacuum-extend:cleaning-time"});
-                $this->checkAndUpdateCmd("cleaningArea",         $json->{"vacuum-extend:cleaning-area"});
+                $this->checkAndUpdateCmd("stateDevice",   $json->{"vacuum:status"});
+                $this->checkAndUpdateCmd("timeBrush",     $json->{"brush-cleaner:brush-left-time"});
+                $this->checkAndUpdateCmd("lifeBrush",     $json->{"brush-cleaner:brush-life-level"});
+                $this->checkAndUpdateCmd("timeBrushLeft", "0");
+                $this->checkAndUpdateCmd("lifeBrushLeft", "0");
+                $this->checkAndUpdateCmd("timeFilterLeft", $json->{"filter:filter-left-time"});
+                $this->checkAndUpdateCmd("lifeFilterLeft", $json->{"filter:filter-life-level"});
+                $this->checkAndUpdateCmd("cleaningTime",  $json->{"vacuum-extend:cleaning-time"});
+                $this->checkAndUpdateCmd("cleaningArea",  $json->{"vacuum-extend:cleaning-area"});
                 $this->checkAndUpdateCmd("speed",         $json->{"vacuum:mode"});
 
                 if (($json->{"vacuum:status"} == 2) and ($json->{"battery:charging-state"} == 1)) {
@@ -790,14 +774,36 @@ class dreame extends eqLogic {
         }
     }
 
-    public function sendCmd($cmd, $val = "") {
-        $did = $this->getConfiguration('did');
+    public static function getModelType($model) {
+
+        switch ($model) {
+            case 'viomi.vacuum.v8':
+                $type = 'viomivacuum';
+                break;
+
+            case 'dreame.vacuum.p2008':
+                $type = 'dreamevacuum';
+                break;
+
+            default:
+                if (strpos($model, 'roborock') !== false) {
+                    $type = 'roborockvacuum';
+                } else {
+                    $type = 'genericmiot';
+                }
+                break;
+        }
+
+        return $type;
+    }
+
+    public function sendCmd($cmd) {
         $ip = $this->getConfiguration('ip');
         $token = $this->getConfiguration('token');
-        $model = $this->getConfiguration('model');
+        $modelType = $this->getConfiguration('modelType');
 
         $cmdLabelsByModel = [
-            'roborock' => [
+            'roborockvacuum' => [
                 "home" => "home",
                 "start" => "start",
                 "stop" => "stop",
@@ -805,7 +811,7 @@ class dreame extends eqLogic {
                 "play-sound" => "test_sound_volume",
                 "setSpeed" => "set_fan_speed",
             ],
-            'viomi.vacuum.v8' => [
+            'viomivacuum' => [
                 "home" => "home",
                 "start" => "start",
                 "stop" => "stop",
@@ -813,7 +819,7 @@ class dreame extends eqLogic {
                 "play-sound" => "",
                 "setSpeed" => "set_fan_speed",
             ],
-            'dreame.vacuum.p2008' => [
+            'dreamevacuum' => [
                 "home" => "home",
                 "start" => "start",
                 "stop" => "stop",
@@ -821,7 +827,8 @@ class dreame extends eqLogic {
                 "play-sound" => "play_sound",
                 "setSpeed" => "set_fan_speed",
             ],
-            'default' => [
+            //default
+            'genericmiot' => [
                 "home" => "battery:start-charge",
                 "start" => "vacuum:start-sweep",
                 "stop" => "vacuum:stop-sweeping",
@@ -831,20 +838,10 @@ class dreame extends eqLogic {
             ],
         ];
 
-        if (strpos($model, 'roborock') !== false) {
-            $cmdLabels = $cmdLabelsByModel['roborock'];
-            $cmdExec = "sudo miiocli roborockvacuum --ip $ip --token $token";
-        } elseif ($model == 'viomi.vacuum.v8') {
-            $cmdLabels = $cmdLabelsByModel['viomi.vacuum.v8'];
-            $cmdExec = "sudo miiocli viomivacuum --ip $ip --token $token";
-        } elseif ($model == 'dreame.vacuum.p2008') {
-            $cmdLabels = $cmdLabelsByModel['dreame.vacuum.p2008'];
-            $cmdExec = "sudo miiocli dreamevacuum --ip $ip --token $token";
-        } else {
-            $cmdLabels = $cmdLabelsByModel['default'];
+        $call = ($modelType  == 'genericmiot') ? ' call' : '';
+        $cmdExec = system::getCmdSudo() . " miiocli $modelType --ip $ip --token $token" . $call;
 
-            $cmdExec = "sudo miiocli genericmiot --ip $ip --token $token call";
-        }
+        $cmdLabels = $cmdLabelsByModel[$modelType];
 
         $cmdLabel = $cmdLabels[$cmd] ?? "";
         if ($cmdLabel == "") {
@@ -857,7 +854,7 @@ class dreame extends eqLogic {
 
             exec($finalCmd, $outputArray, $resultCode);
             log::add(__CLASS__, 'debug', '[CMD] ' . $finalCmd);
-            self::updateCmd();
+            $this->updateCmd();
         } else {
             log::add(__CLASS__, 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
         }
@@ -895,34 +892,40 @@ class dreameCmd extends cmd {
                 log::add('dreame', 'debug', 'Refresh : ' . $this->getLogicalId());
                 $eqLogic->updateCmd();
                 break;
+
             case 'start':
                 log::add('dreame', 'debug', 'start : ' . $this->getLogicalId());
                 $eqLogic->sendCmd('start');
                 break;
+
             case 'stop':
                 log::add('dreame', 'debug', 'stop : ' . $this->getLogicalId());
                 $eqLogic->sendCmd('stop');
                 break;
+
             case 'home':
                 log::add('dreame', 'debug', 'home : ' . $this->getLogicalId());
                 $eqLogic->sendCmd('home');
                 break;
+
             case 'position':
                 log::add('dreame', 'debug', 'position : ' . $this->getLogicalId());
                 $eqLogic->sendCmd('position');
                 break;
+
             case 'play-sound':
                 log::add('dreame', 'debug', 'play-sound : ' . $this->getLogicalId());
                 $eqLogic->sendCmd('play-sound');
                 break;
+
             case 'speed':
                 log::add('dreame', 'debug', 'speed : ' . $this->getLogicalId());
                 $speed = isset($_options['select']) ? $_options['select'] : $_options['slider'];
                 $eqLogic->checkAndUpdateCmd('speed', $speed);
                 $eqLogic->sendCmd('setSpeed', $speed);
                 break;
+
             default:
-                throw new Error('This should not append!');
                 log::add('dreame', 'error', 'Aucune commande associée : ' . $this->getLogicalId());
                 break;
         }
