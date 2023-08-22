@@ -17,7 +17,6 @@
 
 try {
     require_once dirname(__FILE__) . '/../../../../core/php/core.inc.php';
-    require_once dirname(__FILE__) . '/../php/dreame.inc.php';
     include_file('core', 'authentification', 'php');
 
     if (!isConnect('admin')) {
@@ -31,7 +30,7 @@ try {
     ajax::init();
 
     if (init('action') == 'detectDevices') {
-        ajax::success(self::detectDevices());
+        ajax::success(dreame::detectDevices());
     }
 
 

@@ -207,6 +207,9 @@ class dreame extends eqLogic {
                         $device->setConfiguration('modelType', self::getModelType($response->model));
                         $device->save();
                         log::add(__CLASS__, "debug", "Mise à jour de l'IP et du token pour l'équipement existant.");
+                    } elseif ($device->getConfiguration('modelType') == '') {
+                        $device->setConfiguration('modelType', self::getModelType($response->model));
+                        $device->save();
                     } else {
                         log::add(__CLASS__, "debug", "Equipement déjà présent, pas de modification");
                     }
@@ -240,6 +243,9 @@ class dreame extends eqLogic {
     }
 
     public function createCmd() {
+
+        log::add(__CLASS__, "debug", "============================ CREATING CMD ============================");
+
         $order = 1;
 
         $batteryLevel = $this->getCmd(null, 'batteryLevel');
@@ -595,7 +601,7 @@ class dreame extends eqLogic {
     }
 
     public function updateCmd() {
-        log::add(__CLASS__, 'debug', 'updating CMD');
+        log::add(__CLASS__, "debug", "============================ UPDATING CMD ============================");
         $ip = $this->getConfiguration('ip');
         $token = $this->getConfiguration('token');
         $modelType = $this->getConfiguration('modelType');
