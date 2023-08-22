@@ -114,8 +114,7 @@ class dreame extends eqLogic {
 
     // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
     public function postSave() {
-        if ($this->getIsEnable() == 1)
-            self::createCmd();
+        if ($this->getIsEnable() == 1) $this->createCmd();
     }
 
     // Fonction exécutée automatiquement avant la suppression de l'équipement
@@ -162,13 +161,17 @@ class dreame extends eqLogic {
     /*     * **********************Getteur Setteur*************************** */
 
     public static function detectDevices() {
-        $accountEmail =     trim(config::byKey('account-email', __CLASS__));
-        $accountPassword =     trim(config::byKey('account-password', __CLASS__));
-        $accountCountry =     trim(config::byKey('account-country', __CLASS__));
+
+        log::add(__CLASS__, "debug", "============================ DISCOVER ============================");
+
+        $accountEmail =         trim(config::byKey('account-email', __CLASS__));
+        $accountPassword =      trim(config::byKey('account-password', __CLASS__));
+        $accountCountry =       trim(config::byKey('account-country', __CLASS__));
 
         $cmd = "sudo micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c " . $accountCountry . " 2>&1";
         exec($cmd, $outputArray, $resultCode);
         log::add(__CLASS__, "debug", json_encode($outputArray));
+
         if ($resultCode != 0) {
             if (strstr($outputArray[23], 'Access denied')) { //$outputArray[23] = "micloud.micloudexception.MiCloudAccessDenied: Access denied. Did you set the correct api key and/or username?")
                 log::add(__CLASS__, "debug", "Erreur Mot de Passe ou Email");
@@ -186,25 +189,26 @@ class dreame extends eqLogic {
         } else {
             $json = json_decode($outputArray[0]);
             log::add(__CLASS__, "debug", json_encode($json));
-            $getAllDevices = eqLogic::byType('dreame');
+            $getAllDevices = eqLogic::byType(__CLASS__);
+            $numberNewDevice = 0;
             foreach ($json as $response) {
                 $alreadyExist = false;
-                foreach ($getAllDevices as $allDevices) {
-                    if ($allDevices->getLogicalId() == $response->did) {
+                foreach ($getAllDevices as $device) {
+                    if ($device->getLogicalId() == $response->did) {
                         $alreadyExist = true;
-                        if ($allDevices->getConfiguration('ip') != $response->localip || $allDevices->getConfiguration('token') != $response->token) {
-                            $allDevices->setConfiguration('ip', $response->localip);
-                            $allDevices->setConfiguration('token', $response->token);
-                            $allDevices->save();
-                            log::add(__CLASS__, "debug", "Mise à jour de l'IP et du token pour l'équipement existant.");
-                        }
                         break;
                     }
                 }
-                $numberNewDevice = 0;
 
                 if ($alreadyExist) {
-                    log::add(__CLASS__, "debug", "Equipement déjà présent, il ne faut donc pas l'ajouter");
+                    if ($device->getConfiguration('ip') != $response->localip || $device->getConfiguration('token') != $response->token) {
+                        $device->setConfiguration('ip', $response->localip);
+                        $device->setConfiguration('token', $response->token);
+                        $device->save();
+                        log::add(__CLASS__, "debug", "Mise à jour de l'IP et du token pour l'équipement existant.");
+                    } else {
+                        log::add(__CLASS__, "debug", "Equipement déjà présent, pas de modification");
+                    }
                 } else {
                     // Check if $response->model contains 'Dreame' or 'viomi'
                     if (strpos($response->model, 'dreame') !== false || strpos($response->model, 'viomi') !== false || strpos($response->model, 'roborock') !== false) {
@@ -228,13 +232,11 @@ class dreame extends eqLogic {
             }
         }
 
-        log::add(__CLASS__, "debug", "============================ DISCOVER ============================");
-
-
         return [
             "newEq" => $numberNewDevice,
         ];
     }
+
     public function createCmd($bCreateCmd = true) {
         $order = 1;
         $batteryLevel = $this->getCmd(null, 'batteryLevel');
