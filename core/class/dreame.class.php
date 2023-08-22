@@ -41,6 +41,7 @@ class dreame extends eqLogic {
     public static function cron() {
         $eqLogics = self::byType('dreame');
         if (count($eqLogics) > 0) {
+            /** @var dreame $eqLogic */
             foreach ($eqLogics as $eqLogic) {
                 if ($eqLogic->getIsEnable() == 1 && $eqLogic->getConfiguration('model') != 'dreame.vacuum.p2008') {
                     $eqLogic->updateCmd();
@@ -55,6 +56,7 @@ class dreame extends eqLogic {
     public static function cron5() {
         $eqLogics = self::byType('dreame');
         if (count($eqLogics) > 0) {
+            /** @var dreame $eqLogic */
             foreach ($eqLogics as $eqLogic) {
                 if ($eqLogic->getIsEnable() == 1 && $eqLogic->getConfiguration('model') == 'dreame.vacuum.p2008') {
                     $eqLogic->updateCmd();
@@ -159,17 +161,17 @@ class dreame extends eqLogic {
 
     /*     * **********************Getteur Setteur*************************** */
 
-    public function detectDevices() {
-        $accountEmail =     trim(config::byKey('account-email', 'dreame'));
-        $accountPassword =     trim(config::byKey('account-password', 'dreame'));
-        $accountCountry =     trim(config::byKey('account-country', 'dreame'));
+    public static function detectDevices() {
+        $accountEmail =     trim(config::byKey('account-email', __CLASS__));
+        $accountPassword =     trim(config::byKey('account-password', __CLASS__));
+        $accountCountry =     trim(config::byKey('account-country', __CLASS__));
 
         $cmd = "sudo micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c " . $accountCountry . " 2>&1";
         exec($cmd, $outputArray, $resultCode);
-        log::add("dreame", "debug", json_encode($outputArray));
+        log::add(__CLASS__, "debug", json_encode($outputArray));
         if ($resultCode != 0) {
             if (strstr($outputArray[23], 'Access denied')) { //$outputArray[23] = "micloud.micloudexception.MiCloudAccessDenied: Access denied. Did you set the correct api key and/or username?")
-                log::add("dreame", "debug", "Erreur Mot de Passe ou Email");
+                log::add(__CLASS__, "debug", "Erreur Mot de Passe ou Email");
 
                 event::add('jeedom::alert', array(
                     'level' => 'danger',
@@ -183,7 +185,7 @@ class dreame extends eqLogic {
             }
         } else {
             $json = json_decode($outputArray[0]);
-            log::add("dreame", "debug", json_encode($json));
+            log::add(__CLASS__, "debug", json_encode($json));
             $getAllDevices = eqLogic::byType('dreame');
             foreach ($json as $response) {
                 $alreadyExist = false;
@@ -194,7 +196,7 @@ class dreame extends eqLogic {
                             $allDevices->setConfiguration('ip', $response->localip);
                             $allDevices->setConfiguration('token', $response->token);
                             $allDevices->save();
-                            log::add("dreame", "debug", "Mise à jour de l'IP et du token pour l'équipement existant.");
+                            log::add(__CLASS__, "debug", "Mise à jour de l'IP et du token pour l'équipement existant.");
                         }
                         break;
                     }
@@ -202,7 +204,7 @@ class dreame extends eqLogic {
                 $numberNewDevice = 0;
 
                 if ($alreadyExist) {
-                    log::add("dreame", "debug", "Equipement déjà présent, il ne faut donc pas l'ajouter");
+                    log::add(__CLASS__, "debug", "Equipement déjà présent, il ne faut donc pas l'ajouter");
                 } else {
                     // Check if $response->model contains 'Dreame' or 'viomi'
                     if (strpos($response->model, 'dreame') !== false || strpos($response->model, 'viomi') !== false || strpos($response->model, 'roborock') !== false) {
@@ -218,15 +220,15 @@ class dreame extends eqLogic {
                         $eqlogic->setConfiguration('model', $response->model);
                         $eqlogic->save();
                         $numberNewDevice++;
-                        log::add("dreame", "debug", "Nouvel Equipement, ajout en cours.");
+                        log::add(__CLASS__, "debug", "Nouvel Equipement, ajout en cours.");
                     } else {
-                        log::add("dreame", "debug", "Le modèle de l'équipement n'est pas pris en charge : " . $response->model);
+                        log::add(__CLASS__, "debug", "Le modèle de l'équipement n'est pas pris en charge : " . $response->model);
                     }
                 }
             }
         }
 
-        log::add("dreame", "debug", "============================ DISCOVER ============================");
+        log::add(__CLASS__, "debug", "============================ DISCOVER ============================");
 
 
         return [
@@ -601,7 +603,7 @@ class dreame extends eqLogic {
     }
 
     public function updateCmd() {
-        log::add('dreame', 'debug', 'test ');
+        log::add(__CLASS__, 'debug', 'test ');
         $did =             $this->getConfiguration('did');
         $ip =             $this->getConfiguration('ip');
         $token =         $this->getConfiguration('token');
@@ -611,39 +613,39 @@ class dreame extends eqLogic {
         if (!empty($ip) && !empty($token)) {
             if ($model == 'dreame.vacuum.p2008') {
                 $cmd = "sudo miiocli -o json_pretty dreamevacuum --ip " . $ip . " --token " . $token . " status 2>&1";
-                log::add('dreame', 'debug', 'CMD BY DREAMEVACUUM');
+                log::add(__CLASS__, 'debug', 'CMD BY DREAMEVACUUM');
                 $modelType = "dreamevacuum";
             } elseif ($model == 'viomi.vacuum.v8') {
                 $cmd = "sudo miiocli -o json_pretty viomivacuum --ip " . $ip . " --token " . $token . " status 2>&1";
-                log::add('dreame', 'debug', 'CMD BY VIOMIVACUUM');
+                log::add(__CLASS__, 'debug', 'CMD BY VIOMIVACUUM');
                 $modelType = "viomivacuum";
             } elseif (strpos($model, 'roborock') !== false) {
                 $cmd = "sudo miiocli -o json_pretty roborockvacuum --ip " . $ip . " --token " . $token . " status 2>&1";
-                log::add('dreame', 'debug', 'CMD BY ROBOROCKVACUUM');
+                log::add(__CLASS__, 'debug', 'CMD BY ROBOROCKVACUUM');
                 $modelType = "roborockvacuum";
             } else {
                 $cmd = "sudo miiocli -o json_pretty genericmiot --ip " . $ip . " --token " . $token . " status 2>&1";
-                log::add('dreame', 'debug', 'CMD BY GENERIMIOT');
+                log::add(__CLASS__, 'debug', 'CMD BY GENERIMIOT');
                 $modelType = "genericmiot";
             }
             exec($cmd, $outputArray, $resultCode);
-            log::add('dreame', 'debug', '[GET CMD] ' . $cmd);
+            log::add(__CLASS__, 'debug', '[GET CMD] ' . $cmd);
         } else {
-            log::add('dreame', 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
+            log::add(__CLASS__, 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
             return;
         }
 
         $log_output = implode(PHP_EOL, $outputArray);
-        log::add('dreame', 'debug', 'JSON Complet ' . $log_output);
+        log::add(__CLASS__, 'debug', 'JSON Complet ' . $log_output);
         $pos = strpos($log_output, '{');
         $json_string = substr($log_output, $pos);
         $json = json_decode($json_string);
 
         if ($json === null) {
-            log::add('dreame', 'debug', 'Erreur JSON (null) : ' . json_last_error_msg());
+            log::add(__CLASS__, 'debug', 'Erreur JSON (null) : ' . json_last_error_msg());
             return;
         }
-        log::add('dreame', 'debug', 'JSON ' . json_encode($json));
+        log::add(__CLASS__, 'debug', 'JSON ' . json_encode($json));
 
         if ($json != null) {
             if ($modelType == 'dreamevacuum') {
@@ -855,7 +857,7 @@ class dreame extends eqLogic {
 
         $cmdLabel = $cmdLabels[$cmd] ?? "";
         if ($cmdLabel == "") {
-            log::add('dreame', 'warn', 'Erreur pour action : ' . $this->getLogicalId());
+            log::add(__CLASS__, 'warn', 'Erreur pour action : ' . $this->getLogicalId());
             return;
         }
 
@@ -863,10 +865,10 @@ class dreame extends eqLogic {
             $finalCmd = "$cmdExec $cmdLabel";
 
             exec($finalCmd, $outputArray, $resultCode);
-            log::add('dreame', 'debug', '[CMD] ' . $finalCmd);
+            log::add(__CLASS__, 'debug', '[CMD] ' . $finalCmd);
             self::updateCmd();
         } else {
-            log::add('dreame', 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
+            log::add(__CLASS__, 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
         }
     }
 }
@@ -893,6 +895,7 @@ class dreameCmd extends cmd {
     // Exécution d'une commande
     public function execute($_options = array()) {
 
+        /** @var dreame $eqLogic */
         $eqLogic = $this->getEqLogic(); // Récupération de l’eqlogic
         Log::add('dreame', 'debug', '$_options[] traité: ' . json_encode($_options));
 
