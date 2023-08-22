@@ -873,7 +873,9 @@ class dreame extends eqLogic {
             return;
         }
     
-        if (!empty($ip) && !empty($token)) {            
+        if (!empty($ip) && !empty($token)) {
+            $finalCmd = "$cmdExec $cmdLabel";
+            
             exec($finalCmd, $outputArray, $resultCode);
             log::add('dreame', 'debug', '[CMD] ' . $finalCmd);
             self::updateCmd();
