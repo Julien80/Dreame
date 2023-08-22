@@ -16,24 +16,24 @@
 */
 
 /* * ***************************Includes********************************* */
-require_once __DIR__  . '/../../../../core/php/core.inc.php';
+require_once __DIR__ . '/../../../../core/php/core.inc.php';
 
 class dreame extends eqLogic {
-    /*     * *************************Attributs****************************** */
+    /* * *************************Attributs****************************** */
 
     /*
-  * Permet de définir les possibilités de personnalisation du widget (en cas d'utilisation de la fonction 'toHtml' par exemple)
-  * Tableau multidimensionnel - exemple: array('custom' => true, 'custom::layout' => false)
-  public static $_widgetPossibility = array();
-  */
+ * Permet de définir les possibilités de personnalisation du widget (en cas d'utilisation de la fonction 'toHtml' par exemple)
+ * Tableau multidimensionnel - exemple: array('custom' => true, 'custom::layout' => false)
+ public static $_widgetPossibility = array();
+ */
 
     /*
-  * Permet de crypter/décrypter automatiquement des champs de configuration du plugin
-  * Exemple : "param1" & "param2" seront cryptés mais pas "param3"
-  public static $_encryptConfigKey = array('param1', 'param2');
-  */
+ * Permet de crypter/décrypter automatiquement des champs de configuration du plugin
+ * Exemple : "param1" & "param2" seront cryptés mais pas "param3"
+ public static $_encryptConfigKey = array('param1', 'param2');
+ */
 
-    /*     * ***********************Methode static*************************** */
+    /* * ***********************Methode static*************************** */
 
 
     //* Fonction exécutée automatiquement toutes les minutes par Jeedom
@@ -66,31 +66,31 @@ class dreame extends eqLogic {
     }
 
     /*
-  * Fonction exécutée automatiquement toutes les 10 minutes par Jeedom
-  public static function cron10() {}
-  */
+ * Fonction exécutée automatiquement toutes les 10 minutes par Jeedom
+ public static function cron10() {}
+ */
 
     /*
-  * Fonction exécutée automatiquement toutes les 15 minutes par Jeedom
-  public static function cron15() {}
-  */
+ * Fonction exécutée automatiquement toutes les 15 minutes par Jeedom
+ public static function cron15() {}
+ */
 
     /*
-  * Fonction exécutée automatiquement toutes les 30 minutes par Jeedom
-  public static function cron30() {}
-  */
+ * Fonction exécutée automatiquement toutes les 30 minutes par Jeedom
+ public static function cron30() {}
+ */
 
     /*
-  * Fonction exécutée automatiquement toutes les heures par Jeedom
-  public static function cronHourly() {}
-  */
+ * Fonction exécutée automatiquement toutes les heures par Jeedom
+ public static function cronHourly() {}
+ */
 
     /*
-  * Fonction exécutée automatiquement tous les jours par Jeedom
-  public static function cronDaily() {}
-  */
+ * Fonction exécutée automatiquement tous les jours par Jeedom
+ public static function cronDaily() {}
+ */
 
-    /*     * *********************Méthodes d'instance************************* */
+    /* * *********************Méthodes d'instance************************* */
 
     // Fonction exécutée automatiquement avant la création de l'équipement
     public function preInsert() {
@@ -126,47 +126,47 @@ class dreame extends eqLogic {
     }
 
     /*
-  * Permet de crypter/décrypter automatiquement des champs de configuration des équipements
-  * Exemple avec le champ "Mot de passe" (password)
-  public function decrypt() {
-    $this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
-  }
-  public function encrypt() {
-    $this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
-  }
-  */
+ * Permet de crypter/décrypter automatiquement des champs de configuration des équipements
+ * Exemple avec le champ "Mot de passe" (password)
+ public function decrypt() {
+ $this->setConfiguration('password', utils::decrypt($this->getConfiguration('password')));
+ }
+ public function encrypt() {
+ $this->setConfiguration('password', utils::encrypt($this->getConfiguration('password')));
+ }
+ */
 
     /*
-  * Permet de modifier l'affichage du widget (également utilisable par les commandes)
-  public function toHtml($_version = 'dashboard') {}
-  */
+ * Permet de modifier l'affichage du widget (également utilisable par les commandes)
+ public function toHtml($_version = 'dashboard') {}
+ */
 
     /*
-  * Permet de déclencher une action avant modification d'une variable de configuration du plugin
-  * Exemple avec la variable "param3"
-  public static function preConfig_param3( $value ) {
-    // do some checks or modify on $value
-    return $value;
-  }
-  */
+ * Permet de déclencher une action avant modification d'une variable de configuration du plugin
+ * Exemple avec la variable "param3"
+ public static function preConfig_param3( $value ) {
+ // do some checks or modify on $value
+ return $value;
+ }
+ */
 
     /*
-  * Permet de déclencher une action après modification d'une variable de configuration du plugin
-  * Exemple avec la variable "param3"
-  public static function postConfig_param3($value) {
-    // no return value
-  }
-  */
+ * Permet de déclencher une action après modification d'une variable de configuration du plugin
+ * Exemple avec la variable "param3"
+ public static function postConfig_param3($value) {
+ // no return value
+ }
+ */
 
-    /*     * **********************Getteur Setteur*************************** */
+    /* * **********************Getteur Setteur*************************** */
 
     public static function detectDevices() {
 
         log::add(__CLASS__, "debug", "============================ DISCOVER ============================");
 
-        $accountEmail =         trim(config::byKey('account-email', __CLASS__));
-        $accountPassword =      trim(config::byKey('account-password', __CLASS__));
-        $accountCountry =       trim(config::byKey('account-country', __CLASS__));
+        $accountEmail = trim(config::byKey('account-email', __CLASS__));
+        $accountPassword = trim(config::byKey('account-password', __CLASS__));
+        $accountCountry = trim(config::byKey('account-country', __CLASS__));
 
         $cmd = system::getCmdSudo() . " micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c " . $accountCountry . " 2>&1";
         exec($cmd, $outputArray, $resultCode);
@@ -686,19 +686,19 @@ class dreame extends eqLogic {
                     $this->checkAndUpdateCmd("errorDevice", "Vider le bac et nettoyer la planche de lavage.");
                 }
             } elseif ($modelType == 'viomivacuum') {
-                $this->checkAndUpdateCmd("batteryLevel",         $json->{"battary_life"});
-                $this->checkAndUpdateCmd("isCharging",         $json->{"charging_state"});
-                $this->checkAndUpdateCmd("error",         $json->{"err_state"});
-                $this->checkAndUpdateCmd("stateDevice",         $json->{"run_state"});
-                $this->checkAndUpdateCmd("timeBrush",         "0");
-                $this->checkAndUpdateCmd("lifeBrush",         "0");
-                $this->checkAndUpdateCmd("timeBrushLeft",         "0");
-                $this->checkAndUpdateCmd("lifeBrushLeft",         "0");
-                $this->checkAndUpdateCmd("timeFilterLeft",         "0");
-                $this->checkAndUpdateCmd("lifeFilterLeft",         "0");
-                $this->checkAndUpdateCmd("cleaningTime",         $json->{"s_time"});
-                $this->checkAndUpdateCmd("cleaningArea",         $json->{"s_area"});
-                $this->checkAndUpdateCmd("speed",         $json->{"suction_grade"});
+                $this->checkAndUpdateCmd("batteryLevel", $json->{"battary_life"});
+                $this->checkAndUpdateCmd("isCharging", $json->{"charging_state"});
+                $this->checkAndUpdateCmd("error", $json->{"err_state"});
+                $this->checkAndUpdateCmd("stateDevice", $json->{"run_state"});
+                $this->checkAndUpdateCmd("timeBrush", "0");
+                $this->checkAndUpdateCmd("lifeBrush", "0");
+                $this->checkAndUpdateCmd("timeBrushLeft", "0");
+                $this->checkAndUpdateCmd("lifeBrushLeft", "0");
+                $this->checkAndUpdateCmd("timeFilterLeft", "0");
+                $this->checkAndUpdateCmd("lifeFilterLeft", "0");
+                $this->checkAndUpdateCmd("cleaningTime", $json->{"s_time"});
+                $this->checkAndUpdateCmd("cleaningArea", $json->{"s_area"});
+                $this->checkAndUpdateCmd("speed", $json->{"suction_grade"});
             } elseif ($modelType == 'roborockvacuum') {
                 $cleanTimeFormatted = gmdate("i", $json->{"clean_time"});
                 $cleanAreaFormatted = round($json->{"clean_area"} / 1000000, 2);
@@ -710,19 +710,19 @@ class dreame extends eqLogic {
                 $this->checkAndUpdateCmd("cleaningArea", $cleanAreaFormatted);
                 $this->checkAndUpdateCmd("speed", $json->{"fan_power"});
             } else {
-                $this->checkAndUpdateCmd("batteryLevel",  $json->{"battery:battery-level"});
-                $this->checkAndUpdateCmd("isCharging",    $json->{"battery:charging-state"});
-                $this->checkAndUpdateCmd("error",         $json->{"vacuum:fault"});
-                $this->checkAndUpdateCmd("stateDevice",   $json->{"vacuum:status"});
-                $this->checkAndUpdateCmd("timeBrush",     $json->{"brush-cleaner:brush-left-time"});
-                $this->checkAndUpdateCmd("lifeBrush",     $json->{"brush-cleaner:brush-life-level"});
+                $this->checkAndUpdateCmd("batteryLevel", $json->{"battery:battery-level"});
+                $this->checkAndUpdateCmd("isCharging", $json->{"battery:charging-state"});
+                $this->checkAndUpdateCmd("error", $json->{"vacuum:fault"});
+                $this->checkAndUpdateCmd("stateDevice", $json->{"vacuum:status"});
+                $this->checkAndUpdateCmd("timeBrush", $json->{"brush-cleaner:brush-left-time"});
+                $this->checkAndUpdateCmd("lifeBrush", $json->{"brush-cleaner:brush-life-level"});
                 $this->checkAndUpdateCmd("timeBrushLeft", "0");
                 $this->checkAndUpdateCmd("lifeBrushLeft", "0");
                 $this->checkAndUpdateCmd("timeFilterLeft", $json->{"filter:filter-left-time"});
                 $this->checkAndUpdateCmd("lifeFilterLeft", $json->{"filter:filter-life-level"});
-                $this->checkAndUpdateCmd("cleaningTime",  $json->{"vacuum-extend:cleaning-time"});
-                $this->checkAndUpdateCmd("cleaningArea",  $json->{"vacuum-extend:cleaning-area"});
-                $this->checkAndUpdateCmd("speed",         $json->{"vacuum:mode"});
+                $this->checkAndUpdateCmd("cleaningTime", $json->{"vacuum-extend:cleaning-time"});
+                $this->checkAndUpdateCmd("cleaningArea", $json->{"vacuum-extend:cleaning-area"});
+                $this->checkAndUpdateCmd("speed", $json->{"vacuum:mode"});
 
                 if (($json->{"vacuum:status"} == 2) and ($json->{"battery:charging-state"} == 1)) {
                     $this->checkAndUpdateCmd("statusDevice", "Prêt à démarrer");
@@ -838,7 +838,7 @@ class dreame extends eqLogic {
             ],
         ];
 
-        $call = ($modelType  == 'genericmiot') ? ' call' : '';
+        $call = ($modelType == 'genericmiot') ? ' call' : '';
         $cmdExec = system::getCmdSudo() . " miiocli $modelType --ip $ip --token $token" . $call;
 
         $cmdLabels = $cmdLabelsByModel[$modelType];
@@ -862,23 +862,23 @@ class dreame extends eqLogic {
 }
 
 class dreameCmd extends cmd {
-    /*     * *************************Attributs****************************** */
+    /* * *************************Attributs****************************** */
 
     /*
-  public static $_widgetPossibility = array();
-  */
+ public static $_widgetPossibility = array();
+ */
 
-    /*     * ***********************Methode static*************************** */
+    /* * ***********************Methode static*************************** */
 
 
-    /*     * *********************Methode d'instance************************* */
+    /* * *********************Methode d'instance************************* */
 
     /*
-  * Permet d'empêcher la suppression des commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
-  public function dontRemoveCmd() {
-    return true;
-  }
-  */
+ * Permet d'empêcher la suppression des commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
+ public function dontRemoveCmd() {
+ return true;
+ }
+ */
 
     // Exécution d'une commande
     public function execute($_options = array()) {
@@ -933,5 +933,5 @@ class dreameCmd extends cmd {
 
 
 
-    /*     * **********************Getteur Setteur*************************** */
+    /* * **********************Getteur Setteur*************************** */
 }
