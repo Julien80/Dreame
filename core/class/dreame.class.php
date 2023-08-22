@@ -94,6 +94,8 @@ class dreame extends eqLogic {
 
     // Fonction exécutée automatiquement avant la création de l'équipement
     public function preInsert() {
+        $this->setIsEnable(1);
+        $this->setIsVisible(1);
     }
 
     // Fonction exécutée automatiquement après la création de l'équipement
