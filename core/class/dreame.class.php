@@ -159,9 +159,7 @@ class dreame extends eqLogic {
 
   /*     * **********************Getteur Setteur*************************** */
 	public function createCmd($bCreateCmd = true) {
-
-      	$order = 1;
-
+	      	$order = 1;
 		$batteryLevel = $this->getCmd(null, 'batteryLevel');
 		if (!is_object($batteryLevel)) {
 			$batteryLevel = new dreameCmd();
@@ -173,14 +171,14 @@ class dreame extends eqLogic {
 		$batteryLevel->setType('info');
 		$batteryLevel->setUnite('%');
 		$batteryLevel->setSubType('numeric');
-     	$batteryLevel->setTemplate('dashboard', 'default'); 
-      	$batteryLevel->setTemplate('mobile', 'default'); 
+	     	$batteryLevel->setTemplate('dashboard', 'default'); 
+	      	$batteryLevel->setTemplate('mobile', 'default'); 
 		$batteryLevel->setIsVisible(1);
 		$batteryLevel->setIsHistorized(1);
 		$batteryLevel->setDisplay('forceReturnLineBefore', false);
 		$batteryLevel->save();
       
-      $isCharging = $this->getCmd(null, 'isCharging');
+      		$isCharging = $this->getCmd(null, 'isCharging');
 		if (!is_object($isCharging)) {
 			$isCharging = new dreameCmd();
 			$isCharging->setName(__('Etat de Charge', __FILE__));
@@ -190,14 +188,14 @@ class dreame extends eqLogic {
 		$isCharging->setEqLogic_id($this->getId());
 		$isCharging->setType('info');
 		$isCharging->setTemplate('dashboard', 'default');
-      	$isCharging->setTemplate('mobile', 'default');
+      		$isCharging->setTemplate('mobile', 'default');
 		$isCharging->setSubType('numeric');
 		$isCharging->setIsVisible(1);
 		$isCharging->setIsHistorized(1);
 		$isCharging->setDisplay('forceReturnLineBefore', false);
 		$isCharging->save();
       
-       	$error = $this->getCmd(null, 'error');
+       		$error = $this->getCmd(null, 'error');
 		if (!is_object($error)) {
 			$error = new dreameCmd();
 			$error->setName(__('Erreur', __FILE__));
@@ -207,7 +205,7 @@ class dreame extends eqLogic {
 		$error->setEqLogic_id($this->getId());
 		$error->setType('info');
 		$error->setTemplate('dashboard', 'line');
-      	$error->setTemplate('mobile', 'line');
+      		$error->setTemplate('mobile', 'line');
 		$error->setSubType('numeric');
 		$error->setIsVisible(1);
 		$error->setIsHistorized(1);
@@ -224,20 +222,20 @@ class dreame extends eqLogic {
 		$errorDevice->setEqLogic_id($this->getId());
 		$errorDevice->setType('info');
 		$errorDevice->setTemplate('dashboard', 'line');
-      	$errorDevice->setTemplate('mobile', 'line');
+      		$errorDevice->setTemplate('mobile', 'line');
 		$errorDevice->setSubType('numeric');
 		$errorDevice->setIsVisible(1);
 		$errorDevice->setIsHistorized(1);
 		$errorDevice->setDisplay('forceReturnLineBefore', false);
 		$errorDevice->save();
       
-        $statusDevice = $this->getCmd(null, 'statusDevice');
+        	$statusDevice = $this->getCmd(null, 'statusDevice');
 		if (!is_object($statusDevice)) {
 			$statusDevice = new dreameCmd();
 			$statusDevice->setName(__('Etat', __FILE__));
 		}
       
-        $stateDevice = $this->getCmd(null, 'stateDevice');
+        	$stateDevice = $this->getCmd(null, 'stateDevice');
 		if (!is_object($stateDevice)) {
 			$stateDevice = new dreameCmd();
 			$stateDevice->setName(__('Statut', __FILE__));
@@ -247,14 +245,14 @@ class dreame extends eqLogic {
 		$stateDevice->setEqLogic_id($this->getId());
 		$stateDevice->setType('info');
 		$stateDevice->setTemplate('dashboard', 'line');
-      	$stateDevice->setTemplate('mobile', 'line');
+      		$stateDevice->setTemplate('mobile', 'line');
 		$stateDevice->setSubType('numeric');
 		$stateDevice->setIsVisible(1);
 		$stateDevice->setIsHistorized(1);
 		$stateDevice->setDisplay('forceReturnLineBefore', false);
 		$stateDevice->save();
       
-        $statusDevice = $this->getCmd(null, 'statusDevice');
+        	$statusDevice = $this->getCmd(null, 'statusDevice');
 		if (!is_object($statusDevice)) {
 			$statusDevice = new dreameCmd();
 			$statusDevice->setName(__('Etat', __FILE__));
@@ -264,14 +262,14 @@ class dreame extends eqLogic {
 		$statusDevice->setEqLogic_id($this->getId());
 		$statusDevice->setType('info');
 		$statusDevice->setTemplate('dashboard', 'line');
-      	$statusDevice->setTemplate('mobile', 'line');
+      		$statusDevice->setTemplate('mobile', 'line');
 		$statusDevice->setSubType('string');
 		$statusDevice->setIsVisible(1);
 		$statusDevice->setIsHistorized(0);
 		$statusDevice->setDisplay('forceReturnLineBefore', true);
 		$statusDevice->save();
       
-        $timeBrush = $this->getCmd(null, 'timeBrush');
+        	$timeBrush = $this->getCmd(null, 'timeBrush');
 		if (!is_object($timeBrush)) {
 			$timeBrush = new dreameCmd();
 			$timeBrush->setName(__('Temps restant brosse principale', __FILE__));
@@ -281,15 +279,15 @@ class dreame extends eqLogic {
 		$timeBrush->setEqLogic_id($this->getId());
 		$timeBrush->setType('info');
 		$timeBrush->setUnite('h');
-      	$timeBrush->setTemplate('dashboard', 'line');
-      	$timeBrush->setTemplate('mobile', 'line');
+      		$timeBrush->setTemplate('dashboard', 'line');
+      		$timeBrush->setTemplate('mobile', 'line');
 		$timeBrush->setSubType('numeric');
 		$timeBrush->setIsVisible(1);
 		$timeBrush->setIsHistorized(1);
 		$timeBrush->setDisplay('forceReturnLineBefore', false);
 		$timeBrush->save();
       
-       $lifeBrush = $this->getCmd(null, 'lifeBrush');
+       		$lifeBrush = $this->getCmd(null, 'lifeBrush');
 		if (!is_object($lifeBrush)) {
 			$lifeBrush = new dreameCmd();
 			$lifeBrush->setName(__('Etat brosse principale', __FILE__));
@@ -298,8 +296,8 @@ class dreame extends eqLogic {
 		$lifeBrush->setLogicalId('lifeBrush');
 		$lifeBrush->setEqLogic_id($this->getId());
 		$lifeBrush->setType('info');
-        $lifeBrush->setTemplate('dashboard', 'line');
-      	$lifeBrush->setTemplate('mobile', 'line');
+        	$lifeBrush->setTemplate('dashboard', 'line');
+      		$lifeBrush->setTemplate('mobile', 'line');
 		$lifeBrush->setUnite('%');
 		$lifeBrush->setSubType('numeric');
 		$lifeBrush->setIsVisible(1);
@@ -307,7 +305,7 @@ class dreame extends eqLogic {
 		$lifeBrush->setDisplay('forceReturnLineBefore', false);
 		$lifeBrush->save();
       
-        $timeBrushLeft = $this->getCmd(null, 'timeBrushLeft');
+        	$timeBrushLeft = $this->getCmd(null, 'timeBrushLeft');
 		if (!is_object($timeBrushLeft)) {
 			$timeBrushLeft = new dreameCmd();
 			$timeBrushLeft->setName(__('Durée de vie restante brosse latérale', __FILE__));
@@ -318,14 +316,14 @@ class dreame extends eqLogic {
 		$timeBrushLeft->setType('info');
 		$timeBrushLeft->setUnite('h');
 		$timeBrushLeft->setSubType('numeric');
-        $timeBrushLeft->setTemplate('dashboard', 'line');
-      	$timeBrushLeft->setTemplate('mobile', 'line');
+        	$timeBrushLeft->setTemplate('dashboard', 'line');
+      		$timeBrushLeft->setTemplate('mobile', 'line');
 		$timeBrushLeft->setIsVisible(1);
 		$timeBrushLeft->setIsHistorized(1);
 		$timeBrushLeft->setDisplay('forceReturnLineBefore', false);
 		$timeBrushLeft->save();
       
-       $lifeBrushLeft = $this->getCmd(null, 'lifeBrushLeft');
+       		$lifeBrushLeft = $this->getCmd(null, 'lifeBrushLeft');
 		if (!is_object($lifeBrushLeft)) {
 			$lifeBrushLeft = new dreameCmd();
 			$lifeBrushLeft->setName(__('Etat brosse latérale', __FILE__));
@@ -335,15 +333,15 @@ class dreame extends eqLogic {
 		$lifeBrushLeft->setEqLogic_id($this->getId());
 		$lifeBrushLeft->setType('info');
 		$lifeBrushLeft->setUnite('%');
- 	    $lifeBrushLeft->setTemplate('dashboard', 'line');
-      	$lifeBrushLeft->setTemplate('mobile', 'line');
+ 	    	$lifeBrushLeft->setTemplate('dashboard', 'line');
+      		$lifeBrushLeft->setTemplate('mobile', 'line');
 		$lifeBrushLeft->setSubType('numeric');
 		$lifeBrushLeft->setIsVisible(1);
 		$lifeBrushLeft->setIsHistorized(1);
 		$lifeBrushLeft->setDisplay('forceReturnLineBefore', false);
 		$lifeBrushLeft->save();
       
-    	$timeFilterLeft = $this->getCmd(null, 'timeFilterLeft');
+    		$timeFilterLeft = $this->getCmd(null, 'timeFilterLeft');
 		if (!is_object($timeFilterLeft)) {
 			$timeFilterLeft = new dreameCmd();
 			$timeFilterLeft->setName(__('Durée de vie restante filtre', __FILE__));
@@ -354,14 +352,14 @@ class dreame extends eqLogic {
 		$timeFilterLeft->setType('info');
 		$timeFilterLeft->setUnite('h');
 		$timeFilterLeft->setSubType('numeric');
-        $timeFilterLeft->setTemplate('dashboard', 'line');
-     	$timeFilterLeft->setTemplate('mobile', 'line');
+        	$timeFilterLeft->setTemplate('dashboard', 'line');
+     		$timeFilterLeft->setTemplate('mobile', 'line');
 		$timeFilterLeft->setIsVisible(1);
 		$timeFilterLeft->setIsHistorized(1);
 		$timeFilterLeft->setDisplay('forceReturnLineBefore', false);
 		$timeFilterLeft->save();
       
-       $lifeFilterLeft = $this->getCmd(null, 'lifeFilterLeft');
+       		$lifeFilterLeft = $this->getCmd(null, 'lifeFilterLeft');
 		if (!is_object($lifeFilterLeft)) {
 			$lifeFilterLeft = new dreameCmd();
 			$lifeFilterLeft->setName(__('Etat Filtre', __FILE__));
@@ -371,15 +369,15 @@ class dreame extends eqLogic {
 		$lifeFilterLeft->setEqLogic_id($this->getId());
 		$lifeFilterLeft->setType('info');
 		$lifeFilterLeft->setUnite('%');
-    	$lifeFilterLeft->setTemplate('dashboard', 'line');
-      	$lifeFilterLeft->setTemplate('mobile', 'line');
+    		$lifeFilterLeft->setTemplate('dashboard', 'line');
+      		$lifeFilterLeft->setTemplate('mobile', 'line');
 		$lifeFilterLeft->setSubType('numeric');
 		$lifeFilterLeft->setIsVisible(1);
 		$lifeFilterLeft->setIsHistorized(1);
 		$lifeFilterLeft->setDisplay('forceReturnLineBefore', false);
 		$lifeFilterLeft->save();
       
-             $cleaningTime = $this->getCmd(null, 'cleaningTime');
+             	$cleaningTime = $this->getCmd(null, 'cleaningTime');
 		if (!is_object($cleaningTime)) {
 			$cleaningTime = new dreameCmd();
 			$cleaningTime->setName(__('Temps de nettoyage', __FILE__));
@@ -389,15 +387,15 @@ class dreame extends eqLogic {
 		$cleaningTime->setEqLogic_id($this->getId());
 		$cleaningTime->setType('info');
 		$cleaningTime->setUnite('min');
-      	$cleaningTime->setTemplate('dashboard', 'line');
-      	$cleaningTime->setTemplate('mobile', 'line');
+      		$cleaningTime->setTemplate('dashboard', 'line');
+      		$cleaningTime->setTemplate('mobile', 'line');
 		$cleaningTime->setSubType('numeric');
 		$cleaningTime->setIsVisible(1);
 		$cleaningTime->setIsHistorized(1);
 		$cleaningTime->setDisplay('forceReturnLineBefore', false);
 		$cleaningTime->save();
       
-    	$cleaningArea = $this->getCmd(null, 'cleaningArea');
+    		$cleaningArea = $this->getCmd(null, 'cleaningArea');
 		if (!is_object($cleaningArea)) {
 			$cleaningArea = new dreameCmd();
 			$cleaningArea->setName(__('Surface Nettoyée', __FILE__));
@@ -408,7 +406,7 @@ class dreame extends eqLogic {
 		$cleaningArea->setType('info');
 		$cleaningArea->setUnite('m2');
 		$cleaningArea->setTemplate('dashboard', 'line');
-      	$cleaningArea->setTemplate('mobile', 'line');
+      		$cleaningArea->setTemplate('mobile', 'line');
 		$cleaningArea->setSubType('numeric');
 		$cleaningArea->setIsVisible(1);
 		$cleaningArea->setIsHistorized(1);
@@ -427,11 +425,10 @@ class dreame extends eqLogic {
 		$stop->setType('action');
 		$stop->setSubType('other');
 		$stop->setDisplay('generic_type', '');
-		//$info->setDisplay('forceReturnLineBefore', true);
 		$stop->setDisplay('forceReturnLineAfter', true);
 		$stop->save();
       
-      	$start = $this->getCmd('action', 'start');
+      		$start = $this->getCmd('action', 'start');
 		if (!is_object($start)) {
 			$start = new dreameCmd();
 			$start->setName(__('Démarrer', __FILE__));
@@ -447,7 +444,7 @@ class dreame extends eqLogic {
 		$start->setDisplay('forceReturnLineAfter', true);
 		$start->save();
       
-        $home = $this->getCmd('action', 'home');
+        	$home = $this->getCmd('action', 'home');
 		if (!is_object($home)) {
 			$home = new dreameCmd();
 			$home->setName(__('Maison', __FILE__));
@@ -493,7 +490,7 @@ class dreame extends eqLogic {
 		$play_sound->setDisplay('forceReturnLineAfter', true);
 		$play_sound->save();
       
-        $refresh = $this->getCmd('action', 'refresh');
+        	$refresh = $this->getCmd('action', 'refresh');
 		if (!is_object($refresh)) {
 			$refresh = new dreameCmd();
 			$refresh->setName(__('Rafraichir', __FILE__));
@@ -526,7 +523,6 @@ class dreame extends eqLogic {
 
 
 		$speed->setConfiguration('listValue','0|Silencieux;1|Normal;2|Fort;3|Vitesse Maximale');
-		//$info->setDisplay('forceReturnLineBefore', true);
 		$speed->setDisplay('forceReturnLineAfter', true);
 		$speed->save();
 
@@ -554,6 +550,10 @@ class dreame extends eqLogic {
 				$cmd = "sudo miiocli -o json_pretty viomivacuum --ip " . $ip . " --token " . $token ." status 2>&1";
 				log::add('dreame', 'debug', 'CMD BY DREAMEVACUUM');
 				$modelType = "viomivacuum";
+			} elseif ($model == 'viomi.vacuum.v8') {
+				$cmd = "sudo miiocli -o json_pretty roborockvacuum --ip " . $ip . " --token " . $token ." status 2>&1";
+				log::add('dreame', 'debug', 'CMD BY ROBOROCKVACUUM');
+				$modelType = "roborockvacuum";
 			} else {
 				$cmd = "sudo miiocli -o json_pretty genericmiot --ip " . $ip . " --token " . $token ." status 2>&1";
 				log::add('dreame', 'debug', 'CMD BY GENERIMIOT');
@@ -578,8 +578,8 @@ class dreame extends eqLogic {
 		}
 		log::add('dreame', 'debug', 'JSON ' . json_encode($json));
 		
-      	if ($json != null) 
-        {
+	      	if ($json != null) 
+	        {
 			if($modelType == 'dreamevacuum') {
 			    $this->checkAndUpdateCmd("batteryLevel", $json->{"battery_level"}); 
 			    $this->checkAndUpdateCmd("isCharging", $json->{"charging_state"}); 
@@ -660,6 +660,16 @@ class dreame extends eqLogic {
 				$this->checkAndUpdateCmd("cleaningArea", 		$json->{"s_area"});
 				$this->checkAndUpdateCmd("speed", 		$json->{"suction_grade"});
 			
+			} elseif ($modelType == 'roborockvacuum') {
+				$cleanTimeFormatted = gmdate("i", $json->{"clean_time"});
+				$cleanAreaFormatted = round($json->{"clean_area"} / 1000000,2);
+				$this->checkAndUpdateCmd("batteryLevel", $json->{"battery"});
+				$this->checkAndUpdateCmd("isCharging", $json->{"charge_status"});
+				$this->checkAndUpdateCmd("error", $json->{"error_code"});
+				$this->checkAndUpdateCmd("stateDevice", $json->{"state"});
+				$this->checkAndUpdateCmd("cleaningTime", $cleanTimeFormatted);
+				$this->checkAndUpdateCmd("cleaningArea", $cleanAreaFormatted);
+				$this->checkAndUpdateCmd("speed", $json->{"fan_power"});
 			} else {
 				$this->checkAndUpdateCmd("batteryLevel", 		$json->{"battery:battery-level"});
 				$this->checkAndUpdateCmd("isCharging", 		$json->{"battery:charging-state"});
@@ -676,39 +686,39 @@ class dreame extends eqLogic {
 				$this->checkAndUpdateCmd("speed", 		$json->{"vacuum:mode"});
 
 				if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} == 1)){
-				$this->checkAndUpdateCmd("statusDevice","Prêt à démarrer");
+					$this->checkAndUpdateCmd("statusDevice","Prêt à démarrer");
 				}
 
 				if ($json->{"vacuum:status"} == 1){
-				$this->checkAndUpdateCmd("statusDevice","Aspiration en cours");
+					$this->checkAndUpdateCmd("statusDevice","Aspiration en cours");
 				}
 
 				if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} != 1)){
-				$this->checkAndUpdateCmd("statusDevice","Arret");
+					$this->checkAndUpdateCmd("statusDevice","Arret");
 				}
 
 				if (($json->{"vacuum:status"} == 3) AND ($json->{"battery:charging-state"} != 1)){
-				$this->checkAndUpdateCmd("statusDevice","En Pause");
+					$this->checkAndUpdateCmd("statusDevice","En Pause");
 				}
 
 				if ($json->{"vacuum:status"} == 4){
-				$this->checkAndUpdateCmd("statusDevice","Erreur");
+					$this->checkAndUpdateCmd("statusDevice","Erreur");
 				}
 
 				if (($json->{"vacuum:status"} == 5) AND ($json->{"battery:charging-state"} == 5)){
-				$this->checkAndUpdateCmd("statusDevice","Retour Maison");
+					$this->checkAndUpdateCmd("statusDevice","Retour Maison");
 				}
 
 				if (($json->{"vacuum:status"} == 6) AND ($json->{"battery:charging-state"} == 1)){
-				$this->checkAndUpdateCmd("statusDevice","En Charge");
+					$this->checkAndUpdateCmd("statusDevice","En Charge");
 				}
 
 				if ($json->{"vacuum:status"} == 7){
-				$this->checkAndUpdateCmd("statusDevice","Aspiration et Lavage en cours");
+					$this->checkAndUpdateCmd("statusDevice","Aspiration et Lavage en cours");
 				}
 
 				if ($json->{"vacuum:status"} == 8){
-				$this->checkAndUpdateCmd("statusDevice","Séchage de la serpillère");	
+					$this->checkAndUpdateCmd("statusDevice","Séchage de la serpillère");	
 				}
 				if ($json->{"vacuum:status"} == 12){
 					$this->checkAndUpdateCmd("statusDevice","Nettoyage en cours de la Zone");	
@@ -722,7 +732,7 @@ class dreame extends eqLogic {
 					$this->checkAndUpdateCmd("errorDevice","Vider le bac et nettoyer la planche de lavage.");
 				}
 			}
-        }
+        	}
 
 	}
 
@@ -776,7 +786,7 @@ class dreame extends eqLogic {
 			}
 			exec($cmd,$outputArray,$resultCode);
 			log::add('dreame', 'debug', '[CMD] ' .$cmd);
-          	self::updateCmd();
+          		self::updateCmd();
 		} else {
 			log::add('dreame', 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
 			return; // can't update
@@ -808,46 +818,45 @@ class dreameCmd extends cmd {
   // Exécution d'une commande
   public function execute($_options = array()) {
     
-    $eqLogic = $this->getEqLogic(); // Récupération de l’eqlogic
+    	$eqLogic = $this->getEqLogic(); // Récupération de l’eqlogic
 	Log::add('dreame', 'debug', '$_options[] traité: ' . json_encode($_options));
 
-		switch ($this->getLogicalId()) {                
-			case 'refresh': 
-            	log::add('dreame', 'debug', 'Refresh : ' . $this->getLogicalId());
-				$eqLogic->updateCmd();
-				break;
-			case 'start':
-            log::add('dreame', 'debug', 'start : ' . $this->getLogicalId());
-            	$eqLogic->sendCmd('start');
-				break;
-			case 'stop':
-            log::add('dreame', 'debug', 'stop : ' . $this->getLogicalId());
-            	$eqLogic->sendCmd('stop');
-				break;
-			case 'home':
-            log::add('dreame', 'debug', 'home : ' . $this->getLogicalId());
-            	$eqLogic->sendCmd('home');
-				break;		
-			case 'position':
-				log::add('dreame', 'debug', 'position : ' . $this->getLogicalId());
-            	$eqLogic->sendCmd('position');
-				break;
-			case 'play-sound':
-				log::add('dreame', 'debug', 'play-sound : ' . $this->getLogicalId());
-				$eqLogic->sendCmd('play-sound');
-				break;
-			case 'speed':
-				log::add('dreame', 'debug', 'speed : ' . $this->getLogicalId());
-				//$eqLogic->sendCmd('play-sound');
-				$speed = isset($_options['select']) ? $_options['select'] : $_options['slider'];
-				$eqLogic->checkAndUpdateCmd('speed', $speed);
-				$eqLogic->sendCmd('setSpeed', $speed);
-				break;
-			default:
-				throw new Error('This should not append!');
-				log::add('dreame', 'error', 'Aucune commande associée : ' . $this->getLogicalId());
-				break;
-		}
+	switch ($this->getLogicalId()) {                
+		case 'refresh': 
+			log::add('dreame', 'debug', 'Refresh : ' . $this->getLogicalId());
+			$eqLogic->updateCmd();
+			break;
+		case 'start':
+			log::add('dreame', 'debug', 'start : ' . $this->getLogicalId());
+			$eqLogic->sendCmd('start');
+			break;
+		case 'stop':
+			log::add('dreame', 'debug', 'stop : ' . $this->getLogicalId());
+			$eqLogic->sendCmd('stop');
+			break;
+		case 'home':
+			log::add('dreame', 'debug', 'home : ' . $this->getLogicalId());
+			$eqLogic->sendCmd('home');
+			break;		
+		case 'position':
+			log::add('dreame', 'debug', 'position : ' . $this->getLogicalId());
+			$eqLogic->sendCmd('position');
+			break;
+		case 'play-sound':
+			log::add('dreame', 'debug', 'play-sound : ' . $this->getLogicalId());
+			$eqLogic->sendCmd('play-sound');
+			break;
+		case 'speed':
+			log::add('dreame', 'debug', 'speed : ' . $this->getLogicalId());
+			$speed = isset($_options['select']) ? $_options['select'] : $_options['slider'];
+			$eqLogic->checkAndUpdateCmd('speed', $speed);
+			$eqLogic->sendCmd('setSpeed', $speed);
+			break;
+		default:
+			throw new Error('This should not append!');
+			log::add('dreame', 'error', 'Aucune commande associée : ' . $this->getLogicalId());
+			break;
+	}
 
   }
 
