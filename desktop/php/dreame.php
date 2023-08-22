@@ -9,20 +9,44 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
 <div class="row row-overflow">
 	<div class="col-xs-12 eqLogicThumbnailDisplay">
-		<legend><i class="fas fa-cog"></i> {{Gestion}}</legend>
-		<div class="eqLogicThumbnailContainer">
-			<div class="cursor eqLogicAction logoPrimary" data-action="detectDevicesDreame">
-				<i class="fas fa-search"></i>
-				<br>
-				<span>{{Détection Automatique}}</span>
-			</div>
-			<div class="cursor eqLogicAction logoSecondary" data-action="gotoPluginConf">
-				<i class="fas fa-wrench"></i>
-				<br>
-				<span>{{Configuration}}</span>
-			</div>
+		<div class="row">
+			<div class="col-sm-10">
+				<legend><i class="fas fa-cog"></i> {{Gestion}}</legend>
+				<div class="eqLogicThumbnailContainer">
+					<div class="cursor eqLogicAction logoPrimary" data-action="detectDevicesDreame">
+						<i class="fas fa-search"></i>
+						<br>
+						<span>{{Détection Automatique}}</span>
+					</div>
+					<div class="cursor eqLogicAction logoSecondary" data-action="gotoPluginConf">
+						<i class="fas fa-wrench"></i>
+						<br>
+						<span>{{Configuration}}</span>
+					</div>
 
 
+				</div>
+			</div>
+
+			<?php
+			// uniquement si on est en version 4.4 ou supérieur
+			$jeedomVersion  = jeedom::version() ?? '0';
+			$displayInfoValue = version_compare($jeedomVersion, '4.4.0', '>=');
+			if ($displayInfoValue) {
+			?>
+				<div class="col-sm-2">
+					<legend><i class=" fas fa-comments"></i> {{Community}}</legend>
+					<div class="eqLogicThumbnailContainer">
+						<div class="cursor eqLogicAction logoSecondary" data-action="createCommunityPost">
+							<i class="fas fa-ambulance"></i>
+							<br>
+							<span style="color:var(--txt-color)">{{Créer un post Community}}</span>
+						</div>
+					</div>
+				</div>
+			<?php
+			}
+			?>
 		</div>
 		<legend><i class="fas fa-table"></i> {{Mes Robots Aspirateur}}</legend>
 		<input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
