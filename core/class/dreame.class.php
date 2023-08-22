@@ -623,7 +623,7 @@ class dreame extends eqLogic {
 				$modelType = "dreamevacuum";
 			} elseif ($model == 'viomi.vacuum.v8') {
 				$cmd = "sudo miiocli -o json_pretty viomivacuum --ip " . $ip . " --token " . $token ." status 2>&1";
-				log::add('dreame', 'debug', 'CMD BY DREAMEVACUUM');
+				log::add('dreame', 'debug', 'CMD BY VIOMIVACUUM');
 				$modelType = "viomivacuum";
 			} elseif (strpos($model, 'roborock') !== false) {
 				$cmd = "sudo miiocli -o json_pretty roborockvacuum --ip " . $ip . " --token " . $token ." status 2>&1";
@@ -811,63 +811,79 @@ class dreame extends eqLogic {
 
 	}
 
-	public function sendCmd($cmd, $val = "") {
-		
-		$did = 			$this->getConfiguration('did');
-		$ip = 			$this->getConfiguration('ip');
-		$token = 		$this->getConfiguration('token');
-		$model = 		$this->getConfiguration('model'); 
-		
-		
-		$cmdLabel = "";
-		$cmdValue = "";
-		switch ($cmd) {
-			case "home":
-				$cmdLabel = "battery:start-charge";
-				break;
-			case "start":
-				$cmdLabel = "vacuum:start-sweep";
-				break;
-			case "stop":
-				$cmdLabel = "vacuum:stop-sweeping";
-				break;
-			case "position":
-				$cmdLabel = "audio:position";
-				break;
-			case "play-sound":
-				$cmdLabel = "audio:play-sound";
-				break;
-			case "setSpeed":
-				//Silent (0), Basic (1), Strong (2), Full Speed (3)
-				$cmdLabel = "vacuum:mode";
-				$cmdValue = $val;
-				break;
-			default:
-			throw new Error('This should not append!');
-			log::add('dreame', 'warn', 'Erreur pour action : ' . $this->getLogicalId());
-			return;
-		}
-		
-		
-		if($cmdLabel == "")
-		return;
-		
-		if(!empty($ip) && !empty($token)) {
-			if($cmdLabel == "vacuum:mode") {
-				log::add('dreame', 'debug', "Label ".$cmdLabel." Value :".$cmdValue);
-				$cmd = "sudo miiocli genericmiot --ip " . $ip . " --token " . $token ." set ".$cmdLabel." ".$cmdValue;
-			} else {
-				$cmd = "sudo miiocli genericmiot --ip " . $ip . " --token " . $token ." call ".$cmdLabel;
-			}
-			exec($cmd,$outputArray,$resultCode);
-			log::add('dreame', 'debug', '[CMD] ' .$cmd);
-          		self::updateCmd();
-		} else {
-			log::add('dreame', 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
-			return; // can't update
-		}
-
-	} // sendCmd
+    public function sendCmd($cmd, $val = "") {
+        $did = $this->getConfiguration('did');
+        $ip = $this->getConfiguration('ip');
+        $token = $this->getConfiguration('token');
+        $model = $this->getConfiguration('model');
+    
+        $cmdLabelsByModel = [
+            'roborock' => [
+                "home" => "home",
+                "start" => "start",
+                "stop" => "stop",
+                "position" => "",
+                "play-sound" => "test_sound_volume",
+                "setSpeed" => "set_fan_speed",
+            ],
+            'viomi.vacuum.v8' => [
+                "home" => "home",
+                "start" => "start",
+                "stop" => "stop",
+                "position" => "find",
+                "play-sound" => "",
+                "setSpeed" => "set_fan_speed",
+            ],
+            'dreame.vacuum.p2008' => [
+                "home" => "home",
+                "start" => "start",
+                "stop" => "stop",
+                "position" => "locate",
+                "play-sound" => "play_sound",
+                "setSpeed" => "set_fan_speed",
+            ],
+            'default' => [
+                "home" => "battery:start-charge",
+                "start" => "vacuum:start-sweep",
+                "stop" => "vacuum:stop-sweeping",
+                "position" => "audio:position",
+                "play-sound" => "audio:play-sound",
+                "setSpeed" => "vacuum:mode",
+            ],
+        ];
+    
+        if (strpos($model, 'roborock') !== false) {
+            $cmdLabels = $cmdLabelsByModel['roborock'];
+            $cmdExec = "sudo miiocli roborockvacuum --ip $ip --token $token";
+        } elseif ($model == 'viomi.vacuum.v8') {
+            $cmdLabels = $cmdLabelsByModel['viomi.vacuum.v8'];
+            $cmdExec = "sudo miiocli viomivacuum --ip $ip --token $token";
+        } elseif ($model == 'dreame.vacuum.p2008') {
+            $cmdLabels = $cmdLabelsByModel['dreame.vacuum.p2008'];
+            $cmdExec = "sudo miiocli dreamevacuum --ip $ip --token $token";
+        } else {
+            $cmdLabels = $cmdLabelsByModel['default'];
+            $cmdExec = "sudo miiocli genericmiot --ip $ip --token $token";
+        }
+    
+        $cmdLabel = $cmdLabels[$cmd] ?? "";
+        if ($cmdLabel == "") {
+            log::add('dreame', 'warn', 'Erreur pour action : ' . $this->getLogicalId());
+            return;
+        }
+    
+        if (!empty($ip) && !empty($token)) {
+            $finalCmd = $cmd == "setSpeed" 
+                ? "$cmdExec set $cmdLabel $val" 
+                : "$cmdExec call $cmdLabel";
+            
+            exec($finalCmd, $outputArray, $resultCode);
+            log::add('dreame', 'debug', '[CMD] ' . $finalCmd);
+            self::updateCmd();
+        } else {
+            log::add('dreame', 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
+        }
+    }
   
 }
 
@@ -891,79 +907,48 @@ class dreameCmd extends cmd {
   */
 
   // Exécution d'une commande
-  public function sendCmd($cmd, $val = "") {
-    $did = $this->getConfiguration('did');
-    $ip = $this->getConfiguration('ip');
-    $token = $this->getConfiguration('token');
-    $model = $this->getConfiguration('model');
+    public function execute($_options = array()) {
 
-    $cmdLabelsByModel = [
-        'roborock' => [
-            "home" => "home",
-            "start" => "start",
-            "stop" => "stop",
-            "position" => "",
-            "play-sound" => "test_sound_volume",
-            "setSpeed" => "set_fan_speed",
-        ],
-        'viomi.vacuum.v8' => [
-            "home" => "home",
-            "start" => "start",
-            "stop" => "stop",
-            "position" => "find",
-            "play-sound" => "",
-            "setSpeed" => "set_fan_speed",
-        ],
-        'dreame.vacuum.p2008' => [
-            "home" => "home",
-            "start" => "start",
-            "stop" => "stop",
-            "position" => "locate",
-            "play-sound" => "play_sound",
-            "setSpeed" => "set_fan_speed",
-        ],
-        'default' => [
-            "home" => "battery:start-charge",
-            "start" => "vacuum:start-sweep",
-            "stop" => "vacuum:stop-sweeping",
-            "position" => "audio:position",
-            "play-sound" => "audio:play-sound",
-            "setSpeed" => "vacuum:mode",
-        ],
-    ];
+        $eqLogic = $this->getEqLogic(); // Récupération de l’eqlogic
+        Log::add('dreame', 'debug', '$_options[] traité: ' . json_encode($_options));
 
-    if (strpos($model, 'roborock') !== false) {
-        $cmdLabels = $cmdLabelsByModel['roborock'];
-        $cmdExec = "sudo miiocli roborockvacuum --ip $ip --token $token";
-    } elseif ($model == 'viomi.vacuum.v8') {
-        $cmdLabels = $cmdLabelsByModel['viomi.vacuum.v8'];
-        $cmdExec = "sudo miiocli viomivacuum --ip $ip --token $token";
-    } elseif ($model == 'dreame.vacuum.p2008') {
-        $cmdLabels = $cmdLabelsByModel['dreame.vacuum.p2008'];
-        $cmdExec = "sudo miiocli dreamevacuum --ip $ip --token $token";
-    } else {
-        $cmdLabels = $cmdLabelsByModel['default'];
-        $cmdExec = "sudo miiocli genericmiot --ip $ip --token $token";
+        switch ($this->getLogicalId()) {                
+            case 'refresh': 
+                log::add('dreame', 'debug', 'Refresh : ' . $this->getLogicalId());
+                $eqLogic->updateCmd();
+                break;
+            case 'start':
+                log::add('dreame', 'debug', 'start : ' . $this->getLogicalId());
+                $eqLogic->sendCmd('start');
+                break;
+            case 'stop':
+                log::add('dreame', 'debug', 'stop : ' . $this->getLogicalId());
+                $eqLogic->sendCmd('stop');
+                break;
+            case 'home':
+                log::add('dreame', 'debug', 'home : ' . $this->getLogicalId());
+                $eqLogic->sendCmd('home');
+                break;		
+            case 'position':
+                log::add('dreame', 'debug', 'position : ' . $this->getLogicalId());
+                $eqLogic->sendCmd('position');
+                break;
+            case 'play-sound':
+                log::add('dreame', 'debug', 'play-sound : ' . $this->getLogicalId());
+                $eqLogic->sendCmd('play-sound');
+                break;
+            case 'speed':
+                log::add('dreame', 'debug', 'speed : ' . $this->getLogicalId());
+                $speed = isset($_options['select']) ? $_options['select'] : $_options['slider'];
+                $eqLogic->checkAndUpdateCmd('speed', $speed);
+                $eqLogic->sendCmd('setSpeed', $speed);
+                break;
+            default:
+                throw new Error('This should not append!');
+                log::add('dreame', 'error', 'Aucune commande associée : ' . $this->getLogicalId());
+                break;
+            }
     }
-
-    $cmdLabel = $cmdLabels[$cmd] ?? "";
-    if ($cmdLabel == "") {
-        log::add('dreame', 'warn', 'Erreur pour action : ' . $this->getLogicalId());
-        return;
-    }
-
-    if (!empty($ip) && !empty($token)) {
-        $finalCmd = $cmd == "setSpeed" 
-            ? "$cmdExec set $cmdLabel $val" 
-            : "$cmdExec call $cmdLabel";
-        
-        exec($finalCmd, $outputArray, $resultCode);
-        log::add('dreame', 'debug', '[CMD] ' . $finalCmd);
-        self::updateCmd();
-    } else {
-        log::add('dreame', 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
-    }
-}
 
 
 
