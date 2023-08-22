@@ -863,7 +863,8 @@ class dreame extends eqLogic {
             $cmdExec = "sudo miiocli dreamevacuum --ip $ip --token $token";
         } else {
             $cmdLabels = $cmdLabelsByModel['default'];
-            $cmdExec = "sudo miiocli genericmiot --ip $ip --token $token";
+            
+            $cmdExec = "sudo miiocli genericmiot --ip $ip --token $token call";
         }
     
         $cmdLabel = $cmdLabels[$cmd] ?? "";
@@ -872,11 +873,7 @@ class dreame extends eqLogic {
             return;
         }
     
-        if (!empty($ip) && !empty($token)) {
-            $finalCmd = $cmd == "setSpeed" 
-                ? "$cmdExec set $cmdLabel $val" 
-                : "$cmdExec call $cmdLabel";
-            
+        if (!empty($ip) && !empty($token)) {            
             exec($finalCmd, $outputArray, $resultCode);
             log::add('dreame', 'debug', '[CMD] ' . $finalCmd);
             self::updateCmd();
