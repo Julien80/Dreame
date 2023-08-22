@@ -24,7 +24,7 @@ $eqLogics = eqLogic::byType($plugin->getId());
 
 
 		</div>
-		<legend><i class="fas fa-table"></i> {{Mes équipements : Robot Aspirateur Dreame}}</legend>
+		<legend><i class="fas fa-table"></i> {{Mes Robots Aspirateur}}</legend>
 		<input class="form-control" placeholder="{{Rechercher}}" id="in_searchEqlogic" />
 		<div id="div_results"></div>
 		<div class="eqLogicThumbnailContainer">
