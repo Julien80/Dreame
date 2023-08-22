@@ -803,6 +803,13 @@ class dreame extends eqLogic {
         return $type;
     }
 
+    public function getEqIcon() {
+        $modelType = $this->getConfiguration('modelType', 'unknownvacuum');
+        $imgPath = 'plugins/dreame/data/img/' . $modelType . "_icon.png";
+
+        return $imgPath;
+    }
+
     public function sendCmd($cmd) {
         $ip = $this->getConfiguration('ip');
         $token = $this->getConfiguration('token');
