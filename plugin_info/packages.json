@@ -1,28 +1,30 @@
 {
-  "pre-install" : {
-    "script" : "plugins/dreame/resources/pre-install.sh"
+  "pre-install": {
+    "script": "plugins/dreame/resources/pre-install.sh"
   },
-  "apt" : {
-    "libffi-dev" : {},
-    "libssl-dev" : {},
-    "zlib1g-dev" : {},
-    "libbz2-dev" : {},
-    "libreadline-dev" : {},
-    "libsqlite3-dev" : {},
-    "wget" : {},
-    "llvm" : {},
-    "libncurses5-dev" : {},
-    "xz-utils" : {},
-    "tk-dev" : {},
-    "libxml2-dev" : {},
-    "libxmlsec1-dev" : {},
-    "liblzma-dev" : {}
+  "apt": {
+    "libffi-dev": {},
+    "libssl-dev": {},
+    "zlib1g-dev": {},
+    "libbz2-dev": {},
+    "libreadline-dev": {},
+    "libsqlite3-dev": {},
+    "wget": {},
+    "llvm": {},
+    "libncurses5-dev": {},
+    "xz-utils": {},
+    "tk-dev": {},
+    "libxml2-dev": {},
+    "libxmlsec1-dev": {},
+    "liblzma-dev": {}
   },
-  "pip3" : {
-    "cryptography" : {},
-    "python-miio" : {"git": "https://github.com/rytilahti/python-miio.git@master"}
+  "pip3": {
+    "cryptography": {},
+    "python-miio": {
+      "git": "https://github.com/rytilahti/python-miio.git@master"
+    }
   },
-  "post-install" : {
-    "script" : "plugins/dreame/resources/post-install.sh"
+  "post-install": {
+    "script": "plugins/dreame/resources/post-install.sh"
   }
 }

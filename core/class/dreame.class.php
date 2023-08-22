@@ -19,112 +19,112 @@
 require_once __DIR__  . '/../../../../core/php/core.inc.php';
 
 class dreame extends eqLogic {
-  /*     * *************************Attributs****************************** */
+    /*     * *************************Attributs****************************** */
 
-  /*
+    /*
   * Permet de définir les possibilités de personnalisation du widget (en cas d'utilisation de la fonction 'toHtml' par exemple)
   * Tableau multidimensionnel - exemple: array('custom' => true, 'custom::layout' => false)
   public static $_widgetPossibility = array();
   */
 
-  /*
+    /*
   * Permet de crypter/décrypter automatiquement des champs de configuration du plugin
   * Exemple : "param1" & "param2" seront cryptés mais pas "param3"
   public static $_encryptConfigKey = array('param1', 'param2');
   */
 
-  /*     * ***********************Methode static*************************** */
+    /*     * ***********************Methode static*************************** */
 
-  
-  //* Fonction exécutée automatiquement toutes les minutes par Jeedom
-	
-  public static function cron() {
-    $eqLogics = self::byType('dreame');
-    if(count($eqLogics) > 0) {
-        foreach($eqLogics as $eqLogic) {
-            if($eqLogic->getIsEnable() == 1 && $eqLogic->getConfiguration('model') != 'dreame.vacuum.p2008') {
-                $eqLogic->updateCmd();
+
+    //* Fonction exécutée automatiquement toutes les minutes par Jeedom
+
+    public static function cron() {
+        $eqLogics = self::byType('dreame');
+        if (count($eqLogics) > 0) {
+            foreach ($eqLogics as $eqLogic) {
+                if ($eqLogic->getIsEnable() == 1 && $eqLogic->getConfiguration('model') != 'dreame.vacuum.p2008') {
+                    $eqLogic->updateCmd();
+                }
             }
         }
     }
-}
 
 
-  
- // * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
-  public static function cron5() {
-    $eqLogics = self::byType('dreame');
-    if(count($eqLogics) > 0) {
-        foreach($eqLogics as $eqLogic) {
-            if($eqLogic->getIsEnable() == 1 && $eqLogic->getConfiguration('model') == 'dreame.vacuum.p2008') {
-                $eqLogic->updateCmd();
+
+    // * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
+    public static function cron5() {
+        $eqLogics = self::byType('dreame');
+        if (count($eqLogics) > 0) {
+            foreach ($eqLogics as $eqLogic) {
+                if ($eqLogic->getIsEnable() == 1 && $eqLogic->getConfiguration('model') == 'dreame.vacuum.p2008') {
+                    $eqLogic->updateCmd();
+                }
             }
         }
     }
-}
 
-  /*
+    /*
   * Fonction exécutée automatiquement toutes les 10 minutes par Jeedom
   public static function cron10() {}
   */
 
-  /*
+    /*
   * Fonction exécutée automatiquement toutes les 15 minutes par Jeedom
   public static function cron15() {}
   */
 
-  /*
+    /*
   * Fonction exécutée automatiquement toutes les 30 minutes par Jeedom
   public static function cron30() {}
   */
 
-  /*
+    /*
   * Fonction exécutée automatiquement toutes les heures par Jeedom
   public static function cronHourly() {}
   */
 
-  /*
+    /*
   * Fonction exécutée automatiquement tous les jours par Jeedom
   public static function cronDaily() {}
   */
 
-  /*     * *********************Méthodes d'instance************************* */
+    /*     * *********************Méthodes d'instance************************* */
 
-  // Fonction exécutée automatiquement avant la création de l'équipement
-  public function preInsert() {
-  }
+    // Fonction exécutée automatiquement avant la création de l'équipement
+    public function preInsert() {
+    }
 
-  // Fonction exécutée automatiquement après la création de l'équipement
-  public function postInsert() {
-  }
+    // Fonction exécutée automatiquement après la création de l'équipement
+    public function postInsert() {
+    }
 
-  // Fonction exécutée automatiquement avant la mise à jour de l'équipement
-  public function preUpdate() {
-  }
+    // Fonction exécutée automatiquement avant la mise à jour de l'équipement
+    public function preUpdate() {
+    }
 
-  // Fonction exécutée automatiquement après la mise à jour de l'équipement
-  public function postUpdate() {
-  }
+    // Fonction exécutée automatiquement après la mise à jour de l'équipement
+    public function postUpdate() {
+    }
 
-  // Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
-  public function preSave() {
-  }
+    // Fonction exécutée automatiquement avant la sauvegarde (création ou mise à jour) de l'équipement
+    public function preSave() {
+    }
 
-  // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
-  public function postSave() {
-    if($this->getIsEnable() == 1)
-		self::createCmd();
-  }
+    // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
+    public function postSave() {
+        if ($this->getIsEnable() == 1)
+            self::createCmd();
+    }
 
-  // Fonction exécutée automatiquement avant la suppression de l'équipement
-  public function preRemove() {
-  }
+    // Fonction exécutée automatiquement avant la suppression de l'équipement
+    public function preRemove() {
+    }
 
-  // Fonction exécutée automatiquement après la suppression de l'équipement
-  public function postRemove() {
-  }
+    // Fonction exécutée automatiquement après la suppression de l'équipement
+    public function postRemove() {
+    }
 
-  /*
+    /*
   * Permet de crypter/décrypter automatiquement des champs de configuration des équipements
   * Exemple avec le champ "Mot de passe" (password)
   public function decrypt() {
@@ -135,12 +135,12 @@ class dreame extends eqLogic {
   }
   */
 
-  /*
+    /*
   * Permet de modifier l'affichage du widget (également utilisable par les commandes)
   public function toHtml($_version = 'dashboard') {}
   */
 
-  /*
+    /*
   * Permet de déclencher une action avant modification d'une variable de configuration du plugin
   * Exemple avec la variable "param3"
   public static function preConfig_param3( $value ) {
@@ -149,7 +149,7 @@ class dreame extends eqLogic {
   }
   */
 
-  /*
+    /*
   * Permet de déclencher une action après modification d'une variable de configuration du plugin
   * Exemple avec la variable "param3"
   public static function postConfig_param3($value) {
@@ -157,20 +157,20 @@ class dreame extends eqLogic {
   }
   */
 
-  /*     * **********************Getteur Setteur*************************** */
+    /*     * **********************Getteur Setteur*************************** */
 
     public function detectDevices() {
-        $accountEmail = 	trim(config::byKey('account-email', 'dreame'));
-        $accountPassword = 	trim(config::byKey('account-password', 'dreame'));
-        $accountCountry = 	trim(config::byKey('account-country', 'dreame'));
-        
-        $cmd = "sudo micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c ". $accountCountry. " 2>&1";
-        exec($cmd,$outputArray,$resultCode);
+        $accountEmail =     trim(config::byKey('account-email', 'dreame'));
+        $accountPassword =     trim(config::byKey('account-password', 'dreame'));
+        $accountCountry =     trim(config::byKey('account-country', 'dreame'));
+
+        $cmd = "sudo micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c " . $accountCountry . " 2>&1";
+        exec($cmd, $outputArray, $resultCode);
         log::add("dreame", "debug", json_encode($outputArray));
         if ($resultCode != 0) {
-            if (strstr( $outputArray[23],'Access denied')){ //$outputArray[23] = "micloud.micloudexception.MiCloudAccessDenied: Access denied. Did you set the correct api key and/or username?")
+            if (strstr($outputArray[23], 'Access denied')) { //$outputArray[23] = "micloud.micloudexception.MiCloudAccessDenied: Access denied. Did you set the correct api key and/or username?")
                 log::add("dreame", "debug", "Erreur Mot de Passe ou Email");
-                
+
                 event::add('jeedom::alert', array(
                     'level' => 'danger',
                     'page' => 'dreame',
@@ -181,14 +181,13 @@ class dreame extends eqLogic {
                     "newEq" => 0,
                 ];
             }
-            
-        }else{
+        } else {
             $json = json_decode($outputArray[0]);
             log::add("dreame", "debug", json_encode($json));
             $getAllDevices = eqLogic::byType('dreame');
-            foreach($json as $response) {
+            foreach ($json as $response) {
                 $alreadyExist = false;
-                foreach($getAllDevices as $allDevices) {
+                foreach ($getAllDevices as $allDevices) {
                     if ($allDevices->getLogicalId() == $response->did) {
                         $alreadyExist = true;
                         if ($allDevices->getConfiguration('ip') != $response->localip || $allDevices->getConfiguration('token') != $response->token) {
@@ -201,7 +200,7 @@ class dreame extends eqLogic {
                     }
                 }
                 $numberNewDevice = 0;
-                
+
                 if ($alreadyExist) {
                     log::add("dreame", "debug", "Equipement déjà présent, il ne faut donc pas l'ajouter");
                 } else {
@@ -215,28 +214,24 @@ class dreame extends eqLogic {
                         $eqlogic->setEqType_name('dreame');
                         $eqlogic->setConfiguration('did', $response->did);
                         $eqlogic->setConfiguration('ip', $response->localip);
-                        $eqlogic->setConfiguration('token', $response->token);      
+                        $eqlogic->setConfiguration('token', $response->token);
                         $eqlogic->setConfiguration('model', $response->model);
                         $eqlogic->save();
                         $numberNewDevice++;
                         log::add("dreame", "debug", "Nouvel Equipement, ajout en cours.");
                     } else {
-                        log::add("dreame", "debug", "Le modèle de l'équipement n'est pas pris en charge : ".$response->model);
+                        log::add("dreame", "debug", "Le modèle de l'équipement n'est pas pris en charge : " . $response->model);
                     }
                 }
-                
-                
             }
-            
         }
-        
+
         log::add("dreame", "debug", "============================ DISCOVER ============================");
-        
-        
+
+
         return [
             "newEq" => $numberNewDevice,
         ];
-
     }
     public function createCmd($bCreateCmd = true) {
         $order = 1;
@@ -251,13 +246,13 @@ class dreame extends eqLogic {
         $batteryLevel->setType('info');
         $batteryLevel->setUnite('%');
         $batteryLevel->setSubType('numeric');
-        $batteryLevel->setTemplate('dashboard', 'default'); 
-        $batteryLevel->setTemplate('mobile', 'default'); 
+        $batteryLevel->setTemplate('dashboard', 'default');
+        $batteryLevel->setTemplate('mobile', 'default');
         $batteryLevel->setIsVisible(1);
         $batteryLevel->setIsHistorized(1);
         $batteryLevel->setDisplay('forceReturnLineBefore', false);
         $batteryLevel->save();
-        
+
         $isCharging = $this->getCmd(null, 'isCharging');
         if (!is_object($isCharging)) {
             $isCharging = new dreameCmd();
@@ -274,7 +269,7 @@ class dreame extends eqLogic {
         $isCharging->setIsHistorized(1);
         $isCharging->setDisplay('forceReturnLineBefore', false);
         $isCharging->save();
-        
+
         $error = $this->getCmd(null, 'error');
         if (!is_object($error)) {
             $error = new dreameCmd();
@@ -291,7 +286,7 @@ class dreame extends eqLogic {
         $error->setIsHistorized(1);
         $error->setDisplay('forceReturnLineBefore', false);
         $error->save();
-        
+
         $errorDevice = $this->getCmd(null, 'errorDevice');
         if (!is_object($errorDevice)) {
             $errorDevice = new dreameCmd();
@@ -308,13 +303,13 @@ class dreame extends eqLogic {
         $errorDevice->setIsHistorized(1);
         $errorDevice->setDisplay('forceReturnLineBefore', false);
         $errorDevice->save();
-        
+
         $statusDevice = $this->getCmd(null, 'statusDevice');
         if (!is_object($statusDevice)) {
             $statusDevice = new dreameCmd();
             $statusDevice->setName(__('Etat', __FILE__));
         }
-        
+
         $stateDevice = $this->getCmd(null, 'stateDevice');
         if (!is_object($stateDevice)) {
             $stateDevice = new dreameCmd();
@@ -331,7 +326,7 @@ class dreame extends eqLogic {
         $stateDevice->setIsHistorized(1);
         $stateDevice->setDisplay('forceReturnLineBefore', false);
         $stateDevice->save();
-        
+
         $statusDevice = $this->getCmd(null, 'statusDevice');
         if (!is_object($statusDevice)) {
             $statusDevice = new dreameCmd();
@@ -348,7 +343,7 @@ class dreame extends eqLogic {
         $statusDevice->setIsHistorized(0);
         $statusDevice->setDisplay('forceReturnLineBefore', true);
         $statusDevice->save();
-        
+
         $timeBrush = $this->getCmd(null, 'timeBrush');
         if (!is_object($timeBrush)) {
             $timeBrush = new dreameCmd();
@@ -366,7 +361,7 @@ class dreame extends eqLogic {
         $timeBrush->setIsHistorized(1);
         $timeBrush->setDisplay('forceReturnLineBefore', false);
         $timeBrush->save();
-        
+
         $lifeBrush = $this->getCmd(null, 'lifeBrush');
         if (!is_object($lifeBrush)) {
             $lifeBrush = new dreameCmd();
@@ -384,7 +379,7 @@ class dreame extends eqLogic {
         $lifeBrush->setIsHistorized(1);
         $lifeBrush->setDisplay('forceReturnLineBefore', false);
         $lifeBrush->save();
-        
+
         $timeBrushLeft = $this->getCmd(null, 'timeBrushLeft');
         if (!is_object($timeBrushLeft)) {
             $timeBrushLeft = new dreameCmd();
@@ -402,7 +397,7 @@ class dreame extends eqLogic {
         $timeBrushLeft->setIsHistorized(1);
         $timeBrushLeft->setDisplay('forceReturnLineBefore', false);
         $timeBrushLeft->save();
-        
+
         $lifeBrushLeft = $this->getCmd(null, 'lifeBrushLeft');
         if (!is_object($lifeBrushLeft)) {
             $lifeBrushLeft = new dreameCmd();
@@ -420,7 +415,7 @@ class dreame extends eqLogic {
         $lifeBrushLeft->setIsHistorized(1);
         $lifeBrushLeft->setDisplay('forceReturnLineBefore', false);
         $lifeBrushLeft->save();
-        
+
         $timeFilterLeft = $this->getCmd(null, 'timeFilterLeft');
         if (!is_object($timeFilterLeft)) {
             $timeFilterLeft = new dreameCmd();
@@ -438,7 +433,7 @@ class dreame extends eqLogic {
         $timeFilterLeft->setIsHistorized(1);
         $timeFilterLeft->setDisplay('forceReturnLineBefore', false);
         $timeFilterLeft->save();
-        
+
         $lifeFilterLeft = $this->getCmd(null, 'lifeFilterLeft');
         if (!is_object($lifeFilterLeft)) {
             $lifeFilterLeft = new dreameCmd();
@@ -456,7 +451,7 @@ class dreame extends eqLogic {
         $lifeFilterLeft->setIsHistorized(1);
         $lifeFilterLeft->setDisplay('forceReturnLineBefore', false);
         $lifeFilterLeft->save();
-        
+
         $cleaningTime = $this->getCmd(null, 'cleaningTime');
         if (!is_object($cleaningTime)) {
             $cleaningTime = new dreameCmd();
@@ -474,7 +469,7 @@ class dreame extends eqLogic {
         $cleaningTime->setIsHistorized(1);
         $cleaningTime->setDisplay('forceReturnLineBefore', false);
         $cleaningTime->save();
-        
+
         $cleaningArea = $this->getCmd(null, 'cleaningArea');
         if (!is_object($cleaningArea)) {
             $cleaningArea = new dreameCmd();
@@ -492,7 +487,7 @@ class dreame extends eqLogic {
         $cleaningArea->setIsHistorized(1);
         $cleaningArea->setDisplay('forceReturnLineBefore', false);
         $cleaningArea->save();
-        
+
         $stop = $this->getCmd('action', 'stop');
         if (!is_object($stop)) {
             $stop = new dreameCmd();
@@ -507,7 +502,7 @@ class dreame extends eqLogic {
         $stop->setDisplay('generic_type', '');
         $stop->setDisplay('forceReturnLineAfter', true);
         $stop->save();
-        
+
         $start = $this->getCmd('action', 'start');
         if (!is_object($start)) {
             $start = new dreameCmd();
@@ -522,7 +517,7 @@ class dreame extends eqLogic {
         $start->setDisplay('generic_type', 'ENERGY_ON');
         $start->setDisplay('forceReturnLineAfter', true);
         $start->save();
-        
+
         $home = $this->getCmd('action', 'home');
         if (!is_object($home)) {
             $home = new dreameCmd();
@@ -537,7 +532,7 @@ class dreame extends eqLogic {
         $home->setDisplay('generic_type', 'ENERGY_OFF');
         $home->setDisplay('forceReturnLineAfter', true);
         $home->save();
-        
+
         $position = $this->getCmd('action', 'position');
         if (!is_object($position)) {
             $position = new dreameCmd();
@@ -552,7 +547,7 @@ class dreame extends eqLogic {
         $position->setDisplay('generic_type', '');
         $position->setDisplay('forceReturnLineAfter', true);
         $position->save();
-        
+
         $play_sound = $this->getCmd('action', 'play-sound');
         if (!is_object($play_sound)) {
             $play_sound = new dreameCmd();
@@ -567,7 +562,7 @@ class dreame extends eqLogic {
         $play_sound->setDisplay('generic_type', '');
         $play_sound->setDisplay('forceReturnLineAfter', true);
         $play_sound->save();
-        
+
         $refresh = $this->getCmd('action', 'refresh');
         if (!is_object($refresh)) {
             $refresh = new dreameCmd();
@@ -582,7 +577,7 @@ class dreame extends eqLogic {
         $refresh->setDisplay('generic_type', '');
         $refresh->setDisplay('forceReturnLineAfter', true);
         $refresh->save();
-        
+
         $speed = $this->getCmd('action', 'speed');
         if (!is_object($speed)) {
             $speed = new dreameCmd();
@@ -595,228 +590,219 @@ class dreame extends eqLogic {
         $speed->setType('action');
         $speed->setSubType('select');
         $speed->setDisplay('generic_type', '');
-        
+
         //Silent (0), Basic (1), Strong (2), Full Speed (3)
-        $speed->setConfiguration('listValue','0|Silencieux;1|Normal;2|Fort;3|Vitesse Maximale');
+        $speed->setConfiguration('listValue', '0|Silencieux;1|Normal;2|Fort;3|Vitesse Maximale');
         $speed->setDisplay('forceReturnLineAfter', true);
         $speed->save();
-        
-        
+
+
         self::updateCmd();
-        
-        
-        
     }
-  
-	public function updateCmd() {
-		log::add('dreame', 'debug', 'test ');
-		$did = 			$this->getConfiguration('did');
-		$ip = 			$this->getConfiguration('ip');
-		$token = 		$this->getConfiguration('token');
-		$model = 		$this->getConfiguration('model'); 
-		
-		
-		if (!empty($ip) && !empty($token)) {
-			if ($model == 'dreame.vacuum.p2008') {
-				$cmd = "sudo miiocli -o json_pretty dreamevacuum --ip " . $ip . " --token " . $token ." status 2>&1";
-				log::add('dreame', 'debug', 'CMD BY DREAMEVACUUM');
-				$modelType = "dreamevacuum";
-			} elseif ($model == 'viomi.vacuum.v8') {
-				$cmd = "sudo miiocli -o json_pretty viomivacuum --ip " . $ip . " --token " . $token ." status 2>&1";
-				log::add('dreame', 'debug', 'CMD BY VIOMIVACUUM');
-				$modelType = "viomivacuum";
-			} elseif (strpos($model, 'roborock') !== false) {
-				$cmd = "sudo miiocli -o json_pretty roborockvacuum --ip " . $ip . " --token " . $token ." status 2>&1";
-				log::add('dreame', 'debug', 'CMD BY ROBOROCKVACUUM');
-				$modelType = "roborockvacuum";
-			} else {
-				$cmd = "sudo miiocli -o json_pretty genericmiot --ip " . $ip . " --token " . $token ." status 2>&1";
-				log::add('dreame', 'debug', 'CMD BY GENERIMIOT');
-				$modelType = "genericmiot";
-			} 
-			exec($cmd, $outputArray, $resultCode);
-			log::add('dreame', 'debug', '[GET CMD] ' .$cmd);
-		} else {
-			log::add('dreame', 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
-			return;
-		}
-		
-		$log_output = implode(PHP_EOL, $outputArray);
-		log::add('dreame', 'debug', 'JSON Complet ' . $log_output);
-		$pos = strpos($log_output, '{');
-		$json_string = substr($log_output, $pos);
-		$json = json_decode($json_string);
-		
-		if ($json === null) {
-			log::add('dreame', 'debug', 'Erreur JSON (null) : ' . json_last_error_msg());
-			return;
-		}
-		log::add('dreame', 'debug', 'JSON ' . json_encode($json));
-		
-	      	if ($json != null) 
-	        {
-			if($modelType == 'dreamevacuum') {
-			    $this->checkAndUpdateCmd("batteryLevel", $json->{"battery_level"}); 
-			    $this->checkAndUpdateCmd("isCharging", $json->{"charging_state"}); 
-			    $this->checkAndUpdateCmd("error", $json->{"device_fault"}); 
-			    $this->checkAndUpdateCmd("stateDevice", $json->{"device_status"}); 
-			    $this->checkAndUpdateCmd("timeBrush", $json->{"brush_left_time"}); 
-			    $this->checkAndUpdateCmd("lifeBrush", $json->{"brush_life_level"}); 
-			    $this->checkAndUpdateCmd("timeBrushLeft", $json->{"brush_left_time2"}); 
-			    $this->checkAndUpdateCmd("lifeBrushLeft", $json->{"brush_life_level2"}); 
-			    $this->checkAndUpdateCmd("timeFilterLeft", $json->{"filter_left_time"}); 
-			    $this->checkAndUpdateCmd("lifeFilterLeft", $json->{"filter_life_level"}); 
-			    $this->checkAndUpdateCmd("cleaningTime", $json->{"cleaning_time"}); 
-			    $this->checkAndUpdateCmd("cleaningArea", $json->{"cleaning_area"}); 
-			    $this->checkAndUpdateCmd("speed", $json->{"operating_mode"}); 
 
-			    if (($json->{"device_status"} == 2) && ($json->{"charging_state"} == 1)) { 
-				$this->checkAndUpdateCmd("statusDevice", "Prêt à démarrer"); 
-			    } 
-
-			    if ($json->{"device_status"} == 1) { 
-				$this->checkAndUpdateCmd("statusDevice", "Aspiration en cours"); 
-			    } 
-
-			    if (($json->{"device_status"} == 2) && ($json->{"charging_state"} != 1)) { 
-				$this->checkAndUpdateCmd("statusDevice", "Arrêt"); 
-			    } 
-
-			    if (($json->{"device_status"} == 3) && ($json->{"charging_state"} != 1)) { 
-				$this->checkAndUpdateCmd("statusDevice", "En pause"); 
-			    } 
-
-			    if ($json->{"device_status"} == 4) { 
-				$this->checkAndUpdateCmd("statusDevice", "Erreur"); 
-			    } 
-
-			    if (($json->{"device_status"} == 5) && ($json->{"charging_state"} == 5)) { 
-				$this->checkAndUpdateCmd("statusDevice", "Retour maison"); 
-			    } 
-
-			    if (($json->{"device_status"} == 6) && ($json->{"charging_state"} == 1)) { 
-				$this->checkAndUpdateCmd("statusDevice", "En charge"); 
-			    } 
-
-			    if ($json->{"device_status"} == 7) { 
-				$this->checkAndUpdateCmd("statusDevice", "Aspiration et lavage en cours"); 
-			    } 
-
-			    if ($json->{"device_status"} == 8) { 
-				$this->checkAndUpdateCmd("statusDevice", "Séchage de la serpillère"); 
-			    } 
-
-			    if ($json->{"device_status"} == 12) { 
-				$this->checkAndUpdateCmd("statusDevice", "Nettoyage en cours de la zone"); 
-			    } 
-
-			    if ($json->{"filter_life_level"} == 51) { 
-				$this->checkAndUpdateCmd("errorDevice", "Le filtre est mouillé");
-				} 
-
-				if ($json->{"filter_life_level"} == 106) { 
-				    $this->checkAndUpdateCmd("errorDevice", "Vider le bac et nettoyer la planche de lavage."); 
-				} 
-			 
+    public function updateCmd() {
+        log::add('dreame', 'debug', 'test ');
+        $did =             $this->getConfiguration('did');
+        $ip =             $this->getConfiguration('ip');
+        $token =         $this->getConfiguration('token');
+        $model =         $this->getConfiguration('model');
 
 
-			} elseif($modelType == 'viomivacuum') {
-				$this->checkAndUpdateCmd("batteryLevel", 		$json->{"battary_life"});
-				$this->checkAndUpdateCmd("isCharging", 		$json->{"charging_state"});
-				$this->checkAndUpdateCmd("error", 		$json->{"err_state"});
-				$this->checkAndUpdateCmd("stateDevice", 		$json->{"run_state"});
-				$this->checkAndUpdateCmd("timeBrush", 		"0");
-				$this->checkAndUpdateCmd("lifeBrush", 		"0");
-				$this->checkAndUpdateCmd("timeBrushLeft", 		"0");
-				$this->checkAndUpdateCmd("lifeBrushLeft", 		"0");
-				$this->checkAndUpdateCmd("timeFilterLeft", 		"0");
-				$this->checkAndUpdateCmd("lifeFilterLeft", 		"0");
-				$this->checkAndUpdateCmd("cleaningTime", 		$json->{"s_time"});
-				$this->checkAndUpdateCmd("cleaningArea", 		$json->{"s_area"});
-				$this->checkAndUpdateCmd("speed", 		$json->{"suction_grade"});
-			
-			} elseif ($modelType == 'roborockvacuum') {
-				$cleanTimeFormatted = gmdate("i", $json->{"clean_time"});
-				$cleanAreaFormatted = round($json->{"clean_area"} / 1000000,2);
-				$this->checkAndUpdateCmd("batteryLevel", $json->{"battery"});
-				$this->checkAndUpdateCmd("isCharging", $json->{"charge_status"});
-				$this->checkAndUpdateCmd("error", $json->{"error_code"});
-				$this->checkAndUpdateCmd("stateDevice", $json->{"state"});
-				$this->checkAndUpdateCmd("cleaningTime", $cleanTimeFormatted);
-				$this->checkAndUpdateCmd("cleaningArea", $cleanAreaFormatted);
-				$this->checkAndUpdateCmd("speed", $json->{"fan_power"});
-			} else {
-				$this->checkAndUpdateCmd("batteryLevel", 		$json->{"battery:battery-level"});
-				$this->checkAndUpdateCmd("isCharging", 		$json->{"battery:charging-state"});
-				$this->checkAndUpdateCmd("error", 		$json->{"vacuum:fault"});
-				$this->checkAndUpdateCmd("stateDevice", 		$json->{"vacuum:status"});
-				$this->checkAndUpdateCmd("timeBrush", 		$json->{"brush-cleaner:brush-left-time"});
-				$this->checkAndUpdateCmd("lifeBrush", 		$json->{"brush-cleaner:brush-life-level"});
-				$this->checkAndUpdateCmd("timeBrushLeft", 		"0");
-				$this->checkAndUpdateCmd("lifeBrushLeft", 		"0");
-				$this->checkAndUpdateCmd("timeFilterLeft", 		$json->{"filter:filter-left-time"});
-				$this->checkAndUpdateCmd("lifeFilterLeft", 		$json->{"filter:filter-life-level"});
-				$this->checkAndUpdateCmd("cleaningTime", 		$json->{"vacuum-extend:cleaning-time"});
-				$this->checkAndUpdateCmd("cleaningArea", 		$json->{"vacuum-extend:cleaning-area"});
-				$this->checkAndUpdateCmd("speed", 		$json->{"vacuum:mode"});
+        if (!empty($ip) && !empty($token)) {
+            if ($model == 'dreame.vacuum.p2008') {
+                $cmd = "sudo miiocli -o json_pretty dreamevacuum --ip " . $ip . " --token " . $token . " status 2>&1";
+                log::add('dreame', 'debug', 'CMD BY DREAMEVACUUM');
+                $modelType = "dreamevacuum";
+            } elseif ($model == 'viomi.vacuum.v8') {
+                $cmd = "sudo miiocli -o json_pretty viomivacuum --ip " . $ip . " --token " . $token . " status 2>&1";
+                log::add('dreame', 'debug', 'CMD BY VIOMIVACUUM');
+                $modelType = "viomivacuum";
+            } elseif (strpos($model, 'roborock') !== false) {
+                $cmd = "sudo miiocli -o json_pretty roborockvacuum --ip " . $ip . " --token " . $token . " status 2>&1";
+                log::add('dreame', 'debug', 'CMD BY ROBOROCKVACUUM');
+                $modelType = "roborockvacuum";
+            } else {
+                $cmd = "sudo miiocli -o json_pretty genericmiot --ip " . $ip . " --token " . $token . " status 2>&1";
+                log::add('dreame', 'debug', 'CMD BY GENERIMIOT');
+                $modelType = "genericmiot";
+            }
+            exec($cmd, $outputArray, $resultCode);
+            log::add('dreame', 'debug', '[GET CMD] ' . $cmd);
+        } else {
+            log::add('dreame', 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
+            return;
+        }
 
-				if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} == 1)){
-					$this->checkAndUpdateCmd("statusDevice","Prêt à démarrer");
-				}
+        $log_output = implode(PHP_EOL, $outputArray);
+        log::add('dreame', 'debug', 'JSON Complet ' . $log_output);
+        $pos = strpos($log_output, '{');
+        $json_string = substr($log_output, $pos);
+        $json = json_decode($json_string);
 
-				if ($json->{"vacuum:status"} == 1){
-					$this->checkAndUpdateCmd("statusDevice","Aspiration en cours");
-				}
+        if ($json === null) {
+            log::add('dreame', 'debug', 'Erreur JSON (null) : ' . json_last_error_msg());
+            return;
+        }
+        log::add('dreame', 'debug', 'JSON ' . json_encode($json));
 
-				if (($json->{"vacuum:status"} == 2) AND ($json->{"battery:charging-state"} != 1)){
-					$this->checkAndUpdateCmd("statusDevice","Arret");
-				}
+        if ($json != null) {
+            if ($modelType == 'dreamevacuum') {
+                $this->checkAndUpdateCmd("batteryLevel", $json->{"battery_level"});
+                $this->checkAndUpdateCmd("isCharging", $json->{"charging_state"});
+                $this->checkAndUpdateCmd("error", $json->{"device_fault"});
+                $this->checkAndUpdateCmd("stateDevice", $json->{"device_status"});
+                $this->checkAndUpdateCmd("timeBrush", $json->{"brush_left_time"});
+                $this->checkAndUpdateCmd("lifeBrush", $json->{"brush_life_level"});
+                $this->checkAndUpdateCmd("timeBrushLeft", $json->{"brush_left_time2"});
+                $this->checkAndUpdateCmd("lifeBrushLeft", $json->{"brush_life_level2"});
+                $this->checkAndUpdateCmd("timeFilterLeft", $json->{"filter_left_time"});
+                $this->checkAndUpdateCmd("lifeFilterLeft", $json->{"filter_life_level"});
+                $this->checkAndUpdateCmd("cleaningTime", $json->{"cleaning_time"});
+                $this->checkAndUpdateCmd("cleaningArea", $json->{"cleaning_area"});
+                $this->checkAndUpdateCmd("speed", $json->{"operating_mode"});
 
-				if (($json->{"vacuum:status"} == 3) AND ($json->{"battery:charging-state"} != 1)){
-					$this->checkAndUpdateCmd("statusDevice","En Pause");
-				}
+                if (($json->{"device_status"} == 2) && ($json->{"charging_state"} == 1)) {
+                    $this->checkAndUpdateCmd("statusDevice", "Prêt à démarrer");
+                }
 
-				if ($json->{"vacuum:status"} == 4){
-					$this->checkAndUpdateCmd("statusDevice","Erreur");
-				}
+                if ($json->{"device_status"} == 1) {
+                    $this->checkAndUpdateCmd("statusDevice", "Aspiration en cours");
+                }
 
-				if (($json->{"vacuum:status"} == 5) AND ($json->{"battery:charging-state"} == 5)){
-					$this->checkAndUpdateCmd("statusDevice","Retour Maison");
-				}
+                if (($json->{"device_status"} == 2) && ($json->{"charging_state"} != 1)) {
+                    $this->checkAndUpdateCmd("statusDevice", "Arrêt");
+                }
 
-				if (($json->{"vacuum:status"} == 6) AND ($json->{"battery:charging-state"} == 1)){
-					$this->checkAndUpdateCmd("statusDevice","En Charge");
-				}
+                if (($json->{"device_status"} == 3) && ($json->{"charging_state"} != 1)) {
+                    $this->checkAndUpdateCmd("statusDevice", "En pause");
+                }
 
-				if ($json->{"vacuum:status"} == 7){
-					$this->checkAndUpdateCmd("statusDevice","Aspiration et Lavage en cours");
-				}
+                if ($json->{"device_status"} == 4) {
+                    $this->checkAndUpdateCmd("statusDevice", "Erreur");
+                }
 
-				if ($json->{"vacuum:status"} == 8){
-					$this->checkAndUpdateCmd("statusDevice","Séchage de la serpillère");	
-				}
-				if ($json->{"vacuum:status"} == 12){
-					$this->checkAndUpdateCmd("statusDevice","Nettoyage en cours de la Zone");	
-				}
-				
-				if ($json->{"vacuum:fault"} == 51){
-					$this->checkAndUpdateCmd("errorDevice","Filtre est mouillé");
-				}
+                if (($json->{"device_status"} == 5) && ($json->{"charging_state"} == 5)) {
+                    $this->checkAndUpdateCmd("statusDevice", "Retour maison");
+                }
 
-				if ($json->{"vacuum:fault"} == 106){
-					$this->checkAndUpdateCmd("errorDevice","Vider le bac et nettoyer la planche de lavage.");
-				}
-			}
-        	}
+                if (($json->{"device_status"} == 6) && ($json->{"charging_state"} == 1)) {
+                    $this->checkAndUpdateCmd("statusDevice", "En charge");
+                }
 
-	}
+                if ($json->{"device_status"} == 7) {
+                    $this->checkAndUpdateCmd("statusDevice", "Aspiration et lavage en cours");
+                }
+
+                if ($json->{"device_status"} == 8) {
+                    $this->checkAndUpdateCmd("statusDevice", "Séchage de la serpillère");
+                }
+
+                if ($json->{"device_status"} == 12) {
+                    $this->checkAndUpdateCmd("statusDevice", "Nettoyage en cours de la zone");
+                }
+
+                if ($json->{"filter_life_level"} == 51) {
+                    $this->checkAndUpdateCmd("errorDevice", "Le filtre est mouillé");
+                }
+
+                if ($json->{"filter_life_level"} == 106) {
+                    $this->checkAndUpdateCmd("errorDevice", "Vider le bac et nettoyer la planche de lavage.");
+                }
+            } elseif ($modelType == 'viomivacuum') {
+                $this->checkAndUpdateCmd("batteryLevel",         $json->{"battary_life"});
+                $this->checkAndUpdateCmd("isCharging",         $json->{"charging_state"});
+                $this->checkAndUpdateCmd("error",         $json->{"err_state"});
+                $this->checkAndUpdateCmd("stateDevice",         $json->{"run_state"});
+                $this->checkAndUpdateCmd("timeBrush",         "0");
+                $this->checkAndUpdateCmd("lifeBrush",         "0");
+                $this->checkAndUpdateCmd("timeBrushLeft",         "0");
+                $this->checkAndUpdateCmd("lifeBrushLeft",         "0");
+                $this->checkAndUpdateCmd("timeFilterLeft",         "0");
+                $this->checkAndUpdateCmd("lifeFilterLeft",         "0");
+                $this->checkAndUpdateCmd("cleaningTime",         $json->{"s_time"});
+                $this->checkAndUpdateCmd("cleaningArea",         $json->{"s_area"});
+                $this->checkAndUpdateCmd("speed",         $json->{"suction_grade"});
+            } elseif ($modelType == 'roborockvacuum') {
+                $cleanTimeFormatted = gmdate("i", $json->{"clean_time"});
+                $cleanAreaFormatted = round($json->{"clean_area"} / 1000000, 2);
+                $this->checkAndUpdateCmd("batteryLevel", $json->{"battery"});
+                $this->checkAndUpdateCmd("isCharging", $json->{"charge_status"});
+                $this->checkAndUpdateCmd("error", $json->{"error_code"});
+                $this->checkAndUpdateCmd("stateDevice", $json->{"state"});
+                $this->checkAndUpdateCmd("cleaningTime", $cleanTimeFormatted);
+                $this->checkAndUpdateCmd("cleaningArea", $cleanAreaFormatted);
+                $this->checkAndUpdateCmd("speed", $json->{"fan_power"});
+            } else {
+                $this->checkAndUpdateCmd("batteryLevel",         $json->{"battery:battery-level"});
+                $this->checkAndUpdateCmd("isCharging",         $json->{"battery:charging-state"});
+                $this->checkAndUpdateCmd("error",         $json->{"vacuum:fault"});
+                $this->checkAndUpdateCmd("stateDevice",         $json->{"vacuum:status"});
+                $this->checkAndUpdateCmd("timeBrush",         $json->{"brush-cleaner:brush-left-time"});
+                $this->checkAndUpdateCmd("lifeBrush",         $json->{"brush-cleaner:brush-life-level"});
+                $this->checkAndUpdateCmd("timeBrushLeft",         "0");
+                $this->checkAndUpdateCmd("lifeBrushLeft",         "0");
+                $this->checkAndUpdateCmd("timeFilterLeft",         $json->{"filter:filter-left-time"});
+                $this->checkAndUpdateCmd("lifeFilterLeft",         $json->{"filter:filter-life-level"});
+                $this->checkAndUpdateCmd("cleaningTime",         $json->{"vacuum-extend:cleaning-time"});
+                $this->checkAndUpdateCmd("cleaningArea",         $json->{"vacuum-extend:cleaning-area"});
+                $this->checkAndUpdateCmd("speed",         $json->{"vacuum:mode"});
+
+                if (($json->{"vacuum:status"} == 2) and ($json->{"battery:charging-state"} == 1)) {
+                    $this->checkAndUpdateCmd("statusDevice", "Prêt à démarrer");
+                }
+
+                if ($json->{"vacuum:status"} == 1) {
+                    $this->checkAndUpdateCmd("statusDevice", "Aspiration en cours");
+                }
+
+                if (($json->{"vacuum:status"} == 2) and ($json->{"battery:charging-state"} != 1)) {
+                    $this->checkAndUpdateCmd("statusDevice", "Arret");
+                }
+
+                if (($json->{"vacuum:status"} == 3) and ($json->{"battery:charging-state"} != 1)) {
+                    $this->checkAndUpdateCmd("statusDevice", "En Pause");
+                }
+
+                if ($json->{"vacuum:status"} == 4) {
+                    $this->checkAndUpdateCmd("statusDevice", "Erreur");
+                }
+
+                if (($json->{"vacuum:status"} == 5) and ($json->{"battery:charging-state"} == 5)) {
+                    $this->checkAndUpdateCmd("statusDevice", "Retour Maison");
+                }
+
+                if (($json->{"vacuum:status"} == 6) and ($json->{"battery:charging-state"} == 1)) {
+                    $this->checkAndUpdateCmd("statusDevice", "En Charge");
+                }
+
+                if ($json->{"vacuum:status"} == 7) {
+                    $this->checkAndUpdateCmd("statusDevice", "Aspiration et Lavage en cours");
+                }
+
+                if ($json->{"vacuum:status"} == 8) {
+                    $this->checkAndUpdateCmd("statusDevice", "Séchage de la serpillère");
+                }
+                if ($json->{"vacuum:status"} == 12) {
+                    $this->checkAndUpdateCmd("statusDevice", "Nettoyage en cours de la Zone");
+                }
+
+                if ($json->{"vacuum:fault"} == 51) {
+                    $this->checkAndUpdateCmd("errorDevice", "Filtre est mouillé");
+                }
+
+                if ($json->{"vacuum:fault"} == 106) {
+                    $this->checkAndUpdateCmd("errorDevice", "Vider le bac et nettoyer la planche de lavage.");
+                }
+            }
+        }
+    }
 
     public function sendCmd($cmd, $val = "") {
         $did = $this->getConfiguration('did');
         $ip = $this->getConfiguration('ip');
         $token = $this->getConfiguration('token');
         $model = $this->getConfiguration('model');
-    
+
         $cmdLabelsByModel = [
             'roborock' => [
                 "home" => "home",
@@ -851,7 +837,7 @@ class dreame extends eqLogic {
                 "setSpeed" => "vacuum:mode",
             ],
         ];
-    
+
         if (strpos($model, 'roborock') !== false) {
             $cmdLabels = $cmdLabelsByModel['roborock'];
             $cmdExec = "sudo miiocli roborockvacuum --ip $ip --token $token";
@@ -863,19 +849,19 @@ class dreame extends eqLogic {
             $cmdExec = "sudo miiocli dreamevacuum --ip $ip --token $token";
         } else {
             $cmdLabels = $cmdLabelsByModel['default'];
-            
+
             $cmdExec = "sudo miiocli genericmiot --ip $ip --token $token call";
         }
-    
+
         $cmdLabel = $cmdLabels[$cmd] ?? "";
         if ($cmdLabel == "") {
             log::add('dreame', 'warn', 'Erreur pour action : ' . $this->getLogicalId());
             return;
         }
-    
+
         if (!empty($ip) && !empty($token)) {
             $finalCmd = "$cmdExec $cmdLabel";
-            
+
             exec($finalCmd, $outputArray, $resultCode);
             log::add('dreame', 'debug', '[CMD] ' . $finalCmd);
             self::updateCmd();
@@ -883,36 +869,35 @@ class dreame extends eqLogic {
             log::add('dreame', 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
         }
     }
-  
 }
 
 class dreameCmd extends cmd {
-  /*     * *************************Attributs****************************** */
+    /*     * *************************Attributs****************************** */
 
-  /*
+    /*
   public static $_widgetPossibility = array();
   */
 
-  /*     * ***********************Methode static*************************** */
+    /*     * ***********************Methode static*************************** */
 
 
-  /*     * *********************Methode d'instance************************* */
+    /*     * *********************Methode d'instance************************* */
 
-  /*
+    /*
   * Permet d'empêcher la suppression des commandes même si elles ne sont pas dans la nouvelle configuration de l'équipement envoyé en JS
   public function dontRemoveCmd() {
     return true;
   }
   */
 
-  // Exécution d'une commande
+    // Exécution d'une commande
     public function execute($_options = array()) {
 
         $eqLogic = $this->getEqLogic(); // Récupération de l’eqlogic
         Log::add('dreame', 'debug', '$_options[] traité: ' . json_encode($_options));
 
-        switch ($this->getLogicalId()) {                
-            case 'refresh': 
+        switch ($this->getLogicalId()) {
+            case 'refresh':
                 log::add('dreame', 'debug', 'Refresh : ' . $this->getLogicalId());
                 $eqLogic->updateCmd();
                 break;
@@ -927,7 +912,7 @@ class dreameCmd extends cmd {
             case 'home':
                 log::add('dreame', 'debug', 'home : ' . $this->getLogicalId());
                 $eqLogic->sendCmd('home');
-                break;		
+                break;
             case 'position':
                 log::add('dreame', 'debug', 'position : ' . $this->getLogicalId());
                 $eqLogic->sendCmd('position');
@@ -946,13 +931,10 @@ class dreameCmd extends cmd {
                 throw new Error('This should not append!');
                 log::add('dreame', 'error', 'Aucune commande associée : ' . $this->getLogicalId());
                 break;
-            }
+        }
     }
 
 
 
-  /*     * **********************Getteur Setteur*************************** */
-
+    /*     * **********************Getteur Setteur*************************** */
 }
-
-

@@ -19,10 +19,6 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement après l'installation du plugin
 function dreame_install() {
-
-
-
-
 }
 
 

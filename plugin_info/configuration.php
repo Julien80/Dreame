@@ -28,15 +28,15 @@ if (!isConnect()) {
       <label class="col-md-4 control-label">{{ Adresse Mail Xiaomi Home }}
       </label>
       <div class="col-md-4">
-        <input class="configKey form-control" type='email' data-l1key="account-email"/>
+        <input class="configKey form-control" type='email' data-l1key="account-email" />
       </div>
     </div>
     <div class="form-group">
       <label class="col-md-4 control-label">{{ Mot de Passe Xiaomi Home }}
-        
+
       </label>
       <div class="col-md-4">
-        <input class="configKey form-control" type='password' data-l1key="account-password"/>
+        <input class="configKey form-control" type='password' data-l1key="account-password" />
       </div>
     </div>
     <div class="form-group">
