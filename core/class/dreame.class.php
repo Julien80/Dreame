@@ -158,379 +158,454 @@ class dreame extends eqLogic {
   */
 
   /*     * **********************Getteur Setteur*************************** */
-	public function createCmd($bCreateCmd = true) {
-	      	$order = 1;
-		$batteryLevel = $this->getCmd(null, 'batteryLevel');
-		if (!is_object($batteryLevel)) {
-			$batteryLevel = new dreameCmd();
-			$batteryLevel->setName(__('Batterie', __FILE__));
-		}
-		$batteryLevel->setOrder($order++);
-		$batteryLevel->setLogicalId('batteryLevel');
-		$batteryLevel->setEqLogic_id($this->getId());
-		$batteryLevel->setType('info');
-		$batteryLevel->setUnite('%');
-		$batteryLevel->setSubType('numeric');
-	     	$batteryLevel->setTemplate('dashboard', 'default'); 
-	      	$batteryLevel->setTemplate('mobile', 'default'); 
-		$batteryLevel->setIsVisible(1);
-		$batteryLevel->setIsHistorized(1);
-		$batteryLevel->setDisplay('forceReturnLineBefore', false);
-		$batteryLevel->save();
-      
-      		$isCharging = $this->getCmd(null, 'isCharging');
-		if (!is_object($isCharging)) {
-			$isCharging = new dreameCmd();
-			$isCharging->setName(__('Etat de Charge', __FILE__));
-		}
-		$isCharging->setOrder($order++);
-		$isCharging->setLogicalId('isCharging');
-		$isCharging->setEqLogic_id($this->getId());
-		$isCharging->setType('info');
-		$isCharging->setTemplate('dashboard', 'default');
-      		$isCharging->setTemplate('mobile', 'default');
-		$isCharging->setSubType('numeric');
-		$isCharging->setIsVisible(1);
-		$isCharging->setIsHistorized(1);
-		$isCharging->setDisplay('forceReturnLineBefore', false);
-		$isCharging->save();
-      
-       		$error = $this->getCmd(null, 'error');
-		if (!is_object($error)) {
-			$error = new dreameCmd();
-			$error->setName(__('Erreur', __FILE__));
-		}
-		$error->setOrder($order++);
-		$error->setLogicalId('error');
-		$error->setEqLogic_id($this->getId());
-		$error->setType('info');
-		$error->setTemplate('dashboard', 'line');
-      		$error->setTemplate('mobile', 'line');
-		$error->setSubType('numeric');
-		$error->setIsVisible(1);
-		$error->setIsHistorized(1);
-		$error->setDisplay('forceReturnLineBefore', false);
-		$error->save();
 
-		$errorDevice = $this->getCmd(null, 'errorDevice');
-		if (!is_object($errorDevice)) {
-			$errorDevice = new dreameCmd();
-			$errorDevice->setName(__('ErreurDevice', __FILE__));
-		}
-		$errorDevice->setOrder($order++);
-		$errorDevice->setLogicalId('errorDevice');
-		$errorDevice->setEqLogic_id($this->getId());
-		$errorDevice->setType('info');
-		$errorDevice->setTemplate('dashboard', 'line');
-      		$errorDevice->setTemplate('mobile', 'line');
-		$errorDevice->setSubType('numeric');
-		$errorDevice->setIsVisible(1);
-		$errorDevice->setIsHistorized(1);
-		$errorDevice->setDisplay('forceReturnLineBefore', false);
-		$errorDevice->save();
-      
-        	$statusDevice = $this->getCmd(null, 'statusDevice');
-		if (!is_object($statusDevice)) {
-			$statusDevice = new dreameCmd();
-			$statusDevice->setName(__('Etat', __FILE__));
-		}
-      
-        	$stateDevice = $this->getCmd(null, 'stateDevice');
-		if (!is_object($stateDevice)) {
-			$stateDevice = new dreameCmd();
-			$stateDevice->setName(__('Statut', __FILE__));
-		}
-		$stateDevice->setOrder($order++);
-		$stateDevice->setLogicalId('stateDevice');
-		$stateDevice->setEqLogic_id($this->getId());
-		$stateDevice->setType('info');
-		$stateDevice->setTemplate('dashboard', 'line');
-      		$stateDevice->setTemplate('mobile', 'line');
-		$stateDevice->setSubType('numeric');
-		$stateDevice->setIsVisible(1);
-		$stateDevice->setIsHistorized(1);
-		$stateDevice->setDisplay('forceReturnLineBefore', false);
-		$stateDevice->save();
-      
-        	$statusDevice = $this->getCmd(null, 'statusDevice');
-		if (!is_object($statusDevice)) {
-			$statusDevice = new dreameCmd();
-			$statusDevice->setName(__('Etat', __FILE__));
-		}
-		$statusDevice->setOrder($order++);
-		$statusDevice->setLogicalId('statusDevice');
-		$statusDevice->setEqLogic_id($this->getId());
-		$statusDevice->setType('info');
-		$statusDevice->setTemplate('dashboard', 'line');
-      		$statusDevice->setTemplate('mobile', 'line');
-		$statusDevice->setSubType('string');
-		$statusDevice->setIsVisible(1);
-		$statusDevice->setIsHistorized(0);
-		$statusDevice->setDisplay('forceReturnLineBefore', true);
-		$statusDevice->save();
-      
-        	$timeBrush = $this->getCmd(null, 'timeBrush');
-		if (!is_object($timeBrush)) {
-			$timeBrush = new dreameCmd();
-			$timeBrush->setName(__('Temps restant brosse principale', __FILE__));
-		}
-		$timeBrush->setOrder($order++);
-		$timeBrush->setLogicalId('timeBrush');
-		$timeBrush->setEqLogic_id($this->getId());
-		$timeBrush->setType('info');
-		$timeBrush->setUnite('h');
-      		$timeBrush->setTemplate('dashboard', 'line');
-      		$timeBrush->setTemplate('mobile', 'line');
-		$timeBrush->setSubType('numeric');
-		$timeBrush->setIsVisible(1);
-		$timeBrush->setIsHistorized(1);
-		$timeBrush->setDisplay('forceReturnLineBefore', false);
-		$timeBrush->save();
-      
-       		$lifeBrush = $this->getCmd(null, 'lifeBrush');
-		if (!is_object($lifeBrush)) {
-			$lifeBrush = new dreameCmd();
-			$lifeBrush->setName(__('Etat brosse principale', __FILE__));
-		}
-		$lifeBrush->setOrder($order++);
-		$lifeBrush->setLogicalId('lifeBrush');
-		$lifeBrush->setEqLogic_id($this->getId());
-		$lifeBrush->setType('info');
-        	$lifeBrush->setTemplate('dashboard', 'line');
-      		$lifeBrush->setTemplate('mobile', 'line');
-		$lifeBrush->setUnite('%');
-		$lifeBrush->setSubType('numeric');
-		$lifeBrush->setIsVisible(1);
-		$lifeBrush->setIsHistorized(1);
-		$lifeBrush->setDisplay('forceReturnLineBefore', false);
-		$lifeBrush->save();
-      
-        	$timeBrushLeft = $this->getCmd(null, 'timeBrushLeft');
-		if (!is_object($timeBrushLeft)) {
-			$timeBrushLeft = new dreameCmd();
-			$timeBrushLeft->setName(__('Durée de vie restante brosse latérale', __FILE__));
-		}
-		$timeBrushLeft->setOrder($order++);
-		$timeBrushLeft->setLogicalId('timeBrushLeft');
-		$timeBrushLeft->setEqLogic_id($this->getId());
-		$timeBrushLeft->setType('info');
-		$timeBrushLeft->setUnite('h');
-		$timeBrushLeft->setSubType('numeric');
-        	$timeBrushLeft->setTemplate('dashboard', 'line');
-      		$timeBrushLeft->setTemplate('mobile', 'line');
-		$timeBrushLeft->setIsVisible(1);
-		$timeBrushLeft->setIsHistorized(1);
-		$timeBrushLeft->setDisplay('forceReturnLineBefore', false);
-		$timeBrushLeft->save();
-      
-       		$lifeBrushLeft = $this->getCmd(null, 'lifeBrushLeft');
-		if (!is_object($lifeBrushLeft)) {
-			$lifeBrushLeft = new dreameCmd();
-			$lifeBrushLeft->setName(__('Etat brosse latérale', __FILE__));
-		}
-		$lifeBrushLeft->setOrder($order++);
-		$lifeBrushLeft->setLogicalId('lifeBrushLeft');
-		$lifeBrushLeft->setEqLogic_id($this->getId());
-		$lifeBrushLeft->setType('info');
-		$lifeBrushLeft->setUnite('%');
- 	    	$lifeBrushLeft->setTemplate('dashboard', 'line');
-      		$lifeBrushLeft->setTemplate('mobile', 'line');
-		$lifeBrushLeft->setSubType('numeric');
-		$lifeBrushLeft->setIsVisible(1);
-		$lifeBrushLeft->setIsHistorized(1);
-		$lifeBrushLeft->setDisplay('forceReturnLineBefore', false);
-		$lifeBrushLeft->save();
-      
-    		$timeFilterLeft = $this->getCmd(null, 'timeFilterLeft');
-		if (!is_object($timeFilterLeft)) {
-			$timeFilterLeft = new dreameCmd();
-			$timeFilterLeft->setName(__('Durée de vie restante filtre', __FILE__));
-		}
-		$timeFilterLeft->setOrder($order++);
-		$timeFilterLeft->setLogicalId('timeFilterLeft');
-		$timeFilterLeft->setEqLogic_id($this->getId());
-		$timeFilterLeft->setType('info');
-		$timeFilterLeft->setUnite('h');
-		$timeFilterLeft->setSubType('numeric');
-        	$timeFilterLeft->setTemplate('dashboard', 'line');
-     		$timeFilterLeft->setTemplate('mobile', 'line');
-		$timeFilterLeft->setIsVisible(1);
-		$timeFilterLeft->setIsHistorized(1);
-		$timeFilterLeft->setDisplay('forceReturnLineBefore', false);
-		$timeFilterLeft->save();
-      
-       		$lifeFilterLeft = $this->getCmd(null, 'lifeFilterLeft');
-		if (!is_object($lifeFilterLeft)) {
-			$lifeFilterLeft = new dreameCmd();
-			$lifeFilterLeft->setName(__('Etat Filtre', __FILE__));
-		}
-		$lifeFilterLeft->setOrder($order++);
-		$lifeFilterLeft->setLogicalId('lifeFilterLeft');
-		$lifeFilterLeft->setEqLogic_id($this->getId());
-		$lifeFilterLeft->setType('info');
-		$lifeFilterLeft->setUnite('%');
-    		$lifeFilterLeft->setTemplate('dashboard', 'line');
-      		$lifeFilterLeft->setTemplate('mobile', 'line');
-		$lifeFilterLeft->setSubType('numeric');
-		$lifeFilterLeft->setIsVisible(1);
-		$lifeFilterLeft->setIsHistorized(1);
-		$lifeFilterLeft->setDisplay('forceReturnLineBefore', false);
-		$lifeFilterLeft->save();
-      
-             	$cleaningTime = $this->getCmd(null, 'cleaningTime');
-		if (!is_object($cleaningTime)) {
-			$cleaningTime = new dreameCmd();
-			$cleaningTime->setName(__('Temps de nettoyage', __FILE__));
-		}
-		$cleaningTime->setOrder($order++);
-		$cleaningTime->setLogicalId('cleaningTime');
-		$cleaningTime->setEqLogic_id($this->getId());
-		$cleaningTime->setType('info');
-		$cleaningTime->setUnite('min');
-      		$cleaningTime->setTemplate('dashboard', 'line');
-      		$cleaningTime->setTemplate('mobile', 'line');
-		$cleaningTime->setSubType('numeric');
-		$cleaningTime->setIsVisible(1);
-		$cleaningTime->setIsHistorized(1);
-		$cleaningTime->setDisplay('forceReturnLineBefore', false);
-		$cleaningTime->save();
-      
-    		$cleaningArea = $this->getCmd(null, 'cleaningArea');
-		if (!is_object($cleaningArea)) {
-			$cleaningArea = new dreameCmd();
-			$cleaningArea->setName(__('Surface Nettoyée', __FILE__));
-		}
-		$cleaningArea->setOrder($order++);
-		$cleaningArea->setLogicalId('cleaningArea');
-		$cleaningArea->setEqLogic_id($this->getId());
-		$cleaningArea->setType('info');
-		$cleaningArea->setUnite('m2');
-		$cleaningArea->setTemplate('dashboard', 'line');
-      		$cleaningArea->setTemplate('mobile', 'line');
-		$cleaningArea->setSubType('numeric');
-		$cleaningArea->setIsVisible(1);
-		$cleaningArea->setIsHistorized(1);
-		$cleaningArea->setDisplay('forceReturnLineBefore', false);
-		$cleaningArea->save();
-      
-		$stop = $this->getCmd('action', 'stop');
-		if (!is_object($stop)) {
-			$stop = new dreameCmd();
-			$stop->setName(__('Arreter', __FILE__));
-		}
-		$stop->setOrder($order++);
-		$stop->setIsVisible(1);
-		$stop->setLogicalId('stop');
-		$stop->setEqLogic_id($this->getId());
-		$stop->setType('action');
-		$stop->setSubType('other');
-		$stop->setDisplay('generic_type', '');
-		$stop->setDisplay('forceReturnLineAfter', true);
-		$stop->save();
-      
-      		$start = $this->getCmd('action', 'start');
-		if (!is_object($start)) {
-			$start = new dreameCmd();
-			$start->setName(__('Démarrer', __FILE__));
-		}
-		$start->setOrder($order++);
-		$start->setIsVisible(1);
-		$start->setLogicalId('start');
-		$start->setEqLogic_id($this->getId());
-		$start->setType('action');
-		$start->setSubType('other');
-		$start->setDisplay('generic_type', 'ENERGY_ON');
-		//$info->setDisplay('forceReturnLineBefore', true);
-		$start->setDisplay('forceReturnLineAfter', true);
-		$start->save();
-      
-        	$home = $this->getCmd('action', 'home');
-		if (!is_object($home)) {
-			$home = new dreameCmd();
-			$home->setName(__('Maison', __FILE__));
-		}
-		$home->setOrder($order++);
-		$home->setIsVisible(1);
-		$home->setLogicalId('home');
-		$home->setEqLogic_id($this->getId());
-		$home->setType('action');
-		$home->setSubType('other');
-		$home->setDisplay('generic_type', 'ENERGY_OFF');
-		//$info->setDisplay('forceReturnLineBefore', true);
-		$home->setDisplay('forceReturnLineAfter', true);
-		$home->save();
+    public function detectDevices() {
+        $accountEmail = 	trim(config::byKey('account-email', 'dreame'));
+        $accountPassword = 	trim(config::byKey('account-password', 'dreame'));
+        $accountCountry = 	trim(config::byKey('account-country', 'dreame'));
+        
+        $cmd = "sudo micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c ". $accountCountry. " 2>&1";
+        exec($cmd,$outputArray,$resultCode);
+        log::add("dreame", "debug", json_encode($outputArray));
+        if ($resultCode != 0) {
+            if (strstr( $outputArray[23],'Access denied')){ //$outputArray[23] = "micloud.micloudexception.MiCloudAccessDenied: Access denied. Did you set the correct api key and/or username?")
+                log::add("dreame", "debug", "Erreur Mot de Passe ou Email");
+                
+                event::add('jeedom::alert', array(
+                    'level' => 'danger',
+                    'page' => 'dreame',
+                    'ttl' => 10000,
+                    'message' => __('Identification impossible, vérifiez votre identifiant et votre mot de passe Xiami Home.', __FILE__),
+                ));
+                return [
+                    "newEq" => 0,
+                ];
+            }
+            
+        }else{
+            $json = json_decode($outputArray[0]);
+            log::add("dreame", "debug", json_encode($json));
+            $getAllDevices = eqLogic::byType('dreame');
+            foreach($json as $response) {
+                $alreadyExist = false;
+                foreach($getAllDevices as $allDevices) {
+                    if ($allDevices->getLogicalId() == $response->did) {
+                        $alreadyExist = true;
+                        if ($allDevices->getConfiguration('ip') != $response->localip || $allDevices->getConfiguration('token') != $response->token) {
+                            $allDevices->setConfiguration('ip', $response->localip);
+                            $allDevices->setConfiguration('token', $response->token);
+                            $allDevices->save();
+                            log::add("dreame", "debug", "Mise à jour de l'IP et du token pour l'équipement existant.");
+                        }
+                        break;
+                    }
+                }
+                $numberNewDevice = 0;
+                
+                if ($alreadyExist) {
+                    log::add("dreame", "debug", "Equipement déjà présent, il ne faut donc pas l'ajouter");
+                } else {
+                    // Check if $response->model contains 'Dreame' or 'viomi'
+                    if (strpos($response->model, 'dreame') !== false || strpos($response->model, 'viomi') !== false || strpos($response->model, 'roborock') !== false) {
+                        $eqlogic = new dreame();
+                        $eqlogic->setName($response->name);
+                        $eqlogic->setIsEnable(1);
+                        $eqlogic->setIsVisible(0);
+                        $eqlogic->setLogicalId($response->did);
+                        $eqlogic->setEqType_name('dreame');
+                        $eqlogic->setConfiguration('did', $response->did);
+                        $eqlogic->setConfiguration('ip', $response->localip);
+                        $eqlogic->setConfiguration('token', $response->token);      
+                        $eqlogic->setConfiguration('model', $response->model);
+                        $eqlogic->save();
+                        $numberNewDevice++;
+                        log::add("dreame", "debug", "Nouvel Equipement, ajout en cours.");
+                    } else {
+                        log::add("dreame", "debug", "Le modèle de l'équipement n'est pas pris en charge : ".$response->model);
+                    }
+                }
+                
+                
+            }
+            
+        }
+        
+        log::add("dreame", "debug", "============================ DISCOVER ============================");
+        
+        
+        return [
+            "newEq" => $numberNewDevice,
+        ];
 
-		$position = $this->getCmd('action', 'position');
-		if (!is_object($position)) {
-			$position = new dreameCmd();
-			$position->setName(__('Cherche Moi', __FILE__));
-		}
-		$position->setOrder($order++);
-		$position->setIsVisible(1);
-		$position->setLogicalId('position');
-		$position->setEqLogic_id($this->getId());
-		$position->setType('action');
-		$position->setSubType('other');
-		$position->setDisplay('generic_type', '');
-		$position->setDisplay('forceReturnLineAfter', true);
-		$position->save();
-
-		$play_sound = $this->getCmd('action', 'play-sound');
-		if (!is_object($play_sound)) {
-			$play_sound = new dreameCmd();
-			$play_sound->setName(__('Play Sound', __FILE__));
-		}
-		$play_sound->setOrder($order++);
-		$play_sound->setIsVisible(1);
-		$play_sound->setLogicalId('play-sound');
-		$play_sound->setEqLogic_id($this->getId());
-		$play_sound->setType('action');
-		$play_sound->setSubType('other');
-		$play_sound->setDisplay('generic_type', '');
-		$play_sound->setDisplay('forceReturnLineAfter', true);
-		$play_sound->save();
-      
-        	$refresh = $this->getCmd('action', 'refresh');
-		if (!is_object($refresh)) {
-			$refresh = new dreameCmd();
-			$refresh->setName(__('Rafraichir', __FILE__));
-		}
-		$refresh->setOrder($order++);
-		$refresh->setIsVisible(1);
-		$refresh->setLogicalId('refresh');
-		$refresh->setEqLogic_id($this->getId());
-		$refresh->setType('action');
-		$refresh->setSubType('other');
-		$refresh->setDisplay('generic_type', '');
-		//$info->setDisplay('forceReturnLineBefore', true);
-		$refresh->setDisplay('forceReturnLineAfter', true);
-		$refresh->save();
-
-		$speed = $this->getCmd('action', 'speed');
-		if (!is_object($speed)) {
-			$speed = new dreameCmd();
-			$speed->setName(__('Vitesse', __FILE__));
-		}
-		$speed->setOrder($order++);
-		$speed->setIsVisible(1);
-		$speed->setLogicalId('speed');
-		$speed->setEqLogic_id($this->getId());
-		$speed->setType('action');
-		$speed->setSubType('select');
-		$speed->setDisplay('generic_type', '');
-
-		//Silent (0), Basic (1), Strong (2), Full Speed (3)
-
-
-		$speed->setConfiguration('listValue','0|Silencieux;1|Normal;2|Fort;3|Vitesse Maximale');
-		$speed->setDisplay('forceReturnLineAfter', true);
-		$speed->save();
-
-      
-      	self::updateCmd();
-      
- 
-      
+    }
+    public function createCmd($bCreateCmd = true) {
+        $order = 1;
+        $batteryLevel = $this->getCmd(null, 'batteryLevel');
+        if (!is_object($batteryLevel)) {
+            $batteryLevel = new dreameCmd();
+            $batteryLevel->setName(__('Batterie', __FILE__));
+        }
+        $batteryLevel->setOrder($order++);
+        $batteryLevel->setLogicalId('batteryLevel');
+        $batteryLevel->setEqLogic_id($this->getId());
+        $batteryLevel->setType('info');
+        $batteryLevel->setUnite('%');
+        $batteryLevel->setSubType('numeric');
+        $batteryLevel->setTemplate('dashboard', 'default'); 
+        $batteryLevel->setTemplate('mobile', 'default'); 
+        $batteryLevel->setIsVisible(1);
+        $batteryLevel->setIsHistorized(1);
+        $batteryLevel->setDisplay('forceReturnLineBefore', false);
+        $batteryLevel->save();
+        
+        $isCharging = $this->getCmd(null, 'isCharging');
+        if (!is_object($isCharging)) {
+            $isCharging = new dreameCmd();
+            $isCharging->setName(__('Etat de Charge', __FILE__));
+        }
+        $isCharging->setOrder($order++);
+        $isCharging->setLogicalId('isCharging');
+        $isCharging->setEqLogic_id($this->getId());
+        $isCharging->setType('info');
+        $isCharging->setTemplate('dashboard', 'default');
+        $isCharging->setTemplate('mobile', 'default');
+        $isCharging->setSubType('numeric');
+        $isCharging->setIsVisible(1);
+        $isCharging->setIsHistorized(1);
+        $isCharging->setDisplay('forceReturnLineBefore', false);
+        $isCharging->save();
+        
+        $error = $this->getCmd(null, 'error');
+        if (!is_object($error)) {
+            $error = new dreameCmd();
+            $error->setName(__('Erreur', __FILE__));
+        }
+        $error->setOrder($order++);
+        $error->setLogicalId('error');
+        $error->setEqLogic_id($this->getId());
+        $error->setType('info');
+        $error->setTemplate('dashboard', 'line');
+        $error->setTemplate('mobile', 'line');
+        $error->setSubType('numeric');
+        $error->setIsVisible(1);
+        $error->setIsHistorized(1);
+        $error->setDisplay('forceReturnLineBefore', false);
+        $error->save();
+        
+        $errorDevice = $this->getCmd(null, 'errorDevice');
+        if (!is_object($errorDevice)) {
+            $errorDevice = new dreameCmd();
+            $errorDevice->setName(__('ErreurDevice', __FILE__));
+        }
+        $errorDevice->setOrder($order++);
+        $errorDevice->setLogicalId('errorDevice');
+        $errorDevice->setEqLogic_id($this->getId());
+        $errorDevice->setType('info');
+        $errorDevice->setTemplate('dashboard', 'line');
+        $errorDevice->setTemplate('mobile', 'line');
+        $errorDevice->setSubType('numeric');
+        $errorDevice->setIsVisible(1);
+        $errorDevice->setIsHistorized(1);
+        $errorDevice->setDisplay('forceReturnLineBefore', false);
+        $errorDevice->save();
+        
+        $statusDevice = $this->getCmd(null, 'statusDevice');
+        if (!is_object($statusDevice)) {
+            $statusDevice = new dreameCmd();
+            $statusDevice->setName(__('Etat', __FILE__));
+        }
+        
+        $stateDevice = $this->getCmd(null, 'stateDevice');
+        if (!is_object($stateDevice)) {
+            $stateDevice = new dreameCmd();
+            $stateDevice->setName(__('Statut', __FILE__));
+        }
+        $stateDevice->setOrder($order++);
+        $stateDevice->setLogicalId('stateDevice');
+        $stateDevice->setEqLogic_id($this->getId());
+        $stateDevice->setType('info');
+        $stateDevice->setTemplate('dashboard', 'line');
+        $stateDevice->setTemplate('mobile', 'line');
+        $stateDevice->setSubType('numeric');
+        $stateDevice->setIsVisible(1);
+        $stateDevice->setIsHistorized(1);
+        $stateDevice->setDisplay('forceReturnLineBefore', false);
+        $stateDevice->save();
+        
+        $statusDevice = $this->getCmd(null, 'statusDevice');
+        if (!is_object($statusDevice)) {
+            $statusDevice = new dreameCmd();
+            $statusDevice->setName(__('Etat', __FILE__));
+        }
+        $statusDevice->setOrder($order++);
+        $statusDevice->setLogicalId('statusDevice');
+        $statusDevice->setEqLogic_id($this->getId());
+        $statusDevice->setType('info');
+        $statusDevice->setTemplate('dashboard', 'line');
+        $statusDevice->setTemplate('mobile', 'line');
+        $statusDevice->setSubType('string');
+        $statusDevice->setIsVisible(1);
+        $statusDevice->setIsHistorized(0);
+        $statusDevice->setDisplay('forceReturnLineBefore', true);
+        $statusDevice->save();
+        
+        $timeBrush = $this->getCmd(null, 'timeBrush');
+        if (!is_object($timeBrush)) {
+            $timeBrush = new dreameCmd();
+            $timeBrush->setName(__('Temps restant brosse principale', __FILE__));
+        }
+        $timeBrush->setOrder($order++);
+        $timeBrush->setLogicalId('timeBrush');
+        $timeBrush->setEqLogic_id($this->getId());
+        $timeBrush->setType('info');
+        $timeBrush->setUnite('h');
+        $timeBrush->setTemplate('dashboard', 'line');
+        $timeBrush->setTemplate('mobile', 'line');
+        $timeBrush->setSubType('numeric');
+        $timeBrush->setIsVisible(1);
+        $timeBrush->setIsHistorized(1);
+        $timeBrush->setDisplay('forceReturnLineBefore', false);
+        $timeBrush->save();
+        
+        $lifeBrush = $this->getCmd(null, 'lifeBrush');
+        if (!is_object($lifeBrush)) {
+            $lifeBrush = new dreameCmd();
+            $lifeBrush->setName(__('Etat brosse principale', __FILE__));
+        }
+        $lifeBrush->setOrder($order++);
+        $lifeBrush->setLogicalId('lifeBrush');
+        $lifeBrush->setEqLogic_id($this->getId());
+        $lifeBrush->setType('info');
+        $lifeBrush->setTemplate('dashboard', 'line');
+        $lifeBrush->setTemplate('mobile', 'line');
+        $lifeBrush->setUnite('%');
+        $lifeBrush->setSubType('numeric');
+        $lifeBrush->setIsVisible(1);
+        $lifeBrush->setIsHistorized(1);
+        $lifeBrush->setDisplay('forceReturnLineBefore', false);
+        $lifeBrush->save();
+        
+        $timeBrushLeft = $this->getCmd(null, 'timeBrushLeft');
+        if (!is_object($timeBrushLeft)) {
+            $timeBrushLeft = new dreameCmd();
+            $timeBrushLeft->setName(__('Durée de vie restante brosse latérale', __FILE__));
+        }
+        $timeBrushLeft->setOrder($order++);
+        $timeBrushLeft->setLogicalId('timeBrushLeft');
+        $timeBrushLeft->setEqLogic_id($this->getId());
+        $timeBrushLeft->setType('info');
+        $timeBrushLeft->setUnite('h');
+        $timeBrushLeft->setSubType('numeric');
+        $timeBrushLeft->setTemplate('dashboard', 'line');
+        $timeBrushLeft->setTemplate('mobile', 'line');
+        $timeBrushLeft->setIsVisible(1);
+        $timeBrushLeft->setIsHistorized(1);
+        $timeBrushLeft->setDisplay('forceReturnLineBefore', false);
+        $timeBrushLeft->save();
+        
+        $lifeBrushLeft = $this->getCmd(null, 'lifeBrushLeft');
+        if (!is_object($lifeBrushLeft)) {
+            $lifeBrushLeft = new dreameCmd();
+            $lifeBrushLeft->setName(__('Etat brosse latérale', __FILE__));
+        }
+        $lifeBrushLeft->setOrder($order++);
+        $lifeBrushLeft->setLogicalId('lifeBrushLeft');
+        $lifeBrushLeft->setEqLogic_id($this->getId());
+        $lifeBrushLeft->setType('info');
+        $lifeBrushLeft->setUnite('%');
+        $lifeBrushLeft->setTemplate('dashboard', 'line');
+        $lifeBrushLeft->setTemplate('mobile', 'line');
+        $lifeBrushLeft->setSubType('numeric');
+        $lifeBrushLeft->setIsVisible(1);
+        $lifeBrushLeft->setIsHistorized(1);
+        $lifeBrushLeft->setDisplay('forceReturnLineBefore', false);
+        $lifeBrushLeft->save();
+        
+        $timeFilterLeft = $this->getCmd(null, 'timeFilterLeft');
+        if (!is_object($timeFilterLeft)) {
+            $timeFilterLeft = new dreameCmd();
+            $timeFilterLeft->setName(__('Durée de vie restante filtre', __FILE__));
+        }
+        $timeFilterLeft->setOrder($order++);
+        $timeFilterLeft->setLogicalId('timeFilterLeft');
+        $timeFilterLeft->setEqLogic_id($this->getId());
+        $timeFilterLeft->setType('info');
+        $timeFilterLeft->setUnite('h');
+        $timeFilterLeft->setSubType('numeric');
+        $timeFilterLeft->setTemplate('dashboard', 'line');
+        $timeFilterLeft->setTemplate('mobile', 'line');
+        $timeFilterLeft->setIsVisible(1);
+        $timeFilterLeft->setIsHistorized(1);
+        $timeFilterLeft->setDisplay('forceReturnLineBefore', false);
+        $timeFilterLeft->save();
+        
+        $lifeFilterLeft = $this->getCmd(null, 'lifeFilterLeft');
+        if (!is_object($lifeFilterLeft)) {
+            $lifeFilterLeft = new dreameCmd();
+            $lifeFilterLeft->setName(__('Etat Filtre', __FILE__));
+        }
+        $lifeFilterLeft->setOrder($order++);
+        $lifeFilterLeft->setLogicalId('lifeFilterLeft');
+        $lifeFilterLeft->setEqLogic_id($this->getId());
+        $lifeFilterLeft->setType('info');
+        $lifeFilterLeft->setUnite('%');
+        $lifeFilterLeft->setTemplate('dashboard', 'line');
+        $lifeFilterLeft->setTemplate('mobile', 'line');
+        $lifeFilterLeft->setSubType('numeric');
+        $lifeFilterLeft->setIsVisible(1);
+        $lifeFilterLeft->setIsHistorized(1);
+        $lifeFilterLeft->setDisplay('forceReturnLineBefore', false);
+        $lifeFilterLeft->save();
+        
+        $cleaningTime = $this->getCmd(null, 'cleaningTime');
+        if (!is_object($cleaningTime)) {
+            $cleaningTime = new dreameCmd();
+            $cleaningTime->setName(__('Temps de nettoyage', __FILE__));
+        }
+        $cleaningTime->setOrder($order++);
+        $cleaningTime->setLogicalId('cleaningTime');
+        $cleaningTime->setEqLogic_id($this->getId());
+        $cleaningTime->setType('info');
+        $cleaningTime->setUnite('min');
+        $cleaningTime->setTemplate('dashboard', 'line');
+        $cleaningTime->setTemplate('mobile', 'line');
+        $cleaningTime->setSubType('numeric');
+        $cleaningTime->setIsVisible(1);
+        $cleaningTime->setIsHistorized(1);
+        $cleaningTime->setDisplay('forceReturnLineBefore', false);
+        $cleaningTime->save();
+        
+        $cleaningArea = $this->getCmd(null, 'cleaningArea');
+        if (!is_object($cleaningArea)) {
+            $cleaningArea = new dreameCmd();
+            $cleaningArea->setName(__('Surface Nettoyée', __FILE__));
+        }
+        $cleaningArea->setOrder($order++);
+        $cleaningArea->setLogicalId('cleaningArea');
+        $cleaningArea->setEqLogic_id($this->getId());
+        $cleaningArea->setType('info');
+        $cleaningArea->setUnite('m2');
+        $cleaningArea->setTemplate('dashboard', 'line');
+        $cleaningArea->setTemplate('mobile', 'line');
+        $cleaningArea->setSubType('numeric');
+        $cleaningArea->setIsVisible(1);
+        $cleaningArea->setIsHistorized(1);
+        $cleaningArea->setDisplay('forceReturnLineBefore', false);
+        $cleaningArea->save();
+        
+        $stop = $this->getCmd('action', 'stop');
+        if (!is_object($stop)) {
+            $stop = new dreameCmd();
+            $stop->setName(__('Arreter', __FILE__));
+        }
+        $stop->setOrder($order++);
+        $stop->setIsVisible(1);
+        $stop->setLogicalId('stop');
+        $stop->setEqLogic_id($this->getId());
+        $stop->setType('action');
+        $stop->setSubType('other');
+        $stop->setDisplay('generic_type', '');
+        $stop->setDisplay('forceReturnLineAfter', true);
+        $stop->save();
+        
+        $start = $this->getCmd('action', 'start');
+        if (!is_object($start)) {
+            $start = new dreameCmd();
+            $start->setName(__('Démarrer', __FILE__));
+        }
+        $start->setOrder($order++);
+        $start->setIsVisible(1);
+        $start->setLogicalId('start');
+        $start->setEqLogic_id($this->getId());
+        $start->setType('action');
+        $start->setSubType('other');
+        $start->setDisplay('generic_type', 'ENERGY_ON');
+        $start->setDisplay('forceReturnLineAfter', true);
+        $start->save();
+        
+        $home = $this->getCmd('action', 'home');
+        if (!is_object($home)) {
+            $home = new dreameCmd();
+            $home->setName(__('Maison', __FILE__));
+        }
+        $home->setOrder($order++);
+        $home->setIsVisible(1);
+        $home->setLogicalId('home');
+        $home->setEqLogic_id($this->getId());
+        $home->setType('action');
+        $home->setSubType('other');
+        $home->setDisplay('generic_type', 'ENERGY_OFF');
+        $home->setDisplay('forceReturnLineAfter', true);
+        $home->save();
+        
+        $position = $this->getCmd('action', 'position');
+        if (!is_object($position)) {
+            $position = new dreameCmd();
+            $position->setName(__('Cherche Moi', __FILE__));
+        }
+        $position->setOrder($order++);
+        $position->setIsVisible(1);
+        $position->setLogicalId('position');
+        $position->setEqLogic_id($this->getId());
+        $position->setType('action');
+        $position->setSubType('other');
+        $position->setDisplay('generic_type', '');
+        $position->setDisplay('forceReturnLineAfter', true);
+        $position->save();
+        
+        $play_sound = $this->getCmd('action', 'play-sound');
+        if (!is_object($play_sound)) {
+            $play_sound = new dreameCmd();
+            $play_sound->setName(__('Play Sound', __FILE__));
+        }
+        $play_sound->setOrder($order++);
+        $play_sound->setIsVisible(1);
+        $play_sound->setLogicalId('play-sound');
+        $play_sound->setEqLogic_id($this->getId());
+        $play_sound->setType('action');
+        $play_sound->setSubType('other');
+        $play_sound->setDisplay('generic_type', '');
+        $play_sound->setDisplay('forceReturnLineAfter', true);
+        $play_sound->save();
+        
+        $refresh = $this->getCmd('action', 'refresh');
+        if (!is_object($refresh)) {
+            $refresh = new dreameCmd();
+            $refresh->setName(__('Rafraichir', __FILE__));
+        }
+        $refresh->setOrder($order++);
+        $refresh->setIsVisible(1);
+        $refresh->setLogicalId('refresh');
+        $refresh->setEqLogic_id($this->getId());
+        $refresh->setType('action');
+        $refresh->setSubType('other');
+        $refresh->setDisplay('generic_type', '');
+        $refresh->setDisplay('forceReturnLineAfter', true);
+        $refresh->save();
+        
+        $speed = $this->getCmd('action', 'speed');
+        if (!is_object($speed)) {
+            $speed = new dreameCmd();
+            $speed->setName(__('Vitesse', __FILE__));
+        }
+        $speed->setOrder($order++);
+        $speed->setIsVisible(1);
+        $speed->setLogicalId('speed');
+        $speed->setEqLogic_id($this->getId());
+        $speed->setType('action');
+        $speed->setSubType('select');
+        $speed->setDisplay('generic_type', '');
+        
+        //Silent (0), Basic (1), Strong (2), Full Speed (3)
+        $speed->setConfiguration('listValue','0|Silencieux;1|Normal;2|Fort;3|Vitesse Maximale');
+        $speed->setDisplay('forceReturnLineAfter', true);
+        $speed->save();
+        
+        
+        self::updateCmd();
+        
+        
+        
     }
   
 	public function updateCmd() {
@@ -550,7 +625,7 @@ class dreame extends eqLogic {
 				$cmd = "sudo miiocli -o json_pretty viomivacuum --ip " . $ip . " --token " . $token ." status 2>&1";
 				log::add('dreame', 'debug', 'CMD BY DREAMEVACUUM');
 				$modelType = "viomivacuum";
-			} elseif ($model == 'viomi.vacuum.v8') {
+			} elseif (strpos($model, 'roborock') !== false) {
 				$cmd = "sudo miiocli -o json_pretty roborockvacuum --ip " . $ip . " --token " . $token ." status 2>&1";
 				log::add('dreame', 'debug', 'CMD BY ROBOROCKVACUUM');
 				$modelType = "roborockvacuum";
@@ -816,50 +891,84 @@ class dreameCmd extends cmd {
   */
 
   // Exécution d'une commande
-  public function execute($_options = array()) {
-    
-    	$eqLogic = $this->getEqLogic(); // Récupération de l’eqlogic
-	Log::add('dreame', 'debug', '$_options[] traité: ' . json_encode($_options));
+  public function sendCmd($cmd, $val = "") {
+    $did = $this->getConfiguration('did');
+    $ip = $this->getConfiguration('ip');
+    $token = $this->getConfiguration('token');
+    $model = $this->getConfiguration('model');
 
-	switch ($this->getLogicalId()) {                
-		case 'refresh': 
-			log::add('dreame', 'debug', 'Refresh : ' . $this->getLogicalId());
-			$eqLogic->updateCmd();
-			break;
-		case 'start':
-			log::add('dreame', 'debug', 'start : ' . $this->getLogicalId());
-			$eqLogic->sendCmd('start');
-			break;
-		case 'stop':
-			log::add('dreame', 'debug', 'stop : ' . $this->getLogicalId());
-			$eqLogic->sendCmd('stop');
-			break;
-		case 'home':
-			log::add('dreame', 'debug', 'home : ' . $this->getLogicalId());
-			$eqLogic->sendCmd('home');
-			break;		
-		case 'position':
-			log::add('dreame', 'debug', 'position : ' . $this->getLogicalId());
-			$eqLogic->sendCmd('position');
-			break;
-		case 'play-sound':
-			log::add('dreame', 'debug', 'play-sound : ' . $this->getLogicalId());
-			$eqLogic->sendCmd('play-sound');
-			break;
-		case 'speed':
-			log::add('dreame', 'debug', 'speed : ' . $this->getLogicalId());
-			$speed = isset($_options['select']) ? $_options['select'] : $_options['slider'];
-			$eqLogic->checkAndUpdateCmd('speed', $speed);
-			$eqLogic->sendCmd('setSpeed', $speed);
-			break;
-		default:
-			throw new Error('This should not append!');
-			log::add('dreame', 'error', 'Aucune commande associée : ' . $this->getLogicalId());
-			break;
-	}
+    $cmdLabelsByModel = [
+        'roborock' => [
+            "home" => "home",
+            "start" => "start",
+            "stop" => "stop",
+            "position" => "",
+            "play-sound" => "test_sound_volume",
+            "setSpeed" => "set_fan_speed",
+        ],
+        'viomi.vacuum.v8' => [
+            "home" => "home",
+            "start" => "start",
+            "stop" => "stop",
+            "position" => "find",
+            "play-sound" => "",
+            "setSpeed" => "set_fan_speed",
+        ],
+        'dreame.vacuum.p2008' => [
+            "home" => "home",
+            "start" => "start",
+            "stop" => "stop",
+            "position" => "locate",
+            "play-sound" => "play_sound",
+            "setSpeed" => "set_fan_speed",
+        ],
+        'default' => [
+            "home" => "battery:start-charge",
+            "start" => "vacuum:start-sweep",
+            "stop" => "vacuum:stop-sweeping",
+            "position" => "audio:position",
+            "play-sound" => "audio:play-sound",
+            "setSpeed" => "vacuum:mode",
+        ],
+    ];
 
-  }
+    if (strpos($model, 'roborock') !== false) {
+        $cmdLabels = $cmdLabelsByModel['roborock'];
+        $cmdExec = "sudo miiocli roborockvacuum --ip $ip --token $token";
+    } elseif ($model == 'viomi.vacuum.v8') {
+        $cmdLabels = $cmdLabelsByModel['viomi.vacuum.v8'];
+        $cmdExec = "sudo miiocli viomivacuum --ip $ip --token $token";
+    } elseif ($model == 'dreame.vacuum.p2008') {
+        $cmdLabels = $cmdLabelsByModel['dreame.vacuum.p2008'];
+        $cmdExec = "sudo miiocli dreamevacuum --ip $ip --token $token";
+    } else {
+        $cmdLabels = $cmdLabelsByModel['default'];
+        $cmdExec = "sudo miiocli genericmiot --ip $ip --token $token";
+    }
+
+    $cmdLabel = $cmdLabels[$cmd] ?? "";
+    if ($cmdLabel == "") {
+        log::add('dreame', 'warn', 'Erreur pour action : ' . $this->getLogicalId());
+        return;
+    }
+
+    if (!empty($ip) && !empty($token)) {
+        $finalCmd = $cmd == "setSpeed" 
+            ? "$cmdExec set $cmdLabel $val" 
+            : "$cmdExec call $cmdLabel";
+        
+        exec($finalCmd, $outputArray, $resultCode);
+        log::add('dreame', 'debug', '[CMD] ' . $finalCmd);
+        self::updateCmd();
+    } else {
+        log::add('dreame', 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
+    }
+}
+
+
 
   /*     * **********************Getteur Setteur*************************** */
 
 }
+
+
