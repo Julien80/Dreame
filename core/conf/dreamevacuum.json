@@ -1,0 +1,191 @@
+{
+    "cmds": [
+        {
+            "logicalId": "battery_level",
+            "name": "Batterie",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%"
+        },
+        {
+            "logicalId": "charging_state",
+            "name": "En Charge",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1
+        },
+        {
+            "logicalId": "device_fault",
+            "name": "Erreur",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%"
+        },
+		{
+            "logicalId": "error_device",
+            "name": "Equipement en erreur",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1
+        },
+        {
+            "logicalId": "device_status",
+            "name": "Statut",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1
+        },
+		{
+            "logicalId": "device_status_str",
+            "name": "Etat",
+            "type": "info",
+            "subtype": "string",
+            "isVisible": 1
+        },
+        {
+            "logicalId": "brush_left_time",
+            "name": "Temps restant brosse principale",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "h"
+        },
+        {
+            "logicalId": "brush_life_level",
+            "name": "Etat brosse principale",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%"
+        },
+        {
+            "logicalId": "brush_left_time2",
+            "name": "Durée de vie restante brosse latérale",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "h"
+        },
+        {
+            "logicalId": "brush_life_level2",
+            "name": "Etat brosse latérale",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%"
+        },
+        {
+            "logicalId": "filter_left_time",
+            "name": "Durée de vie restante filtre",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "h"
+        },
+        {
+            "logicalId": "filter_life_level",
+            "name": "Etat Filtre",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%"
+        },
+        {
+            "logicalId": "cleaning_time",
+            "name": "Temps de nettoyage",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "min"
+        },
+        {
+            "logicalId": "cleaning_area",
+            "name": "Surface Nettoyée",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "m2"
+        },
+        {
+            "logicalId": "operating_mode",
+            "name": "Vitesse Mode",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1
+        },
+        {
+            "logicalId": "stop",
+            "name": "Arreter",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "home"
+            }
+        },
+        {
+            "logicalId": "start",
+            "name": "Démarrer",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "home"
+            }
+        },
+        {
+            "logicalId": "home",
+            "name": "Maison",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "generic_type": "DOCK",
+            "configuration": {
+                "request": "home"
+            }
+        },
+        {
+            "logicalId": "position",
+            "name": "Cherche Moi",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "locate"
+            }
+        },
+        {
+            "logicalId": "playSound",
+            "name": "Joue un son",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "play_sound"
+            }
+        },
+        {
+            "logicalId": "refresh",
+            "name": "Rafraichir",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "none"
+            }
+        },
+        {
+            "logicalId": "setSpeed",
+            "name": "Vitesse",
+            "type": "action",
+            "subtype": "select",
+            "isVisible": 1,
+            "configuration": {
+                "listValue": "0|Silencieux;1|Normal;2|Fort;3|Vitesse Maximale",
+                "request": "set_fan_speed"
+            }
+        }
+    ]
+}
