@@ -106,7 +106,8 @@ function detectDevices() {
         $('#div_alert').showAlert({ message: 'Resultat de la détection : Aucun appareil trouvé', level: 'danger' });
         return;
       } else {
-        $('#div_alert').showAlert({ message: 'Resultat de la détection : ' + data.result.newEq + ' appareil(s) ajoutés', level: 'success' });
+        var plurial = (data.result.newEq > 1) ? 's' : ''
+        $('#div_alert').showAlert({ message: 'Resultat de la détection : ' + data.result.newEq + ' appareil' + plurial + ' ajouté' + plurial, level: 'success' });
         setTimeout(() => { window.location.reload(); }, 3000);
       }
 
