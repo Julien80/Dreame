@@ -418,8 +418,8 @@ class dreame extends eqLogic {
             $finalCmd = "$cmdExec $cmd $value";
 
             log::add(__CLASS__, 'debug', '[CMD] ' . $finalCmd);
-            // exec($finalCmd, $outputArray, $resultCode);
-            // $this->updateCmd();
+            exec($finalCmd, $outputArray, $resultCode);
+            $this->updateCmd();
         } else {
             log::add(__CLASS__, 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
         }
