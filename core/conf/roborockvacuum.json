@@ -57,6 +57,17 @@
             }
         },
         {
+            "logicalId": "in_cleaning",
+            "name": "Nettoyage en cours",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
             "logicalId": "dnd_enabled",
             "name": "Mode Ne Pas Déranger",
             "type": "info",
