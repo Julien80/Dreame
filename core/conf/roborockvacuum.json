@@ -68,6 +68,17 @@
             }
         },
         {
+            "logicalId": "error_code",
+            "name": "Code erreur",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
             "logicalId": "lock_status",
             "name": "Verrouillé",
             "type": "info",
