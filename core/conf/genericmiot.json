@@ -21,23 +21,34 @@
             "type": "info",
             "subtype": "numeric",
             "isVisible": 1,
-            "unite": "%"
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
-		{
+        {
             "logicalId": "error_device",
             "name": "Equipement en erreur",
             "type": "info",
             "subtype": "numeric",
-            "isVisible": 1
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "vacuum:status",
             "name": "Statut",
             "type": "info",
             "subtype": "numeric",
-            "isVisible": 1
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
-		{
+        {
             "logicalId": "device_status_str",
             "name": "Etat",
             "type": "info",
@@ -50,7 +61,11 @@
             "type": "info",
             "subtype": "numeric",
             "isVisible": 1,
-            "unite": "h"
+            "unite": "h",
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "brush-cleaner:brush-life-level",
@@ -58,7 +73,11 @@
             "type": "info",
             "subtype": "numeric",
             "isVisible": 1,
-            "unite": "%"
+            "unite": "%",
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "filter:filter-left-time",
@@ -66,7 +85,11 @@
             "type": "info",
             "subtype": "numeric",
             "isVisible": 1,
-            "unite": "h"
+            "unite": "h",
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "filter:filter-life-level",
@@ -74,7 +97,11 @@
             "type": "info",
             "subtype": "numeric",
             "isVisible": 1,
-            "unite": "%"
+            "unite": "%",
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "vacuum-extend:cleaning-time",
@@ -82,7 +109,11 @@
             "type": "info",
             "subtype": "numeric",
             "isVisible": 1,
-            "unite": "min"
+            "unite": "min",
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "vacuum-extend:cleaning-area",
@@ -90,14 +121,22 @@
             "type": "info",
             "subtype": "numeric",
             "isVisible": 1,
-            "unite": "m2"
+            "unite": "m2",
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "vacuum:mode",
             "name": "Vitesse Mode",
             "type": "info",
             "subtype": "numeric",
-            "isVisible": 1
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "stop",

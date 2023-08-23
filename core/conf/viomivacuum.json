@@ -9,7 +9,7 @@
             "unite": "%"
         },
         {
-            "logicalId": "charging_state",
+            "logicalId": "is_charge",
             "name": "En Charge",
             "type": "info",
             "subtype": "numeric",
@@ -21,14 +21,43 @@
             "type": "info",
             "subtype": "numeric",
             "isVisible": 1,
-            "unite": "%"
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "error_device",
+            "name": "Equipement en erreur",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "device_status_str",
+            "name": "Etat",
+            "type": "info",
+            "subtype": "string",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "run_state",
             "name": "Statut",
             "type": "info",
             "subtype": "numeric",
-            "isVisible": 1
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "s_time",
@@ -36,7 +65,11 @@
             "type": "info",
             "subtype": "numeric",
             "isVisible": 1,
-            "unite": "min"
+            "unite": "min",
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "s_area",
@@ -44,14 +77,22 @@
             "type": "info",
             "subtype": "numeric",
             "isVisible": 1,
-            "unite": "m2"
+            "unite": "m2",
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "suction_grade",
             "name": "Vitesse Mode",
             "type": "info",
             "subtype": "numeric",
-            "isVisible": 1
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "stop",

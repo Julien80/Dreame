@@ -24,6 +24,10 @@
             "unite": "min",
             "configuration": {
                 "calculValueOffset": "gmdate('i', #value#)"
+            },
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
             }
         },
         {
@@ -35,6 +39,10 @@
             "isVisible": 1,
             "configuration": {
                 "calculValueOffset": "round(#value# / 1000000, 2)"
+            },
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
             }
         },
         {
@@ -42,42 +50,66 @@
             "name": "Statut Compartiment Eau",
             "type": "info",
             "subtype": "numeric",
-            "isVisible": 1
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "dnd_enabled",
             "name": "Mode Ne Pas Déranger",
             "type": "info",
             "subtype": "numeric",
-            "isVisible": 1
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "lock_status",
             "name": "Verrouillé",
             "type": "info",
             "subtype": "numeric",
-            "isVisible": 1
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "water_shortage_status",
             "name": "Statut Niveau Eau",
             "type": "info",
             "subtype": "numeric",
-            "isVisible": 1
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "dust_collection_status",
             "name": "Statut Tiroir Poussière",
             "type": "info",
             "subtype": "numeric",
-            "isVisible": 1
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "charge_status",
             "name": "En Charge",
             "type": "info",
             "subtype": "numeric",
-            "isVisible": 1
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "clean_percent",
@@ -85,7 +117,11 @@
             "type": "info",
             "subtype": "numeric",
             "isVisible": 1,
-            "unite": "%"
+            "unite": "%",
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
         },
         {
             "logicalId": "stop",
