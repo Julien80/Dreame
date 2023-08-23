@@ -144,6 +144,16 @@
             }
         },
         {
+            "logicalId": "pause",
+            "name": "Pause",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "pause"
+            }
+        },
+        {
             "logicalId": "home",
             "name": "Maison",
             "type": "action",
