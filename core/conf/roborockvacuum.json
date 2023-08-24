@@ -1,4 +1,15 @@
 {
+    "rooms": {
+        "request": "get_room_mapping",
+        "cmd": {
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "segment_clean"
+            }
+        }
+    },
     "cmds": [
         {
             "logicalId": "state",

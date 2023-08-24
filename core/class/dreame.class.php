@@ -254,11 +254,11 @@ class dreame extends eqLogic {
         $content = file_get_contents($path);
 
         if (!is_json($content)) {
-            log::add(__CLASS__, 'error', 'not JSON file ' . $path);
-            return null;
+            // log::add(__CLASS__, 'debug', 'not JSON file ' . $path);
+            return $content;
         }
-        $configFile = json_decode($content, true);
 
+        $configFile = json_decode($content, true);
         return $configFile;
     }
 
@@ -267,7 +267,6 @@ class dreame extends eqLogic {
         log::add(__CLASS__, "debug", "============================ CREATING CMD ============================");
 
         $modelType = $this->getConfiguration('modelType');
-
         $order_cmd = 1;
 
         $path = __DIR__ . '/../conf/' . $modelType . '.json';
@@ -275,56 +274,140 @@ class dreame extends eqLogic {
 
         $configFile = self::getFileContent($path);
 
-        try {
-            foreach ($configFile['cmds'] as $command) {
-                log::add(__CLASS__, 'debug', '  -- creating cmd ' . $command['name']);
+        $updateCmd = true;
 
-                $cmd = $this->getCmd(null, $command["logicalId"]);
-                if (!is_object($cmd)) {
-                    $cmd = new dreameCmd();
-                    $cmd->setOrder($order_cmd);
-                    $cmd->setEqLogic_id($this->getId());
+        // get status to know with info are available and then create only the associate cmd (no more!)
+        try {
+            $status = $this->execCmd('statusz');
+            if ($status === null) {
+                log::add(__CLASS__, 'warning', 'Skipping cmd creation - No status available : ' . json_last_error_msg());
+                $updateCmd = false;
+            } else {
+
+                $keyAvailable = array_keys($status);
+
+                foreach ($configFile['cmds'] as $command) {
+                    if ($command["type"] == 'info' && !in_array($command["logicalId"], $keyAvailable)) {
+                        log::add(__CLASS__, 'debug', '  -- skipping cmd ' . $command['name']);
+                        continue;
+                    }
+
+                    log::add(__CLASS__, 'debug', '  -- creating cmd ' . $command['name']);
+
+                    $cmd = $this->getCmd(null, $command["logicalId"]);
+                    if (!is_object($cmd)) {
+                        $cmd = new dreameCmd();
+                        $cmd->setOrder($order_cmd);
+                        $cmd->setEqLogic_id($this->getId());
+                    }
+                    utils::a2o($cmd, $command);
+                    $cmd->save();
+                    $order_cmd++;
                 }
-                utils::a2o($cmd, $command);
-                $cmd->save();
-                $order_cmd++;
             }
         } catch (Exception $e) {
-            log::add(__CLASS__, 'error', 'Cannot save Cmd for this EqLogic -- ' . $e->getMessage());
+            log::add(__CLASS__, 'warning', $e->getMessage());
+            // log::add(__CLASS__, 'error', 'Cannot save Cmd for this EqLogic -- ' . $e->getMessage());
         }
 
-        $this->updateCmd();
+        // check if the vacuum accept room action
+        // if so create the associate room cmd action
+        if (key_exists('rooms', $configFile) && key_exists('request', $configFile['rooms']) && key_exists('cmd', $configFile['rooms'])) {
+            try {
+
+                $rooms = $this->execCmd($configFile['rooms']['request']);
+
+                if ($rooms === null) {
+                    log::add(__CLASS__, 'warning', 'Skipping cmd creation - No rooms available : ' . json_last_error_msg());
+                }
+                log::add(__CLASS__, 'debug', 'rooms => : ' . json_encode($rooms));
+
+
+                foreach ($rooms as $room) {
+                    $command = $configFile['rooms']['cmd'];
+                    $logicalId = "clean_room_" . $room[0];
+                    $name = "Nettoyer Pièce " . $room[0];
+
+                    log::add(__CLASS__, 'debug', '  -- creating cmd ' . $name);
+
+                    $cmd = $this->getCmd(null, $logicalId);
+                    if (!is_object($cmd)) {
+                        $cmd = new dreameCmd();
+                        $cmd->setOrder($order_cmd);
+                        $cmd->setEqLogic_id($this->getId());
+                        $cmd->setName($name);
+                        $cmd->setConfiguration('roomId', "[" . $room[0] . "]");
+                        $cmd->setLogicalId($logicalId);
+                    }
+                    utils::a2o($cmd, $command);
+                    $cmd->save();
+                    $order_cmd++;
+                }
+            } catch (Exception $e) {
+                log::add(__CLASS__, 'warning', $e->getMessage());
+            }
+        }
+
+        // update the cmd based on the last one received
+        if ($updateCmd) $this->updateCmd($status);
     }
 
-    public function updateCmd() {
-        log::add(__CLASS__, "debug", "============================ UPDATING CMD ============================");
-
+    public function execCmd($cmd, $value = '') {
         $ip = $this->getConfiguration('ip');
         $token = $this->getConfiguration('token');
         $modelType = $this->getConfiguration('modelType');
 
+        $errorFile = __DIR__ . '/../../data/exec/error_' . $this->getId() . '.txt';
+
         if (!empty($ip) && !empty($token)) {
-            $cmd = system::getCmdSudo() . " miiocli -o json_pretty $modelType --ip " . $ip . " --token " . $token . " status 2>&1";
-            log::add(__CLASS__, 'debug', 'CMD BY ' . $modelType . " => " . $cmd);
-            exec($cmd, $outputArray, $resultCode);
+            $call = ($modelType == 'genericmiot') ? ' call' : '';
+            $val = ($value == '') ? '' : escapeshellarg($value);
+            $exec = system::getCmdSudo() . " miiocli -o json_pretty " . $modelType . " --ip " . $ip . " --token " . $token . $call . " " . $cmd . " " . $val .  " >&1 2>" . $errorFile;
+            log::add(__CLASS__, 'debug', 'CMD BY ' . $modelType . " => " . $exec);
+            exec($exec, $outputArray, $resultCode);
         } else {
             log::add(__CLASS__, 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
-            return;
+            return array();
         }
 
-        $log_output = implode(PHP_EOL, $outputArray);
-        log::add(__CLASS__, 'debug', 'JSON Complet ' . $log_output);
-        $pos = strpos($log_output, '{');
-        $json_string = substr($log_output, $pos);
-        $json = json_decode($json_string, true);
+        $resultContent = implode(PHP_EOL, $outputArray);
+        $jsonResultData = json_decode($resultContent, true);
+        log::add(__CLASS__, 'debug', "CMD result :" . json_encode($jsonResultData));
 
-        if ($json === null) {
-            log::add(__CLASS__, 'debug', 'Erreur JSON (null) : ' . json_last_error_msg());
-            return;
+        if ($jsonResultData === null) {
+            $errorContent = self::getFileContent($errorFile);
+            $errorPos = strpos($errorContent, 'Error:');
+            if ($errorPos !== false) {
+                throw new Exception(substr($errorContent, $errorPos));
+            }
         }
-        log::add(__CLASS__, 'debug', 'JSON ' . json_encode($json));
 
-        foreach ($json as $key => $value) {
+        if (filesize($errorFile)) unlink($errorFile);
+
+        return $jsonResultData;
+    }
+
+    public function updateCmd($statusOutput = '') {
+        log::add(__CLASS__, "debug", "============================ UPDATING CMD ============================");
+        $modelType = $this->getConfiguration('modelType');
+
+        if ($statusOutput == '') {
+            try {
+                $statusOutput = $this->execCmd('status');
+
+                if ($statusOutput === null) {
+                    log::add(__CLASS__, 'debug', 'Erreur JSON (null) : ' . json_last_error_msg());
+                    return;
+                }
+            } catch (Exception $e) {
+                log::add(__CLASS__, 'warning', $e->getMessage());
+                return;
+            }
+        }
+
+        log::add(__CLASS__, 'debug', 'JSON ' . json_encode($statusOutput));
+
+        foreach ($statusOutput as $key => $value) {
             $cmd = $this->getCmd('info', $key);
             if (!is_object($cmd)) {
                 // log::add(__CLASS__, 'warning', 'Pas d\'update pour la clé ' . $key);
@@ -338,40 +421,40 @@ class dreame extends eqLogic {
         if ($modelType == 'dreamevacuum') {
 
             $device_status_str = "";
-            if ($json["device_status"] == 1) $device_status_str = "Aspiration en cours";
-            if (($json["device_status"] == 2) && ($json["charging_state"] == 1)) $device_status_str = "Prêt à démarrer";
-            if (($json["device_status"] == 2) && ($json["charging_state"] != 1)) $device_status_str = "Arrêt";
-            if (($json["device_status"] == 3) && ($json["charging_state"] != 1)) $device_status_str = "En pause";
-            if ($json["device_status"] == 4) $device_status_str = "Erreur";
-            if (($json["device_status"] == 5) && ($json["charging_state"] == 5)) $device_status_str = "Retour maison";
-            if (($json["device_status"] == 6) && ($json["charging_state"] == 1)) $device_status_str = "En charge";
-            if ($json["device_status"] == 7) $device_status_str = "Aspiration et lavage en cours";
-            if ($json["device_status"] == 8) $device_status_str = "Séchage de la serpillère";
-            if ($json["device_status"] == 12) $device_status_str = "Nettoyage en cours de la zone";
+            if ($statusOutput["device_status"] == 1) $device_status_str = "Aspiration en cours";
+            if (($statusOutput["device_status"] == 2) && ($statusOutput["charging_state"] == 1)) $device_status_str = "Prêt à démarrer";
+            if (($statusOutput["device_status"] == 2) && ($statusOutput["charging_state"] != 1)) $device_status_str = "Arrêt";
+            if (($statusOutput["device_status"] == 3) && ($statusOutput["charging_state"] != 1)) $device_status_str = "En pause";
+            if ($statusOutput["device_status"] == 4) $device_status_str = "Erreur";
+            if (($statusOutput["device_status"] == 5) && ($statusOutput["charging_state"] == 5)) $device_status_str = "Retour maison";
+            if (($statusOutput["device_status"] == 6) && ($statusOutput["charging_state"] == 1)) $device_status_str = "En charge";
+            if ($statusOutput["device_status"] == 7) $device_status_str = "Aspiration et lavage en cours";
+            if ($statusOutput["device_status"] == 8) $device_status_str = "Séchage de la serpillère";
+            if ($statusOutput["device_status"] == 12) $device_status_str = "Nettoyage en cours de la zone";
             if ($device_status_str != "")  $this->checkAndUpdateCmd("device_status_str", $device_status_str);
 
             $error_device = "";
-            if ($json["filter_life_level"] == 51) $error_device = "Le filtre est mouillé";
-            if ($json["filter_life_level"] == 106) $error_device = "Vider le bac et nettoyer la planche de lavage.";
+            if ($statusOutput["filter_life_level"] == 51) $error_device = "Le filtre est mouillé";
+            if ($statusOutput["filter_life_level"] == 106) $error_device = "Vider le bac et nettoyer la planche de lavage.";
             if ($error_device != "") $this->checkAndUpdateCmd("error_device", $error_device);
-        } else {
+        } elseif ($modelType == 'genericmiot') {
 
             $device_status_str = "";
-            if (($json["vacuum:status"] == 2) and ($json["battery:charging-state"] == 1)) $device_status_str = "Prêt à démarrer";
-            if ($json["vacuum:status"] == 1) $device_status_str =  "Aspiration en cours";
-            if (($json["vacuum:status"] == 2) and ($json["battery:charging-state"] != 1)) $device_status_str =  "Arret";
-            if (($json["vacuum:status"] == 3) and ($json["battery:charging-state"] != 1)) $device_status_str =  "En Pause";
-            if ($json["vacuum:status"] == 4) $device_status_str =  "Erreur";
-            if (($json["vacuum:status"] == 5) and ($json["battery:charging-state"] == 5)) $device_status_str =  "Retour Maison";
-            if (($json["vacuum:status"] == 6) and ($json["battery:charging-state"] == 1)) $device_status_str =  "En Charge";
-            if ($json["vacuum:status"] == 7) $device_status_str =  "Aspiration et Lavage en cours";
-            if ($json["vacuum:status"] == 8) $device_status_str =  "Séchage de la serpillère";
-            if ($json["vacuum:status"] == 12) $device_status_str =  "Nettoyage en cours de la Zone";
+            if (($statusOutput["vacuum:status"] == 2) and ($statusOutput["battery:charging-state"] == 1)) $device_status_str = "Prêt à démarrer";
+            if ($statusOutput["vacuum:status"] == 1) $device_status_str =  "Aspiration en cours";
+            if (($statusOutput["vacuum:status"] == 2) and ($statusOutput["battery:charging-state"] != 1)) $device_status_str =  "Arret";
+            if (($statusOutput["vacuum:status"] == 3) and ($statusOutput["battery:charging-state"] != 1)) $device_status_str =  "En Pause";
+            if ($statusOutput["vacuum:status"] == 4) $device_status_str =  "Erreur";
+            if (($statusOutput["vacuum:status"] == 5) and ($statusOutput["battery:charging-state"] == 5)) $device_status_str =  "Retour Maison";
+            if (($statusOutput["vacuum:status"] == 6) and ($statusOutput["battery:charging-state"] == 1)) $device_status_str =  "En Charge";
+            if ($statusOutput["vacuum:status"] == 7) $device_status_str =  "Aspiration et Lavage en cours";
+            if ($statusOutput["vacuum:status"] == 8) $device_status_str =  "Séchage de la serpillère";
+            if ($statusOutput["vacuum:status"] == 12) $device_status_str =  "Nettoyage en cours de la Zone";
             if ($device_status_str != "")  $this->checkAndUpdateCmd("device_status_str", $device_status_str);
 
             $error_device = "";
-            if ($json->{"vacuum:fault"} == 51) $error_device = "Filtre est mouillé";
-            if ($json->{"vacuum:fault"} == 106) $error_device = "Vider le bac et nettoyer la planche de lavage.";
+            if ($statusOutput->{"vacuum:fault"} == 51) $error_device = "Filtre est mouillé";
+            if ($statusOutput->{"vacuum:fault"} == 106) $error_device = "Vider le bac et nettoyer la planche de lavage.";
             if ($error_device != "") $this->checkAndUpdateCmd("error_device", $error_device);
         }
     }
@@ -447,7 +530,7 @@ class dreameCmd extends cmd {
 
     // Exécution d'une commande
     public function execute($_options = array()) {
-        log::add(__CLASS__, "debug", "============================ EXEC CMD ============================");
+        log::add('dreame', "debug", "============================ EXEC CMD ============================");
 
         /** @var dreame $eqLogic */
         $eqLogic = $this->getEqLogic(); // Récupération de l’eqlogic
@@ -460,7 +543,9 @@ class dreameCmd extends cmd {
             return;
         }
 
-        switch ($this->getLogicalId()) {
+        $logicalId = (strpos(strtolower($this->getLogicalId()), 'clean_room') !== false) ? 'cleanRoom' : $this->getLogicalId();
+
+        switch ($logicalId) {
             case 'refresh':
                 log::add('dreame', 'debug', 'running : ' . $this->getLogicalId());
                 $eqLogic->updateCmd();
@@ -472,13 +557,23 @@ class dreameCmd extends cmd {
             case 'position':
             case 'playSound':
                 log::add('dreame', 'debug', 'running : ' . $this->getLogicalId() . ' - request: ' . $request);
-                $eqLogic->sendCmd($request);
+                $eqLogic->execCmd($request);
                 break;
 
             case 'setSpeed':
                 log::add('dreame', 'debug', 'running : ' . $this->getLogicalId() . ' request: ' . $request);
                 $speed = isset($_options['select']) ? $_options['select'] : $_options['slider'];
-                $eqLogic->sendCmd($request, $speed);
+                $eqLogic->execCmd($request, $speed);
+                break;
+
+            case 'cleanRoom':
+                log::add('dreame', 'debug', 'running : ' . $this->getLogicalId() . ' request: ' . $request);
+                $roomId = $this->getConfiguration('roomId');
+                if ($roomId == '') {
+                    log::add('dreame', 'error', 'No room id found for cmd [' . $this->getId() . ']');
+                    return;
+                }
+                $eqLogic->execCmd($request, $roomId);
                 break;
 
             default:
