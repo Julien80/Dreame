@@ -278,7 +278,7 @@ class dreame extends eqLogic {
 
         // get status to know with info are available and then create only the associate cmd (no more!)
         try {
-            $status = $this->execCmd('statusz');
+            $status = $this->execCmd('status');
             if ($status === null) {
                 log::add(__CLASS__, 'warning', 'Skipping cmd creation - No status available : ' . json_last_error_msg());
                 $updateCmd = false;
