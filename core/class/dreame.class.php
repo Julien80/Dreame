@@ -116,7 +116,6 @@ class dreame extends eqLogic {
 
     // Fonction exécutée automatiquement après la sauvegarde (création ou mise à jour) de l'équipement
     public function postSave() {
-        if ($this->getIsEnable() == 1) $this->createCmd();
     }
 
     // Fonction exécutée automatiquement avant la suppression de l'équipement

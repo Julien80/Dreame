@@ -33,6 +33,14 @@ try {
         ajax::success(dreame::detectDevices());
     }
 
+    if (init('action') == 'syncCmd') {
+        $eqId = init('eqId');
+        /** @var dreame $eqLogic */
+        $eqLogic = eqLogic::byId($eqId);
+        if (!is_object($eqLogic)) ajax::error('No eq Id found!');
+        ajax::success($eqLogic->createCmd());
+    }
+
 
     throw new Exception(__('Aucune méthode correspondante à', __FILE__) . ' : ' . init('action'));
     /*     * *********Catch exeption*************** */

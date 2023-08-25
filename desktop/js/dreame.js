@@ -122,3 +122,33 @@ $('.eqLogicAction[data-action=detectDevicesDreame]').on('click', function () {
   $('#div_alert').showAlert({ message: "Début de la détection. Patientez......", level: 'warning' });
   detectDevices();
 });
+
+$('.syncCmd').on('click', function () {
+  // $('.syncCmd').off('click').on('click', function () {
+  syncCmd()
+});
+
+
+function syncCmd() {
+  $.ajax({
+    type: 'POST',
+    url: 'plugins/dreame/core/ajax/dreame.ajax.php',
+    data: {
+      action: 'syncCmd',
+      eqId: $('.eqLogicAttr[data-l1key=id]').value(),
+    },
+    dataType: 'json',
+    error: function (request, status, error) {
+      handleAjaxError(request, status, error);
+    },
+    success: function (data) {
+      if (data.state != 'ok') {
+        $('#div_alert').showAlert({ message: data.result, level: 'danger' });
+        return;
+      }
+      $('#div_alert').showAlert({ message: 'Commandes mises à jour !', level: 'success' });
+
+    }
+  });
+
+}
