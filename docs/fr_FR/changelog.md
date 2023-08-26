@@ -8,17 +8,17 @@
 
 - Refonte complète du plugin pour plus d'évolutions par la suite et plus de lisibilité
 - Les robots de la marque Roborock sont maintenant supportés par le plugin
-- Ajout d'une commande "Synchroniser les commandes" pour eviter de re-creer systematiquement toutes les commandes
-- Roborock : Possibilité de recuperer les differentes pièces de la maison. 1 pièce = 1 commande, vous pourrez renommer ces commandes pour remplacer l'ID par le nom de la pièce. Vous pourrez ensuite lancer un nettoyage juste pour cette pièce
-- Le plugin Dreame est maintenant intégrable dans Jeedom Connect (et d'ailleurs aussi dans JeeMate en respectant les generiques types)
+- Ajout d'une commande "Synchroniser les commandes" pour éviter de recréer systématiquement toutes les commandes
+- Roborock : Possibilité de récupérer les différentes pièces de la maison. 1 pièce = 1 commande, vous pourrez renommer ces commandes pour remplacer l'ID par le nom de la pièce. Vous pourrez ensuite lancer un nettoyage juste pour cette pièce
+- Le plugin Dreame est maintenant intégrable dans Jeedom Connect (et d'ailleurs aussi dans JeeMate en respectant les génériques types)
 - Bouton pour contacter rapidement le forum Community en cas de besoin (version Core au moins V4.4)
 - Optimisations diverses
 - Diverses corrections sur les textes et noms
-- Ajout enfin d'une icône pour le plugin Dreame et pour les differents modèles de robots.
+- Ajout enfin d'une icône pour le plugin Dreame et pour les différents modèles de robots.
 
-  Je tiens à remercier @Tomitomas pour ce changelog, intégralement effectué par ses soins et qui permet de re-dynamiser completement le plugin. Sur la forme le changelog est peut-être petit mais sur le fond il y a eu un très gros travail et quasiment tout le plugin a été refait.
+Je tiens à remercier @Tomitomas pour ce changelog, intégralement effectué par ses soins et qui permet de redynamiser complètement le plugin. Sur la forme le changelog est peut-être petit mais sur le fond il y a eu un très gros travail et quasiment tout le plugin a été refait.
 
-  # NB : Afin de faciliter la mise à jour, merci de supprimer vos équipements et de refaire une nouvelle detection.
+_NB_ : Afin de faciliter la mise à jour, merci de supprimer vos équipements et de refaire une nouvelle détection.
 
 # 22/08/2023
 
