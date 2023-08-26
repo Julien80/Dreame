@@ -1,0 +1,307 @@
+{
+    "cmds": {
+        "batteryLevel": {
+            "logicalId": "batteryLevel",
+            "name": "Batterie",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%",
+            "order": 1
+        },
+        "isCharging": {
+            "logicalId": "isCharging",
+            "name": "En Charge",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "order": 2
+        },
+        "chargingState": {
+            "logicalId": "chargingState",
+            "name": "Niveau de Charge",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%",
+            "order": 2
+        },
+        "error": {
+            "logicalId": "error",
+            "name": "Erreur",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%",
+            "order": 3
+        },
+        "errorDevice": {
+            "logicalId": "errorDevice",
+            "name": "Equipement en erreur",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "order": 4
+        },
+        "stateDevice": {
+            "logicalId": "stateDevice",
+            "name": "Statut",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "order": 5
+        },
+        "statusDevice": {
+            "logicalId": "statusDevice",
+            "name": "Etat",
+            "type": "info",
+            "subtype": "string",
+            "isVisible": 1,
+            "order": 6
+        },
+        "timeBrush": {
+            "logicalId": "timeBrush",
+            "name": "Temps restant brosse principale",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "h",
+            "order": 7
+        },
+        "lifeBrush": {
+            "logicalId": "lifeBrush",
+            "name": "Etat brosse principale",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%",
+            "order": 8
+        },
+        "timeBrushLeft": {
+            "logicalId": "timeBrushLeft",
+            "name": "Durée de vie restante brosse latérale",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "h",
+            "order": 9
+        },
+        "lifeBrushLeft": {
+            "logicalId": "lifeBrushLeft",
+            "name": "Etat brosse latérale",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%",
+            "order": 10
+        },
+        "timeFilterLeft": {
+            "logicalId": "timeFilterLeft",
+            "name": "Durée de vie restante filtre",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "h",
+            "order": 11
+        },
+        "lifeFilterLeft": {
+            "logicalId": "lifeFilterLeft",
+            "name": "Etat Filtre",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%",
+            "order": 12
+        },
+        "cleaningTime": {
+            "logicalId": "cleaningTime",
+            "name": "Temps de nettoyage",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "min",
+            "order": 13
+        },
+        "cleaningArea": {
+            "logicalId": "cleaningArea",
+            "name": "Surface Nettoyée",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "m2",
+            "order": 14
+        },
+        "stop": {
+            "logicalId": "stop",
+            "name": "Arreter",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "order": 15
+        },
+        "start": {
+            "logicalId": "start",
+            "name": "Démarrer",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "order": 16
+        },
+        "home": {
+            "logicalId": "home",
+            "name": "Maison",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "order": 17,
+            "generic_type": "DOCK"
+        },
+        "position": {
+            "logicalId": "position",
+            "name": "Cherche Moi",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "order": 18
+        },
+        "playSound": {
+            "logicalId": "playSound",
+            "name": "Joue un son",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "order": 19
+        },
+        "refresh": {
+            "logicalId": "refresh",
+            "name": "Rafraichir",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "order": 20
+        },
+        "speed": {
+            "logicalId": "speed",
+            "name": "Vitesse",
+            "type": "action",
+            "subtype": "select",
+            "isVisible": 1,
+            "order": 21,
+            "configuration": {
+                "listValue": "0|Silencieux;1|Normal;2|Fort;3|Vitesse Maximale"
+            }
+        },
+        "cleanTime": {
+            "logicalId": "cleanTime",
+            "name": "Durée de nettoyage",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "order": 1
+        },
+        "cleanArea": {
+            "logicalId": "cleanArea",
+            "name": "Surface Nettoyée",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "order": 1
+        },
+        "waterBoxStatus": {
+            "logicalId": "waterBoxStatus",
+            "name": "Statut Compartiment Eau",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "order": 1
+        },
+        "dndEnabled": {
+            "logicalId": "dndEnabled",
+            "name": "Mode Ne Pas Déranger",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "order": 1
+        },
+        "lockStatus": {
+            "logicalId": "lockStatus",
+            "name": "Verrouillé",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "order": 1
+        },
+        "waterShortageStatus": {
+            "logicalId": "waterShortageStatus",
+            "name": "Statut Niveau Eau",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "order": 1
+        },
+        "dustCollectionStatus": {
+            "logicalId": "dustCollectionStatus",
+            "name": "Statut Tiroir Poussière",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "order": 1
+        },
+        "cleanPercent": {
+            "logicalId": "cleanPercent",
+            "name": "Taux Nettoyage Effectué",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%",
+            "order": 1
+        }
+    },
+    "equipments": {
+        "roborockvacuum": {
+            "state": {
+                "logicalId": "stateDevice"
+            },
+            "battery": {
+                "logicalId": "batteryLevel"
+            },
+            "clean_time": {
+                "logicalId": "cleanTime",
+                "param": {
+                    "configuration": {
+                        "calculValueOffset": ""
+                    }
+                }
+            },
+            "clean_area": {
+                "logicalId": "cleanArea",
+                "param": {
+                    "configuration": {
+                        "calculValueOffset": "round(#value# / 1000000, 2)"
+                    }
+                }
+            },
+            "water_box_status": {
+                "logicalId": "waterBoxStatus"
+            },
+            "dnd_enabled": {
+                "logicalId": "dndEnabled"
+            },
+            "lock_status": {
+                "logicalId": "lockStatus"
+            },
+            "water_shortage_status": {
+                "logicalId": "waterShortageStatus"
+            },
+            "dust_collection_status": {
+                "logicalId": "dustCollectionStatus"
+            },
+            "charge_status": {
+                "logicalId": "isCharging"
+            },
+            "clean_percent": {
+                "logicalId": "cleanPercent"
+            }
+        }
+    }
+}

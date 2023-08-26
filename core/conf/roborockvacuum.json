@@ -1,0 +1,232 @@
+{
+    "rooms": {
+        "request": "get_room_mapping",
+        "cmd": {
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "segment_clean"
+            }
+        }
+    },
+    "cmds": [
+        {
+            "logicalId": "state",
+            "name": "Statut",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1
+        },
+        {
+            "logicalId": "battery",
+            "name": "Batterie",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%"
+        },
+        {
+            "logicalId": "clean_time",
+            "name": "Durée de nettoyage",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "min",
+            "configuration": {
+                "calculValueOffset": "gmdate('i', #value#)"
+            },
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "clean_area",
+            "name": "Surface Nettoyée",
+            "type": "info",
+            "subtype": "numeric",
+            "unite": "m2",
+            "isVisible": 1,
+            "configuration": {
+                "calculValueOffset": "round(#value# / 1000000, 2)"
+            },
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "water_box_status",
+            "name": "Statut Compartiment Eau",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "in_cleaning",
+            "name": "Nettoyage en cours",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "dnd_enabled",
+            "name": "Mode Ne Pas Déranger",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "error_code",
+            "name": "Code erreur",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "lock_status",
+            "name": "Verrouillé",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "water_shortage_status",
+            "name": "Statut Niveau Eau",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "dust_collection_status",
+            "name": "Statut Tiroir Poussière",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "charge_status",
+            "name": "En Charge",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "clean_percent",
+            "name": "Taux Nettoyage Effectué",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%",
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "stop",
+            "name": "Arreter",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "stop"
+            }
+        },
+        {
+            "logicalId": "start",
+            "name": "Démarrer",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "start"
+            }
+        },
+        {
+            "logicalId": "pause",
+            "name": "Pause",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "pause"
+            }
+        },
+        {
+            "logicalId": "home",
+            "name": "Maison",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "generic_type": "DOCK",
+            "configuration": {
+                "request": "home"
+            }
+        },
+        {
+            "logicalId": "playSound",
+            "name": "Joue un son",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "test_sound_volume"
+            }
+        },
+        {
+            "logicalId": "refresh",
+            "name": "Rafraichir",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "none"
+            }
+        },
+        {
+            "logicalId": "setSpeed",
+            "name": "Vitesse",
+            "type": "action",
+            "subtype": "select",
+            "isVisible": 1,
+            "configuration": {
+                "listValue": "0|Silencieux;1|Normal;2|Fort;3|Vitesse Maximale",
+                "request": "set_fan_speed"
+            }
+        }
+    ]
+}

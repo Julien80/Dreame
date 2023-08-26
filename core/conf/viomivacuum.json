@@ -1,0 +1,160 @@
+{
+    "cmds": [
+        {
+            "logicalId": "battary_life",
+            "name": "Batterie",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "%"
+        },
+        {
+            "logicalId": "is_charge",
+            "name": "En Charge",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1
+        },
+        {
+            "logicalId": "err_state",
+            "name": "Erreur",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "error_device",
+            "name": "Equipement en erreur",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "device_status_str",
+            "name": "Etat",
+            "type": "info",
+            "subtype": "string",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "run_state",
+            "name": "Statut",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "s_time",
+            "name": "Temps de nettoyage",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "min",
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "s_area",
+            "name": "Surface Nettoyée",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "unite": "m2",
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "suction_grade",
+            "name": "Vitesse Mode",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
+            "logicalId": "stop",
+            "name": "Arreter",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "home"
+            }
+        },
+        {
+            "logicalId": "start",
+            "name": "Démarrer",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "home"
+            }
+        },
+        {
+            "logicalId": "home",
+            "name": "Maison",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "generic_type": "DOCK",
+            "configuration": {
+                "request": "home"
+            }
+        },
+        {
+            "logicalId": "position",
+            "name": "Cherche Moi",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "find"
+            }
+        },
+        {
+            "logicalId": "refresh",
+            "name": "Rafraichir",
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "none"
+            }
+        },
+        {
+            "logicalId": "setSpeed",
+            "name": "Vitesse",
+            "type": "action",
+            "subtype": "select",
+            "isVisible": 1,
+            "configuration": {
+                "listValue": "0|Silencieux;1|Normal;2|Fort;3|Vitesse Maximale",
+                "request": "set_fan_speed"
+            }
+        }
+    ]
+}

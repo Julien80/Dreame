@@ -27,7 +27,7 @@ $("#table_cmd").sortable({
 /* Fonction permettant l'affichage des commandes dans l'équipement */
 function addCmdToTable(_cmd) {
   if (!isset(_cmd)) {
-    var _cmd = {configuration: {}}
+    var _cmd = { configuration: {} }
   }
   if (!isset(_cmd.configuration)) {
     _cmd.configuration = {}
@@ -61,7 +61,7 @@ function addCmdToTable(_cmd) {
   tr += '</div>'
   tr += '</td>'
   tr += '<td>';
-  tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>'; 
+  tr += '<span class="cmdAttr" data-l1key="htmlstate"></span>';
   tr += '</td>';
   tr += '<td>'
   if (is_numeric(_cmd.id)) {
@@ -73,10 +73,10 @@ function addCmdToTable(_cmd) {
   $('#table_cmd tbody').append(tr)
   var tr = $('#table_cmd tbody tr').last()
   jeedom.eqLogic.buildSelectCmd({
-    id:  $('.eqLogicAttr[data-l1key=id]').value(),
-    filter: {type: 'info'},
+    id: $('.eqLogicAttr[data-l1key=id]').value(),
+    filter: { type: 'info' },
     error: function (error) {
-      $('#div_alert').showAlert({message: error.message, level: 'danger'})
+      $('#div_alert').showAlert({ message: error.message, level: 'danger' })
     },
     success: function (result) {
       tr.find('.cmdAttr[data-l1key=value]').append(result)
@@ -87,37 +87,68 @@ function addCmdToTable(_cmd) {
 }
 
 function detectDevices() {
-	$.ajax({
-		type: 'POST',
-		url: 'plugins/dreame/core/ajax/dreame.ajax.php',
-		data: {
-			action: 'detectDevices'
-		},
-		dataType: 'json',
-		error: function (request, status, error) {
-			handleAjaxError(request, status, error);
-		},
-		success: function (data) {
-		  if (data.state != 'ok') {
-			  $('#div_alert').showAlert({message: data.result, level: 'danger'});
-				return;
-			}
-			if(data.result.newEq == 0){
-        $('#div_alert').showAlert({message: 'Resultat de la détection : Aucun appareil trouvé', level: 'danger'});
-				return;
-			} else {
-        $('#div_alert').showAlert({message: 'Resultat de la détection : '+ data.result.newEq + ' appareil(s) ajoutés', level: 'warning'});
-				setTimeout(() => { window.location.reload(); }, 3000);
+  $.ajax({
+    type: 'POST',
+    url: 'plugins/dreame/core/ajax/dreame.ajax.php',
+    data: {
+      action: 'detectDevices'
+    },
+    dataType: 'json',
+    error: function (request, status, error) {
+      handleAjaxError(request, status, error);
+    },
+    success: function (data) {
+      if (data.state != 'ok') {
+        $('#div_alert').showAlert({ message: data.result, level: 'danger' });
+        return;
       }
-			
-		},
-		done: function(data) {
-		}
-	});
+      if (data.result.newEq == 0) {
+        $('#div_alert').showAlert({ message: 'Resultat de la détection : Aucun appareil trouvé', level: 'danger' });
+        return;
+      } else {
+        var plurial = (data.result.newEq > 1) ? 's' : ''
+        $('#div_alert').showAlert({ message: 'Resultat de la détection : ' + data.result.newEq + ' appareil' + plurial + ' ajouté' + plurial, level: 'success' });
+        setTimeout(() => { window.location.reload(); }, 3000);
+      }
+
+    },
+    done: function (data) {
+    }
+  });
 
 }
 
-$('.eqLogicAction[data-action=detectDevicesDreame]').on('click', function() {
-  $('#div_alert').showAlert({message: "Début de la détection. Patientez......", level: 'warning'});
-	detectDevices();
+$('.eqLogicAction[data-action=detectDevicesDreame]').on('click', function () {
+  $('#div_alert').showAlert({ message: "Début de la détection. Patientez......", level: 'warning' });
+  detectDevices();
 });
+
+$('.syncCmd').on('click', function () {
+  // $('.syncCmd').off('click').on('click', function () {
+  syncCmd()
+});
+
+
+function syncCmd() {
+  $.ajax({
+    type: 'POST',
+    url: 'plugins/dreame/core/ajax/dreame.ajax.php',
+    data: {
+      action: 'syncCmd',
+      eqId: $('.eqLogicAttr[data-l1key=id]').value(),
+    },
+    dataType: 'json',
+    error: function (request, status, error) {
+      handleAjaxError(request, status, error);
+    },
+    success: function (data) {
+      if (data.state != 'ok') {
+        $('#div_alert').showAlert({ message: data.result, level: 'danger' });
+        return;
+      }
+      $('#div_alert').showAlert({ message: 'Commandes mises à jour !', level: 'success' });
+
+    }
+  });
+
+}
