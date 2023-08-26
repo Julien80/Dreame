@@ -101,7 +101,7 @@
             "subtype": "other",
             "isVisible": 1,
             "configuration": {
-                "request": "home"
+                "request": "stop"
             }
         },
         {
@@ -111,7 +111,7 @@
             "subtype": "other",
             "isVisible": 1,
             "configuration": {
-                "request": "home"
+                "request": "start"
             }
         },
         {
