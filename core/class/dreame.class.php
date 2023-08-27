@@ -604,6 +604,36 @@ class dreameCmd extends cmd {
                 $eqLogic->execCmd($request, $roomId);
                 break;
 
+            case 'custom':
+                $request = $_options['title'] ?? '';
+                if ($request == '') {
+                    log::add('dreame', 'error', 'Empty field "' . $this->getDisplay('title_placeholder', 'Titre') . '" [cmdId : ' . $this->getId() . ']');
+                    return;
+                }
+                $option = $_options['message'] ?? '';
+                if ($option == '') {
+                    log::add('dreame', 'warning', 'Empty field "' . $this->getDisplay('message_placeholder', 'Message') . '" [cmdId : ' . $this->getId() . ']');
+                }
+                log::add('dreame', 'debug', 'running : ' . $this->getLogicalId() . ' request: ' . $request);
+                try {
+                    $result =  $eqLogic->execCmd($request, $option);
+                    event::add('jeedom::alert', array(
+                        'level' => 'success',
+                        'page' => 'dreame',
+                        'ttl' => 10000,
+                        'message' => __('Résultat de la commande : ', __FILE__) . $result,
+                    ));
+                } catch (Exception $e) {
+                    event::add('jeedom::alert', array(
+                        'level' => 'error',
+                        'page' => 'dreame',
+                        'ttl' => 10000,
+                        'message' => __('Résultat de la commande : ', __FILE__) . $e->getMessage(),
+                    ));
+                }
+                return $result;
+                break;
+
             default:
                 log::add('dreame', 'error', 'Aucune commande associée : ' . $this->getLogicalId());
                 break;
