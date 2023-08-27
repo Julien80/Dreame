@@ -145,6 +145,20 @@
             }
         },
         {
+            "logicalId": "child_lock",
+            "name": "Sécurité Enfant",
+            "type": "info",
+            "subtype": "binary",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            },
+            "configuration": {
+                "request": "child_lock"
+            }
+        },
+        {
             "logicalId": "clean_percent",
             "name": "Taux Nettoyage Effectué",
             "type": "info",
@@ -226,6 +240,17 @@
             "configuration": {
                 "listValue": "0|Silencieux;1|Normal;2|Fort;3|Vitesse Maximale",
                 "request": "set_fan_speed"
+            }
+        },
+        {
+            "logicalId": "setChildLock",
+            "name": "Mode Sécurité enfant",
+            "type": "action",
+            "subtype": "select",
+            "isVisible": 1,
+            "configuration": {
+                "listValue": "1|Activer;0|Désactiver",
+                "request": "set_child_lock"
             }
         }
     ]
