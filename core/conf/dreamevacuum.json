@@ -169,7 +169,7 @@
             "subtype": "other",
             "isVisible": 1,
             "configuration": {
-                "request": "home"
+                "request": "stop"
             }
         },
         {
@@ -179,7 +179,7 @@
             "subtype": "other",
             "isVisible": 1,
             "configuration": {
-                "request": "home"
+                "request": "start"
             }
         },
         {
@@ -232,6 +232,20 @@
             "configuration": {
                 "listValue": "0|Silencieux;1|Normal;2|Fort;3|Vitesse Maximale",
                 "request": "set_fan_speed"
+            }
+        },
+        {
+            "logicalId": "custom",
+            "name": "Commande perso",
+            "type": "action",
+            "subtype": "message",
+            "isVisible": 1,
+            "configuration": {
+                "request": "none"
+            },
+            "display": {
+                "title_placeholder": "Commande",
+                "message_placeholder": "Valeur"
             }
         }
     ]

@@ -286,8 +286,11 @@ class dreame extends eqLogic {
                 $keyAvailable = array_keys($status);
 
                 foreach ($configFile['cmds'] as $command) {
-                    if ($command["type"] == 'info' && !in_array($command["logicalId"], $keyAvailable)) {
-                        log::add(__CLASS__, 'debug', '  -- skipping cmd ' . $command['name']);
+                    if (
+                        $command["type"] == 'info' && !in_array($command["logicalId"], $keyAvailable)
+                        && !isset($command["configuration"]["request"])  //si la cmd ne fait pas parti d'une requete dédiée
+                    ) {
+                        log::add(__CLASS__, 'warning', '  -- skipping cmd ' . $command['name']);
                         continue;
                     }
 
@@ -456,6 +459,26 @@ class dreame extends eqLogic {
             if ($statusOutput->{"vacuum:fault"} == 106) $error_device = "Vider le bac et nettoyer la planche de lavage.";
             if ($error_device != "") $this->checkAndUpdateCmd("error_device", $error_device);
         }
+
+
+        $child_lock = $this->getCmd('info', 'child_lock');
+        if (is_object($child_lock)) {
+            $child_lock_action = $child_lock->getConfiguration('request');
+
+            try {
+                $statusOutput = $this->execCmd($child_lock_action);
+
+                if ($statusOutput === null) {
+                    log::add(__CLASS__, 'debug', 'Erreur JSON (null) : ' . json_last_error_msg());
+                    return;
+                }
+
+                $this->checkAndUpdateCmd('child_lock', $statusOutput);
+            } catch (Exception $e) {
+                log::add(__CLASS__, 'warning', $e->getMessage());
+                return;
+            }
+        }
     }
 
     public static function getModelType($model) {
@@ -565,6 +588,12 @@ class dreameCmd extends cmd {
                 $eqLogic->execCmd($request, $speed);
                 break;
 
+            case 'setChildLock':
+                log::add('dreame', 'debug', 'running : ' . $this->getLogicalId() . ' request: ' . $request);
+                $speed = isset($_options['select']) ? $_options['select'] : $_options['slider'];
+                $eqLogic->execCmd($request, $speed);
+                break;
+
             case 'cleanRoom':
                 log::add('dreame', 'debug', 'running : ' . $this->getLogicalId() . ' request: ' . $request);
                 $roomId = $this->getConfiguration('roomId');
@@ -573,6 +602,36 @@ class dreameCmd extends cmd {
                     return;
                 }
                 $eqLogic->execCmd($request, $roomId);
+                break;
+
+            case 'custom':
+                $request = $_options['title'] ?? '';
+                if ($request == '') {
+                    log::add('dreame', 'error', 'Empty field "' . $this->getDisplay('title_placeholder', 'Titre') . '" [cmdId : ' . $this->getId() . ']');
+                    return;
+                }
+                $option = $_options['message'] ?? '';
+                if ($option == '') {
+                    log::add('dreame', 'warning', 'Empty field "' . $this->getDisplay('message_placeholder', 'Message') . '" [cmdId : ' . $this->getId() . ']');
+                }
+                log::add('dreame', 'debug', 'running : ' . $this->getLogicalId() . ' request: ' . $request);
+                try {
+                    $result =  $eqLogic->execCmd($request, $option);
+                    event::add('jeedom::alert', array(
+                        'level' => 'success',
+                        'page' => 'dreame',
+                        'ttl' => 10000,
+                        'message' => __('Résultat de la commande : ', __FILE__) . $result,
+                    ));
+                } catch (Exception $e) {
+                    event::add('jeedom::alert', array(
+                        'level' => 'error',
+                        'page' => 'dreame',
+                        'ttl' => 10000,
+                        'message' => __('Résultat de la commande : ', __FILE__) . $e->getMessage(),
+                    ));
+                }
+                return $result;
                 break;
 
             default:
