@@ -231,6 +231,7 @@ class dreame extends eqLogic {
                         $eqlogic->save();
                         $numberNewDevice++;
                         log::add(__CLASS__, "debug", "Nouvel Equipement, ajout en cours.");
+                        $eqlogic->createCmd();
                     } else {
                         log::add(__CLASS__, "debug", "Le modèle de l'équipement n'est pas pris en charge : " . $response->model);
                     }
