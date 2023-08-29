@@ -231,6 +231,7 @@ class dreame extends eqLogic {
                         $eqlogic->save();
                         $numberNewDevice++;
                         log::add(__CLASS__, "debug", "Nouvel Equipement, ajout en cours.");
+                        $eqlogic->createCmd();
                     } else {
                         log::add(__CLASS__, "debug", "Le modèle de l'équipement n'est pas pris en charge : " . $response->model);
                     }
@@ -363,7 +364,7 @@ class dreame extends eqLogic {
 
         if (!empty($ip) && !empty($token)) {
             $call = ($modelType == 'genericmiot') ? ' call' : '';
-            $val = ($value == '') ? '' : escapeshellarg($value);
+            $val = ($value === '') ? '' :  escapeshellarg($value);
             $exec = system::getCmdSudo() . " miiocli -o json_pretty " . $modelType . " --ip " . $ip . " --token " . $token . $call . " " . $cmd . " " . $val .  " >&1 2>" . $errorFile;
             log::add(__CLASS__, 'debug', 'CMD BY ' . $modelType . " => " . $exec);
             exec($exec, $outputArray, $resultCode);
@@ -610,11 +611,11 @@ class dreameCmd extends cmd {
                     log::add('dreame', 'error', 'Empty field "' . $this->getDisplay('title_placeholder', 'Titre') . '" [cmdId : ' . $this->getId() . ']');
                     return;
                 }
-                $option = $_options['message'] ?? '';
+                $option = jeedom::evaluateExpression($_options['message']) ?? '';
                 if ($option == '') {
-                    log::add('dreame', 'warning', 'Empty field "' . $this->getDisplay('message_placeholder', 'Message') . '" [cmdId : ' . $this->getId() . ']');
+                    log::add('dreame', 'debug', 'Empty field "' . $this->getDisplay('message_placeholder', 'Message') . '" [cmdId : ' . $this->getId() . ']');
                 }
-                log::add('dreame', 'debug', 'running : ' . $this->getLogicalId() . ' request: ' . $request);
+                log::add('dreame', 'debug', 'running : ' . $this->getLogicalId() . ' request: ' . $request . ' / options : ' . json_encode($option));
                 try {
                     $result =  $eqLogic->execCmd($request, $option);
                     event::add('jeedom::alert', array(
@@ -632,6 +633,10 @@ class dreameCmd extends cmd {
                     ));
                 }
                 return $result;
+                break;
+
+            case '':
+                log::add('dreame', 'debug', 'running custom action named "' . $this->getName() . '"');
                 break;
 
             default:

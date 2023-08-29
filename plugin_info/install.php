@@ -19,12 +19,18 @@ require_once dirname(__FILE__) . '/../../../core/php/core.inc.php';
 
 // Fonction exécutée automatiquement après l'installation du plugin
 function dreame_install() {
+    if (config::byKey('account-country', 'dreame') == '') {
+        config::save('account-country', 'DE', 'dreame');
+    }
 }
 
 
 
 // Fonction exécutée automatiquement après la mise à jour du plugin
 function dreame_update() {
+    if (config::byKey('account-country', 'dreame') == '') {
+        config::save('account-country', 'DE', 'dreame');
+    }
 }
 
 // Fonction exécutée automatiquement après la suppression du plugin
