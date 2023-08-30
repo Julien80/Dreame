@@ -363,7 +363,7 @@ class dreame extends eqLogic {
         $errorFile = __DIR__ . '/../../data/exec/error_' . $this->getId() . '.txt';
 
         if (!empty($ip) && !empty($token)) {
-            $call = ($modelType == 'genericmiot') ? ' call' : '';
+            $call = ($modelType == 'genericmiot' && $cmd != 'status') ? ' call' : '';
             $val = ($value === '') ? '' :  escapeshellarg($value);
             $exec = system::getCmdSudo() . " miiocli -o json_pretty " . $modelType . " --ip " . $ip . " --token " . $token . $call . " " . $cmd . " " . $val .  " >&1 2>" . $errorFile;
             log::add(__CLASS__, 'debug', 'CMD BY ' . $modelType . " => " . $exec);
