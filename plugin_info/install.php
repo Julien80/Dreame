@@ -31,6 +31,7 @@ function dreame_update() {
     if (config::byKey('account-country', 'dreame') == '') {
         config::save('account-country', 'DE', 'dreame');
     }
+    dreame::refreshAllCmd();
 }
 
 // Fonction exécutée automatiquement après la suppression du plugin

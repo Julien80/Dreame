@@ -262,6 +262,13 @@ class dreame extends eqLogic {
         return $configFile;
     }
 
+    public static function refreshAllCmd() {
+        /** @var dreame $eqLogic */
+        foreach (self::byType(__CLASS__) as $eqLogic) {
+            $eqLogic->createCmd();
+        }
+    }
+
     public function createCmd() {
 
         log::add(__CLASS__, "debug", "============================ CREATING CMD ============================");
