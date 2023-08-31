@@ -171,6 +171,17 @@
             }
         },
         {
+            "logicalId": "map_status",
+            "name": "Statut Carte",
+            "type": "info",
+            "subtype": "numeric",
+            "isVisible": 1,
+            "template": {
+                "dashboard": "line",
+                "mobile": "line"
+            }
+        },
+        {
             "logicalId": "stop",
             "name": "Arreter",
             "type": "action",
