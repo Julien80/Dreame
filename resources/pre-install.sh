@@ -37,7 +37,7 @@ echo "Installing python-miio from git master branch"
 sudo python${PYTHON_VERSION:0:3} -m ensurepip
 sudo python${PYTHON_VERSION:0:3} -m pip install --upgrade pip
 sudo python${PYTHON_VERSION:0:3} -m pip install git+https://github.com/rytilahti/python-miio.git@master
-sudo python${PYTHON_VERSION:0:3} -m pip uninstall pycrypto --yes
+sudo python${PYTHON_VERSION:0:3} -m pip uninstall --yes pycrypto 
 sudo python${PYTHON_VERSION:0:3} -m pip install --upgrade --force-reinstall --yes pycryptodome
 sudo python${PYTHON_VERSION:0:3} -m pip uninstall micloud
 sudo python${PYTHON_VERSION:0:3} -m pip install micloud
