@@ -161,6 +161,17 @@ class dreame extends eqLogic {
 
     /* * **********************Getteur Setteur*************************** */
 
+    public static function getVenvPath() {
+        $path = __DIR__ . '/../../resources/venv/bin/';
+
+        if (!file_exists($path)) {
+            log::add(__CLASS__, "error", "No VENV - please install dependencies");
+            return '';
+        }
+
+        return $path;
+    }
+
     public static function detectDevices() {
 
         log::add(__CLASS__, "debug", "============================ DISCOVER ============================");
@@ -169,7 +180,7 @@ class dreame extends eqLogic {
         $accountPassword = trim(config::byKey('account-password', __CLASS__));
         $accountCountry = trim(config::byKey('account-country', __CLASS__));
 
-        $cmd = system::getCmdSudo() . " micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c " . $accountCountry . " 2>&1";
+        $cmd = system::getCmdSudo() . " " . self::getVenvPath() . "micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c " . $accountCountry . " 2>&1";
         exec($cmd, $outputArray, $resultCode);
         log::add(__CLASS__, "debug", json_encode($outputArray));
 
@@ -372,7 +383,7 @@ class dreame extends eqLogic {
         if (!empty($ip) && !empty($token)) {
             $call = ($modelType == 'genericmiot' && $cmd != 'status') ? ' call' : '';
             $val = ($value === '') ? '' :  escapeshellarg($value);
-            $exec = system::getCmdSudo() . " miiocli -o json_pretty " . $modelType . " --ip " . $ip . " --token " . $token . $call . " " . $cmd . " " . $val .  " >&1 2>" . $errorFile;
+            $exec = system::getCmdSudo() . " " . self::getVenvPath() . "miiocli -o json_pretty " . $modelType . " --ip " . $ip . " --token " . $token . $call . " " . $cmd . " " . $val .  " >&1 2>" . $errorFile;
             log::add(__CLASS__, 'debug', 'CMD BY ' . $modelType . " => " . $exec);
             exec($exec, $outputArray, $resultCode);
         } else {
@@ -525,7 +536,7 @@ class dreame extends eqLogic {
         $modelType = $this->getConfiguration('modelType');
 
         $call = ($modelType == 'genericmiot') ? ' call' : '';
-        $cmdExec = system::getCmdSudo() . " miiocli $modelType --ip $ip --token $token" . $call;
+        $cmdExec = system::getCmdSudo() . " " . self::getVenvPath() . "miiocli $modelType --ip $ip --token $token" . $call;
 
         if (!empty($ip) && !empty($token)) {
             $finalCmd = "$cmdExec $cmd $value";
