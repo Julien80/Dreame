@@ -2,7 +2,13 @@
 
 RUST_VERSION="1.48.0"
 PYTHON_VERSION="3.8.2"
-VENV_DIR="./venv"
+VENV_DIR=$(pwd)/venv
+
+if [ ! -d "$VENV_DIR" ]; then
+    echo "Folder ${VENV_DIR} does NOT exist - EXIT"
+    exit 1
+fi
+
 
 echo ""
 echo "********************************************"
