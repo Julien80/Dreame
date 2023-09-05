@@ -57,6 +57,7 @@ echo ""
 echo "*********************************************************"
 echo "***** Installing python-miio from git master branch *****"
 echo "*********************************************************"
+sudo apt-get install -y git
 sudo $VENV_DIR/bin/python3 -m ensurepip
 sudo $VENV_DIR/bin/python3 -m pip install --upgrade pip
 sudo $VENV_DIR/bin/python3 -m pip install git+https://github.com/rytilahti/python-miio.git@master
