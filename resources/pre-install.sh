@@ -39,23 +39,6 @@ fi
 
 echo ""
 echo ""
-echo "*****************"
-echo "Installing rustup"
-echo "*****************"
-sudo apt remove -y rustc
-sudo apt remove -y cargo
-sudo apt autoremove -y
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
-echo "Updating rustup to version ${RUST_VERSION}"
-rustup update ${RUST_VERSION}
-sudo ln -s /root/.cargo/bin/rustc /usr/bin/rustc
-sudo ln -s /root/.cargo/bin/cargo /usr/bin/cargo
-echo "Setting executable permissions for rustc and cargo"
-sudo chmod +x /usr/bin/rustc
-sudo chmod +x /usr/bin/cargo
-
-echo ""
-echo ""
 echo "*************************"
 echo "***** Install VENV ******"
 echo "*************************"
