@@ -607,6 +607,7 @@ class dreameCmd extends cmd {
 
             case 'start':
             case 'stop':
+            case 'pause':
             case 'home':
             case 'position':
             case 'playSound':
