@@ -583,6 +583,8 @@ class dreameCmd extends cmd {
     public function execute($_options = array()) {
         log::add('dreame', "debug", "============================ EXEC CMD ============================");
 
+        $refresh = true;
+
         /** @var dreame $eqLogic */
         $eqLogic = $this->getEqLogic(); // Récupération de l’eqlogic
         Log::add('dreame', 'debug', '  with options : ' . json_encode($_options));
@@ -600,6 +602,7 @@ class dreameCmd extends cmd {
             case 'refresh':
                 log::add('dreame', 'debug', 'running : ' . $this->getLogicalId());
                 $eqLogic->updateCmd();
+                $refresh = false;
                 break;
 
             case 'start':
@@ -669,8 +672,10 @@ class dreameCmd extends cmd {
 
             default:
                 log::add('dreame', 'error', 'Aucune commande associée : ' . $this->getLogicalId());
+                $refresh = false;
                 break;
         }
+        if ($refresh) $eqLogic->updateCmd();
     }
 
 
