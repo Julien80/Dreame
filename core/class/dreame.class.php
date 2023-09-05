@@ -412,6 +412,12 @@ class dreame extends eqLogic {
         log::add(__CLASS__, "debug", "============================ UPDATING CMD ============================");
         $modelType = $this->getConfiguration('modelType');
 
+        $path = __DIR__ . '/../conf/' . $modelType . '.json';
+        log::add(__CLASS__, 'debug', 'GENERATE CMD FROM CONFIG FILE : ' . $path);
+
+        $configFile = self::getFileContent($path);
+
+
         if ($statusOutput == '') {
             try {
                 $statusOutput = $this->execCmd('status');
@@ -477,6 +483,10 @@ class dreame extends eqLogic {
             if ($statusOutput->{"vacuum:fault"} == 51) $error_device = "Filtre est mouillé";
             if ($statusOutput->{"vacuum:fault"} == 106) $error_device = "Vider le bac et nettoyer la planche de lavage.";
             if ($error_device != "") $this->checkAndUpdateCmd("error_device", $error_device);
+        } elseif ($modelType == 'roborockvacuum') {
+            $status = $statusOutput['state'] ?? 999;
+            $device_status_str = $configFile['state_translate'][$status] ?? 'Inconnu - ' . $status;
+            $this->checkAndUpdateCmd("device_status_str", $device_status_str);
         }
 
 

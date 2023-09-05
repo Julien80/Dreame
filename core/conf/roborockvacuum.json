@@ -10,6 +10,25 @@
             }
         }
     },
+    "state_translate": {
+        "1": "Démarrage",
+        "2": "Chargeur déconnecté",
+        "3": "Au repos",
+        "4": "Contrôle Manuel",
+        "5": "Nettoyage en cours",
+        "6": "Retour à la base",
+        "7": "Mode Manuel",
+        "8": "En charge",
+        "9": "Problème de charge",
+        "10": "Pause",
+        "12": "Erreur",
+        "13": "Arrêt de l'appareil",
+        "14": "Maj en cours",
+        "15": "Mise en place sur la base",
+        "16": "En direction de la cible",
+        "17": "Nettoyage de Zone(s)",
+        "18": "Nettoyage de Segment(s)"
+    },
     "cmds": [
         {
             "logicalId": "state",
@@ -17,6 +36,16 @@
             "type": "info",
             "subtype": "numeric",
             "isVisible": 1
+        },
+        {
+            "logicalId": "device_status_str",
+            "name": "Etat",
+            "type": "info",
+            "subtype": "string",
+            "isVisible": 1,
+            "configuration": {
+                "request": "none"
+            }
         },
         {
             "logicalId": "battery",
