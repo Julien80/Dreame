@@ -35,6 +35,9 @@
             "template": {
                 "dashboard": "line",
                 "mobile": "line"
+            },
+            "configuration": {
+                "request": "none"
             }
         },
         {
@@ -53,7 +56,10 @@
             "name": "Etat",
             "type": "info",
             "subtype": "string",
-            "isVisible": 1
+            "isVisible": 1,
+            "configuration": {
+                "request": "none"
+            }
         },
         {
             "logicalId": "brush_left_time",
