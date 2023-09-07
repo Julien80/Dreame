@@ -161,6 +161,17 @@ class dreame extends eqLogic {
 
     /* * **********************Getteur Setteur*************************** */
 
+    public static function getVenvPath() {
+        $path = __DIR__ . '/../../resources/venv/bin/';
+
+        if (!file_exists($path)) {
+            log::add(__CLASS__, "error", "No VENV - please install dependencies");
+            return '';
+        }
+
+        return $path;
+    }
+
     public static function detectDevices() {
 
         log::add(__CLASS__, "debug", "============================ DISCOVER ============================");
@@ -169,7 +180,7 @@ class dreame extends eqLogic {
         $accountPassword = trim(config::byKey('account-password', __CLASS__));
         $accountCountry = trim(config::byKey('account-country', __CLASS__));
 
-        $cmd = system::getCmdSudo() . " micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c " . $accountCountry . " 2>&1";
+        $cmd = system::getCmdSudo() . " " . self::getVenvPath() . "micloud get-devices -u '" . $accountEmail . "' -p '" . $accountPassword . "' -c " . $accountCountry . " 2>&1";
         exec($cmd, $outputArray, $resultCode);
         log::add(__CLASS__, "debug", json_encode($outputArray));
 
@@ -372,7 +383,7 @@ class dreame extends eqLogic {
         if (!empty($ip) && !empty($token)) {
             $call = ($modelType == 'genericmiot' && $cmd != 'status') ? ' call' : '';
             $val = ($value === '') ? '' :  escapeshellarg($value);
-            $exec = system::getCmdSudo() . " miiocli -o json_pretty " . $modelType . " --ip " . $ip . " --token " . $token . $call . " " . $cmd . " " . $val .  " >&1 2>" . $errorFile;
+            $exec = system::getCmdSudo() . " " . self::getVenvPath() . "miiocli -o json_pretty " . $modelType . " --ip " . $ip . " --token " . $token . $call . " " . $cmd . " " . $val .  " >&1 2>" . $errorFile;
             log::add(__CLASS__, 'debug', 'CMD BY ' . $modelType . " => " . $exec);
             exec($exec, $outputArray, $resultCode);
         } else {
@@ -400,6 +411,12 @@ class dreame extends eqLogic {
     public function updateCmd($statusOutput = '') {
         log::add(__CLASS__, "debug", "============================ UPDATING CMD ============================");
         $modelType = $this->getConfiguration('modelType');
+
+        $path = __DIR__ . '/../conf/' . $modelType . '.json';
+        log::add(__CLASS__, 'debug', 'GENERATE CMD FROM CONFIG FILE : ' . $path);
+
+        $configFile = self::getFileContent($path);
+
 
         if ($statusOutput == '') {
             try {
@@ -466,6 +483,10 @@ class dreame extends eqLogic {
             if ($statusOutput->{"vacuum:fault"} == 51) $error_device = "Filtre est mouillé";
             if ($statusOutput->{"vacuum:fault"} == 106) $error_device = "Vider le bac et nettoyer la planche de lavage.";
             if ($error_device != "") $this->checkAndUpdateCmd("error_device", $error_device);
+        } elseif ($modelType == 'roborockvacuum') {
+            $status = $statusOutput['state'] ?? 999;
+            $device_status_str = $configFile['state_translate'][$status] ?? 'Inconnu - ' . $status;
+            $this->checkAndUpdateCmd("device_status_str", $device_status_str);
         }
 
 
@@ -525,7 +546,7 @@ class dreame extends eqLogic {
         $modelType = $this->getConfiguration('modelType');
 
         $call = ($modelType == 'genericmiot') ? ' call' : '';
-        $cmdExec = system::getCmdSudo() . " miiocli $modelType --ip $ip --token $token" . $call;
+        $cmdExec = system::getCmdSudo() . " " . self::getVenvPath() . "miiocli $modelType --ip $ip --token $token" . $call;
 
         if (!empty($ip) && !empty($token)) {
             $finalCmd = "$cmdExec $cmd $value";
@@ -562,6 +583,8 @@ class dreameCmd extends cmd {
     public function execute($_options = array()) {
         log::add('dreame', "debug", "============================ EXEC CMD ============================");
 
+        $refresh = true;
+
         /** @var dreame $eqLogic */
         $eqLogic = $this->getEqLogic(); // Récupération de l’eqlogic
         Log::add('dreame', 'debug', '  with options : ' . json_encode($_options));
@@ -579,10 +602,12 @@ class dreameCmd extends cmd {
             case 'refresh':
                 log::add('dreame', 'debug', 'running : ' . $this->getLogicalId());
                 $eqLogic->updateCmd();
+                $refresh = false;
                 break;
 
             case 'start':
             case 'stop':
+            case 'pause':
             case 'home':
             case 'position':
             case 'playSound':
@@ -648,8 +673,10 @@ class dreameCmd extends cmd {
 
             default:
                 log::add('dreame', 'error', 'Aucune commande associée : ' . $this->getLogicalId());
+                $refresh = false;
                 break;
         }
+        if ($refresh) $eqLogic->updateCmd();
     }
 
 
