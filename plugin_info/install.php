@@ -22,6 +22,11 @@ function dreame_install() {
     if (config::byKey('account-country', 'dreame') == '') {
         config::save('account-country', 'DE', 'dreame');
     }
+
+    $packageJsonFile = __DIR__ . '/packages.json';
+    if (file_exists($packageJsonFile)) {
+        unlink($packageJsonFile);
+    }
 }
 
 
@@ -32,6 +37,11 @@ function dreame_update() {
         config::save('account-country', 'DE', 'dreame');
     }
     dreame::refreshAllCmd();
+
+    $packageJsonFile = __DIR__ . '/packages.json';
+    if (file_exists($packageJsonFile)) {
+        unlink($packageJsonFile);
+    }
 }
 
 // Fonction exécutée automatiquement après la suppression du plugin
