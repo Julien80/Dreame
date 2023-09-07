@@ -4,6 +4,13 @@
 >
 >S'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# 07/09/2023
+
+- Réinstallation des dépendances nécessaire : mise en place d'un venv pour utiliser python 3.8 & co
+- Fix commandes `Etat` des appareils
+- Rafraichissement des infos après une action
+- Ajout du mapping des statuts avec un texte
+
 # 26/08/2023
 
 - Refonte complète du plugin pour plus d'évolutions par la suite et plus de lisibilité
@@ -23,7 +30,7 @@ _NB_ : Afin de faciliter la mise à jour, merci de supprimer vos équipements et
 # 22/08/2023
 
 - Début du developpement pour integrer la marque Roborock sur le plugin.
-- Roborock S8 fonctionnel avec le plugin 
+- Roborock S8 fonctionnel avec le plugin
 - Correction lié à la detection des appareils
 - Mise à jour automatique de l'adresse IP et du Token lorsqu'on detecte les nouveaux robots et que le robot est déjà présent
 - Optimisations diverses
@@ -35,7 +42,7 @@ _NB_ : Afin de faciliter la mise à jour, merci de supprimer vos équipements et
 # 12/03/2023
 
 - Ajout de log lors de la découverte des nouveaux appareils
-- Filtration des appareils pour ne ressortir que les aspirateurs robots 
+- Filtration des appareils pour ne ressortir que les aspirateurs robots
 
 # 11/03/2023
 
