@@ -10,6 +10,8 @@
 - Fix commandes `Etat` des appareils
 - Rafraichissement des infos après une action
 - Ajout du mapping des statuts avec un texte
+- Choix de la méthode par lequel le robot doit être appelé/piloté
+- Paramétrage du délai entre 2 rafraichissements des commandes (à minima les possesseurs de Dreame p2008 doivent par exemple mettre un rafraichissement minimum de 5min)
 
 # 26/08/2023
 
