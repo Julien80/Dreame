@@ -161,12 +161,35 @@ class dreame extends eqLogic {
 
     /* * **********************Getteur Setteur*************************** */
 
-    public static function getVenvPath() {
-        $path = __DIR__ . '/../../resources/venv/bin/';
+    public static function dependancy_install() {
+        log::remove(__CLASS__ . '_dep');
+        $venv = self::getVenvPath('');
+        return array('script' => dirname(__FILE__) . '/../../resources/pre-install.sh ' . $venv . ' ' . jeedom::getTmpFolder(__CLASS__) . '/dependency', 'log' => log::getPathToLog(__CLASS__ . '_dep'));
+    }
+
+    public static function dependancy_info() {
+        $return = array();
+        $return['progress_file'] = jeedom::getTmpFolder(__CLASS__) . '/dependency';
+        if (file_exists(jeedom::getTmpFolder(__CLASS__) . '/dependency')) {
+            $return['state'] = 'in_progress';
+        } else {
+            $cmd = system::getCmdSudo() . " " . self::getVenvPath() . 'python3.8 -m pip list | grep -Ec "micloud +|python-miio +"';
+            // log::add(__CLASS__, "debug", "dependancy_info cmd => " . $cmd);
+            if (exec($cmd) < 2) {
+                $return['state'] = 'nok';
+            } else {
+                $return['state'] = 'ok';
+            }
+        }
+        return $return;
+    }
+
+    public static function getVenvPath($path = 'bin/') {
+        $path = __DIR__ . '/../../resources/venv/' . $path;
 
         if (!file_exists($path)) {
             log::add(__CLASS__, "error", "No VENV - please install dependencies");
-            return '';
+            return '/no-venv/';
         }
 
         return $path;
