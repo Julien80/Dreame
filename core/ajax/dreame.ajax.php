@@ -35,9 +35,16 @@ try {
 
     if (init('action') == 'syncCmd') {
         $eqId = init('eqId');
+        $remove = init('remove', false);
         /** @var dreame $eqLogic */
         $eqLogic = eqLogic::byId($eqId);
         if (!is_object($eqLogic)) ajax::error('No eq Id found!');
+        if ($remove) {
+            log::add('dreame', 'debug', 'removing all commands');
+            foreach ($eqLogic->getCmd() as $cmd) {
+                $cmd->remove();
+            }
+        }
         ajax::success($eqLogic->createCmd());
     }
 

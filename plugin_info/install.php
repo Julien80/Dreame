@@ -27,6 +27,8 @@ function dreame_install() {
     if (file_exists($packageJsonFile)) {
         unlink($packageJsonFile);
     }
+
+    dreame::addCron();
 }
 
 
@@ -42,8 +44,11 @@ function dreame_update() {
     if (file_exists($packageJsonFile)) {
         unlink($packageJsonFile);
     }
+
+    dreame::addCron();
 }
 
 // Fonction exécutée automatiquement après la suppression du plugin
 function dreame_remove() {
+    dreame::removeCronItems();
 }

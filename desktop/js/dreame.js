@@ -139,25 +139,60 @@ $('.syncCmd').on('click', function () {
 
 
 function syncCmd() {
-  $.ajax({
-    type: 'POST',
-    url: 'plugins/dreame/core/ajax/dreame.ajax.php',
-    data: {
-      action: 'syncCmd',
-      eqId: $('.eqLogicAttr[data-l1key=id]').value(),
-    },
-    dataType: 'json',
-    error: function (request, status, error) {
-      handleAjaxError(request, status, error);
-    },
-    success: function (data) {
-      if (data.state != 'ok') {
-        $('#div_alert').showAlert({ message: data.result, level: 'danger' });
-        return;
-      }
-      $('#div_alert').showAlert({ message: 'Commandes mises à jour !', level: 'success' });
 
+  bootbox.confirm({
+    message: 'Souhaitez vous supprimer les commandes existantes ?',
+    buttons: {
+      confirm: {
+        label: 'Oui',
+        className: 'btn-success'
+      },
+      cancel: {
+        label: 'Non',
+        className: 'btn-danger'
+      }
+    },
+    callback: function (result) {
+      console.log('response :', result);
+      var removeResponse = (result ? '1' : '0');
+      $.ajax({
+        type: 'POST',
+        url: 'plugins/dreame/core/ajax/dreame.ajax.php',
+        data: {
+          action: 'syncCmd',
+          remove: removeResponse,
+          eqId: $('.eqLogicAttr[data-l1key=id]').value(),
+        },
+        dataType: 'json',
+        error: function (request, status, error) {
+          handleAjaxError(request, status, error);
+        },
+        success: function (data) {
+          if (data.state != 'ok') {
+            $('#div_alert').showAlert({ message: data.result, level: 'danger' });
+            return;
+          }
+          $('#div_alert').showAlert({ message: 'Commandes mises à jour !', level: 'success' });
+
+          setTimeout(function () {
+            window.location.reload();
+          }, 2000);
+        }
+      });
     }
   });
 
 }
+
+function printEqLogic(_eqLogic) {
+  var modelType = _eqLogic.configuration.modelType || 'none';
+  var manufacturerType = _eqLogic.configuration.manufacturerType || 'none';
+  $('#sel_robot option.optRobot').removeClass('hidden').addClass('hidden');
+  $('#sel_robot option.optRobot[value=' + modelType + ']').removeClass('hidden');
+  $('#sel_robot option.optRobot[value=' + manufacturerType + ']').removeClass('hidden');
+  $('.typeChange').removeClass('hidden').addClass('hidden');
+}
+
+$('#sel_robot').on('change', function () {
+  $('.typeChange').removeClass('hidden');
+})

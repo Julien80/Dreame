@@ -34,61 +34,55 @@ class dreame extends eqLogic {
     */
 
     /* * ***********************Methode static*************************** */
+    public static function addCron() {
+        $cron = cron::byClassAndFunction(__CLASS__, 'updateEqLogic');
+        if (!is_object($cron)) {
+            $cron = new cron();
+            $cron->setClass(__CLASS__);
+            $cron->setFunction('updateEqLogic');
+            $cron->setEnable(1);
+            $cron->setDeamon(0);
+            $cron->setSchedule('* * * * *');
+            $cron->setTimeout(5);
+            $cron->save();
+        }
+    }
 
+    public static function removeCronItems() {
+        try {
+            $crons = cron::searchClassAndFunction(__CLASS__, 'updateEqLogic');
+            if (is_array($crons)) {
+                foreach ($crons as $cron) {
+                    $cron->remove();
+                }
+            }
+        } catch (Exception $e) {
+        }
+    }
 
     //* Fonction exécutée automatiquement toutes les minutes par Jeedom
+    public static function updateEqLogic() {
+        $eqLogics = self::byType('dreame', true);
+        /** @var dreame $eqLogic */
+        foreach ($eqLogics as $eqLogic) {
+            $refresh = $eqLogic->getConfiguration('refresh');
+            if ($refresh == '') {
+                $eqLogic->setConfiguration('refresh', 1);
+                $eqLogic->save(true);
+                $refresh = '1';
+            }
 
-    public static function cron() {
-        $eqLogics = self::byType('dreame');
-        if (count($eqLogics) > 0) {
-            /** @var dreame $eqLogic */
-            foreach ($eqLogics as $eqLogic) {
-                if ($eqLogic->getIsEnable() == 1 && $eqLogic->getConfiguration('model') != 'dreame.vacuum.p2008') {
-                    $eqLogic->updateCmd();
-                }
+            if ($refresh == '1') {
+                $eqLogic->updateCmd();
+            } elseif ($refresh == '5' && (date('i') % 5 == 0)) {
+                log::add(__CLASS__, 'debug', "*** REFRESH 5min****");
+                $eqLogic->updateCmd();
+            } elseif ($refresh == '15' && in_array(date('i'), array(0, 15, 30, 45))) {
+                log::add(__CLASS__, 'debug', "*** REFRESH 15min****");
+                $eqLogic->updateCmd();
             }
         }
     }
-
-
-
-    // * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
-    public static function cron5() {
-        $eqLogics = self::byType('dreame');
-        if (count($eqLogics) > 0) {
-            /** @var dreame $eqLogic */
-            foreach ($eqLogics as $eqLogic) {
-                if ($eqLogic->getIsEnable() == 1 && $eqLogic->getConfiguration('model') == 'dreame.vacuum.p2008') {
-                    $eqLogic->updateCmd();
-                }
-            }
-        }
-    }
-
-    /*
-    * Fonction exécutée automatiquement toutes les 10 minutes par Jeedom
-    public static function cron10() {}
-    */
-
-    /*
-    * Fonction exécutée automatiquement toutes les 15 minutes par Jeedom
-    public static function cron15() {}
-    */
-
-    /*
-    * Fonction exécutée automatiquement toutes les 30 minutes par Jeedom
-    public static function cron30() {}
-    */
-
-    /*
-    * Fonction exécutée automatiquement toutes les heures par Jeedom
-    public static function cronHourly() {}
-    */
-
-    /*
-    * Fonction exécutée automatiquement tous les jours par Jeedom
-    public static function cronDaily() {}
-    */
 
     /* * *********************Méthodes d'instance************************* */
 
@@ -96,6 +90,7 @@ class dreame extends eqLogic {
     public function preInsert() {
         $this->setIsEnable(1);
         $this->setIsVisible(1);
+        $this->setConfiguration('refresh', 1);
     }
 
     // Fonction exécutée automatiquement après la création de l'équipement
@@ -235,15 +230,18 @@ class dreame extends eqLogic {
                     }
                 }
 
+                $manufacturerType = self::getModelType($response->model);
                 if ($alreadyExist) {
                     if ($device->getConfiguration('ip') != $response->localip || $device->getConfiguration('token') != $response->token) {
                         $device->setConfiguration('ip', $response->localip);
                         $device->setConfiguration('token', $response->token);
-                        $device->setConfiguration('modelType', self::getModelType($response->model));
                         $device->save();
                         log::add(__CLASS__, "debug", "Mise à jour de l'IP et du token pour l'équipement existant.");
                     } elseif ($device->getConfiguration('modelType') == '') {
-                        $device->setConfiguration('modelType', self::getModelType($response->model));
+                        $device->setConfiguration('modelType', 'genericmiot');
+                        $device->save();
+                    } elseif ($device->getConfiguration('manufacturerType') == '') {
+                        $device->setConfiguration('manufacturerType', $manufacturerType);
                         $device->save();
                     } else {
                         log::add(__CLASS__, "debug", "Equipement déjà présent, pas de modification");
@@ -261,11 +259,12 @@ class dreame extends eqLogic {
                         $eqlogic->setConfiguration('ip', $response->localip);
                         $eqlogic->setConfiguration('token', $response->token);
                         $eqlogic->setConfiguration('model', $response->model);
-                        $eqlogic->setConfiguration('modelType', self::getModelType($response->model));
+                        $eqlogic->setConfiguration('modelType', 'genericmiot');
+                        $eqlogic->setConfiguration('manufacturerType', $manufacturerType);
                         $eqlogic->save();
                         $numberNewDevice++;
                         log::add(__CLASS__, "debug", "Nouvel Equipement, ajout en cours.");
-                        $eqlogic->createCmd();
+                        $eqlogic->createCmd(true);
                     } else {
                         log::add(__CLASS__, "debug", "Le modèle de l'équipement n'est pas pris en charge : " . $response->model);
                     }
@@ -303,7 +302,7 @@ class dreame extends eqLogic {
         }
     }
 
-    public function createCmd() {
+    public function createCmd($retry = false) {
 
         log::add(__CLASS__, "debug", "============================ CREATING CMD ============================");
 
@@ -336,13 +335,15 @@ class dreame extends eqLogic {
                         continue;
                     }
 
-                    log::add(__CLASS__, 'debug', '  -- creating cmd ' . $command['name']);
 
                     $cmd = $this->getCmd(null, $command["logicalId"]);
                     if (!is_object($cmd)) {
+                        log::add(__CLASS__, 'debug', '  -- creating cmd ' . $command['name']);
                         $cmd = new dreameCmd();
                         $cmd->setOrder($order_cmd);
                         $cmd->setEqLogic_id($this->getId());
+                    } else {
+                        log::add(__CLASS__, 'debug', '  -- updating cmd ' . $command['name']);
                     }
                     utils::a2o($cmd, $command);
                     $cmd->save();
@@ -350,8 +351,17 @@ class dreame extends eqLogic {
                 }
             }
         } catch (Exception $e) {
-            log::add(__CLASS__, 'warning', $e->getMessage());
-            // log::add(__CLASS__, 'error', 'Cannot save Cmd for this EqLogic -- ' . $e->getMessage());
+            $msg = $e->getMessage();
+            log::add(__CLASS__, 'warning', $msg);
+            if (strpos($msg, 'json not found or it is stale') !== false && $retry && $modelType == 'genericmiot') {
+                $manufacturerType = $this->getConfiguration('manufacturerType');
+                log::add(__CLASS__, 'debug', 'JSON file not found with generic - trying creation with specific ' . $manufacturerType);
+                $this->setConfiguration('modelType', $manufacturerType);
+                $this->save(true);
+                $this->createCmd();
+                return;
+            }
+            $updateCmd = false;
         }
 
         // check if the vacuum accept room action
@@ -535,25 +545,17 @@ class dreame extends eqLogic {
 
     public static function getModelType($model) {
 
-        switch ($model) {
-            case 'viomi.vacuum.v8':
-                $type = 'viomivacuum';
-                break;
-
-            case 'dreame.vacuum.p2008':
-                $type = 'dreamevacuum';
-                break;
-
-            default:
-                if (strpos($model, 'roborock') !== false) {
-                    $type = 'roborockvacuum';
-                } else {
-                    $type = 'genericmiot';
-                }
-                break;
+        if (strpos($model, 'viomi') !== false) {
+            $manufacturType = 'viomivacuum';
+        } elseif (strpos($model, 'dreame') !== false) {
+            $manufacturType = 'dreamevacuum';
+        } elseif (strpos($model, 'roborock') !== false) {
+            $manufacturType = 'roborockvacuum';
+        } else {
+            $manufacturType = 'genericmiot';
         }
 
-        return $type;
+        return $manufacturType;
     }
 
     public function getEqIcon() {
@@ -561,25 +563,6 @@ class dreame extends eqLogic {
         $imgPath = 'plugins/dreame/data/img/' . $modelType . "_icon.png";
 
         return $imgPath;
-    }
-
-    public function sendCmd($cmd, $value = '') {
-        $ip = $this->getConfiguration('ip');
-        $token = $this->getConfiguration('token');
-        $modelType = $this->getConfiguration('modelType');
-
-        $call = ($modelType == 'genericmiot') ? ' call' : '';
-        $cmdExec = system::getCmdSudo() . " " . self::getVenvPath() . "miiocli $modelType --ip $ip --token $token" . $call;
-
-        if (!empty($ip) && !empty($token)) {
-            $finalCmd = "$cmdExec $cmd $value";
-
-            log::add(__CLASS__, 'debug', '[CMD] ' . $finalCmd);
-            exec($finalCmd, $outputArray, $resultCode);
-            $this->updateCmd();
-        } else {
-            log::add(__CLASS__, 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
-        }
     }
 }
 

@@ -157,9 +157,29 @@ $eqLogics = eqLogic::byType($plugin->getId());
 						</div>
 
 						<div class="form-group">
-							<label class="col-sm-3 control-label">{{Type}}</label>
+							<label class="col-sm-3 control-label help" data-help="Le type par défaut est récupéré de votre appareil.<br/>Ne le modifiez que si lors de la synchronisation des commandes vous obtenez une erreur.">{{Type}}</label>
 							<div class="col-sm-3">
-								<span class="eqLogicAttr" data-l1key="configuration" data-l2key="modelType"></span>
+								<select id="sel_robot" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="modelType">
+									<option value="genericmiot">{{Générique}}</option>
+									<option value="viomivacuum" class="optRobot hidden">{{Viomi}}</option>
+									<option value="dreamevacuum" class="optRobot hidden">{{Dream}}</option>
+									<option value="roborockvacuum" class="optRobot hidden">{{Roborock}}</option>
+								</select>
+								<br class="typeChange hidden" />
+								<div class=" alert alert-danger typeChange hidden text-center">
+									Attention, si vous changez le type vous devez relancer la synchronisation des commandes et perdrez potentiellement toutes les commandes existantes !
+								</div>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-3 control-label help" data-help="Défini le temps entre 2 rafraichissements des status">{{Rafraichissement}}</label>
+							<div class="col-sm-3">
+								<select id="sel_robot" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="refresh">
+									<option value="1">{{Toutes les minutes}}</option>
+									<option value="5">{{Toutes les 5 min}}</option>
+									<option value="15">{{Toutes les 15 min}}</option>
+								</select>
 							</div>
 						</div>
 
@@ -188,4 +208,5 @@ $eqLogics = eqLogic::byType($plugin->getId());
 </div>
 
 <?php include_file('desktop', 'dreame', 'js', 'dreame'); ?>
+<?php include_file('desktop', 'dreame', 'css', 'dreame'); ?>
 <?php include_file('core', 'plugin.template', 'js'); ?>
