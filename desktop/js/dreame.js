@@ -161,3 +161,16 @@ function syncCmd() {
   });
 
 }
+
+function printEqLogic(_eqLogic) {
+  var modelType = _eqLogic.configuration.modelType || 'none';
+  var manufacturerType = _eqLogic.configuration.manufacturerType || 'none';
+  $('#sel_robot option.optRobot').removeClass('hidden').addClass('hidden');
+  $('#sel_robot option.optRobot[value=' + modelType + ']').removeClass('hidden');
+  $('#sel_robot option.optRobot[value=' + manufacturerType + ']').removeClass('hidden');
+  $('.typeChange').removeClass('hidden').addClass('hidden');
+}
+
+$('#sel_robot').on('change', function () {
+  $('.typeChange').removeClass('hidden');
+})
