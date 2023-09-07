@@ -564,25 +564,6 @@ class dreame extends eqLogic {
 
         return $imgPath;
     }
-
-    public function sendCmd($cmd, $value = '') {
-        $ip = $this->getConfiguration('ip');
-        $token = $this->getConfiguration('token');
-        $modelType = $this->getConfiguration('modelType');
-
-        $call = ($modelType == 'genericmiot') ? ' call' : '';
-        $cmdExec = system::getCmdSudo() . " " . self::getVenvPath() . "miiocli $modelType --ip $ip --token $token" . $call;
-
-        if (!empty($ip) && !empty($token)) {
-            $finalCmd = "$cmdExec $cmd $value";
-
-            log::add(__CLASS__, 'debug', '[CMD] ' . $finalCmd);
-            exec($finalCmd, $outputArray, $resultCode);
-            $this->updateCmd();
-        } else {
-            log::add(__CLASS__, 'debug', "updateCmd impossible : Pas d'IP ou pas de Token");
-        }
-    }
 }
 
 class dreameCmd extends cmd {
