@@ -34,61 +34,55 @@ class dreame extends eqLogic {
     */
 
     /* * ***********************Methode static*************************** */
+    public static function addCron() {
+        $cron = cron::byClassAndFunction(__CLASS__, 'updateEqLogic');
+        if (!is_object($cron)) {
+            $cron = new cron();
+            $cron->setClass(__CLASS__);
+            $cron->setFunction('updateEqLogic');
+            $cron->setEnable(1);
+            $cron->setDeamon(0);
+            $cron->setSchedule('* * * * *');
+            $cron->setTimeout(5);
+            $cron->save();
+        }
+    }
 
+    public static function removeCronItems() {
+        try {
+            $crons = cron::searchClassAndFunction(__CLASS__, 'updateEqLogic');
+            if (is_array($crons)) {
+                foreach ($crons as $cron) {
+                    $cron->remove();
+                }
+            }
+        } catch (Exception $e) {
+        }
+    }
 
     //* Fonction exécutée automatiquement toutes les minutes par Jeedom
+    public static function updateEqLogic() {
+        $eqLogics = self::byType('dreame', true);
+        /** @var dreame $eqLogic */
+        foreach ($eqLogics as $eqLogic) {
+            $refresh = $eqLogic->getConfiguration('refresh');
+            if ($refresh == '') {
+                $eqLogic->setConfiguration('refresh', 1);
+                $eqLogic->save(true);
+                $refresh = '1';
+            }
 
-    public static function cron() {
-        $eqLogics = self::byType('dreame');
-        if (count($eqLogics) > 0) {
-            /** @var dreame $eqLogic */
-            foreach ($eqLogics as $eqLogic) {
-                if ($eqLogic->getIsEnable() == 1 && $eqLogic->getConfiguration('model') != 'dreame.vacuum.p2008') {
-                    $eqLogic->updateCmd();
-                }
+            if ($refresh == '1') {
+                $eqLogic->updateCmd();
+            } elseif ($refresh == '5' && (date('i') % 5 == 0)) {
+                log::add(__CLASS__, 'debug', "*** REFRESH 5min****");
+                $eqLogic->updateCmd();
+            } elseif ($refresh == '15' && in_array(date('i'), array(0, 15, 30, 45))) {
+                log::add(__CLASS__, 'debug', "*** REFRESH 15min****");
+                $eqLogic->updateCmd();
             }
         }
     }
-
-
-
-    // * Fonction exécutée automatiquement toutes les 5 minutes par Jeedom
-    public static function cron5() {
-        $eqLogics = self::byType('dreame');
-        if (count($eqLogics) > 0) {
-            /** @var dreame $eqLogic */
-            foreach ($eqLogics as $eqLogic) {
-                if ($eqLogic->getIsEnable() == 1 && $eqLogic->getConfiguration('model') == 'dreame.vacuum.p2008') {
-                    $eqLogic->updateCmd();
-                }
-            }
-        }
-    }
-
-    /*
-    * Fonction exécutée automatiquement toutes les 10 minutes par Jeedom
-    public static function cron10() {}
-    */
-
-    /*
-    * Fonction exécutée automatiquement toutes les 15 minutes par Jeedom
-    public static function cron15() {}
-    */
-
-    /*
-    * Fonction exécutée automatiquement toutes les 30 minutes par Jeedom
-    public static function cron30() {}
-    */
-
-    /*
-    * Fonction exécutée automatiquement toutes les heures par Jeedom
-    public static function cronHourly() {}
-    */
-
-    /*
-    * Fonction exécutée automatiquement tous les jours par Jeedom
-    public static function cronDaily() {}
-    */
 
     /* * *********************Méthodes d'instance************************* */
 
@@ -96,6 +90,7 @@ class dreame extends eqLogic {
     public function preInsert() {
         $this->setIsEnable(1);
         $this->setIsVisible(1);
+        $this->setConfiguration('refresh', 1);
     }
 
     // Fonction exécutée automatiquement après la création de l'équipement
