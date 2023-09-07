@@ -132,12 +132,6 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							<div class="col-sm-12">&nbsp;</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label">{{ID unique}}</label>
-							<div class="col-sm-3">
-								<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="did" />
-							</div>
-						</div>
-						<div class="form-group">
 							<label class="col-sm-3 control-label">{{Adresse IP}}</label>
 							<div class="col-sm-3">
 								<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="ip" />
@@ -150,9 +144,22 @@ $eqLogics = eqLogic::byType($plugin->getId());
 							</div>
 						</div>
 						<div class="form-group">
-							<label class="col-sm-3 control-label">{{Modele}}</label>
+							<label class="col-sm-3 control-label">{{ID unique}}</label>
 							<div class="col-sm-3">
-								<input type="text" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="model" />
+								<span class="eqLogicAttr" data-l1key="configuration" data-l2key="did"></span>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-3 control-label">{{Model}}</label>
+							<div class="col-sm-3">
+								<span class="eqLogicAttr" data-l1key="configuration" data-l2key="model"></span>
+							</div>
+						</div>
+
+						<div class="form-group">
+							<label class="col-sm-3 control-label">{{Type}}</label>
+							<div class="col-sm-3">
+								<span class="eqLogicAttr" data-l1key="configuration" data-l2key="modelType"></span>
 							</div>
 						</div>
 
