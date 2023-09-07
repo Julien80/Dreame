@@ -1,5 +1,7 @@
 {
-  "pre-install": {},
+  "pre-install": {
+    "script": "plugins/dreame/resources/pre-install.sh"
+  },
   "apt": {},
   "pip3": {},
   "npm": {},

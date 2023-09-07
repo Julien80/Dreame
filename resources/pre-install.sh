@@ -1,7 +1,14 @@
 #!/bin/bash
 
+PROGRESS_FILE=/tmp/jeedom/dreame/dependency 
+
 PYTHON_VERSION="3.8.2"
 VENV_DIR=$(pwd)/venv
+
+
+touch ${PROGRESS_FILE}
+echo 0 > ${PROGRESS_FILE}
+echo $(date)
 
 if [ ! -d "$VENV_DIR" ]; then
     echo "Folder ${VENV_DIR} does NOT exist - EXIT"
@@ -15,6 +22,7 @@ echo "***** Revert Last Dependencies Install ***** "
 echo "********************************************"
 sudo python3 -m pip uninstall --yes pip
 sudo apt-get -y --reinstall install python3-pip
+echo 10 > ${PROGRESS_FILE}
 
 echo ""
 echo ""
@@ -42,6 +50,7 @@ if ! python${PYTHON_VERSION:0:3} -c "import sys; assert sys.version_info >= (3, 
 else
     echo "Python ${PYTHON_VERSION} already existing"
 fi
+echo 70 > ${PROGRESS_FILE}
 
 echo ""
 echo ""
@@ -51,6 +60,7 @@ echo "*************************"
 sudo apt-get install -y python3 python3-pip python3-venv
 sudo python3.8 -m venv $VENV_DIR
 sudo $VENV_DIR/bin/python3 -m pip install --upgrade pip wheel
+echo 80 > ${PROGRESS_FILE}
 
 echo ""
 echo ""
@@ -59,7 +69,13 @@ echo "***** Installing python-miio from git master branch *****"
 echo "*********************************************************"
 sudo apt-get install -y git
 sudo $VENV_DIR/bin/python3 -m ensurepip
-sudo $VENV_DIR/bin/python3 -m pip install --upgrade pip
 sudo $VENV_DIR/bin/python3 -m pip install git+https://github.com/rytilahti/python-miio.git@master
 sudo $VENV_DIR/bin/python3 -m pip install --upgrade --force-reinstall pycryptodome
 sudo $VENV_DIR/bin/python3 -m pip install micloud
+echo 100 > ${PROGRESS_FILE}
+
+echo $(date)
+echo "***************************"
+echo "*      Install ended      *"
+echo "***************************"
+rm ${PROGRESS_FILE}
