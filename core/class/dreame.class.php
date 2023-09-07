@@ -298,6 +298,11 @@ class dreame extends eqLogic {
     public static function refreshAllCmd() {
         /** @var dreame $eqLogic */
         foreach (self::byType(__CLASS__) as $eqLogic) {
+            if ($eqLogic->getConfiguration('manufacturerType') == '') {
+                $manufacturerType = self::getModelType($eqLogic->getConfiguration('model'));
+                $eqLogic->setConfiguration('manufacturerType', $manufacturerType);
+                $eqLogic->save(true);
+            }
             $eqLogic->createCmd();
         }
     }
