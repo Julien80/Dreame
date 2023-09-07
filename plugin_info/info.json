@@ -13,9 +13,9 @@
 	"hasOwnDeamon": false,
 	"maxDependancyInstallTime": 20,
 	"changelog": "https://julien80.github.io/dreame/#language#/changelog",
-	"documentation": "https://julien80.github.io/dreame/#language#/",
-	"changelog_beta": "https://julien80.github.io/dreame/#language#/beta/changelog",
-	"documentation_beta": "https://julien80.github.io/dreame/#language#/beta/",
+	"changelog_beta": "https://julien80.github.io/dreame/#language#/changelog_beta",
+	"documentation": "https://julien80.github.io/dreame/#language#/index",
+	"documentation_beta": "https://julien80.github.io/dreame/#language#/index_beta",
 	"link": {
 		"forum": "https://community.jeedom.com/tags/plugin-dreame"
 	},
