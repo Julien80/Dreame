@@ -381,11 +381,19 @@ class dreame extends eqLogic {
                 }
                 log::add(__CLASS__, 'debug', 'rooms => : ' . json_encode($rooms));
 
+                if ($modelType == 'viomivacuum') {
+                    $roomTmp = $rooms;
+                    $rooms = array();
+                    foreach ($roomTmp as $id => $name) {
+                        $rooms[] = array($id, $name);
+                    }
+                }
 
                 foreach ($rooms as $room) {
                     $command = $configFile['rooms']['cmd'];
                     $logicalId = "clean_room_" . $room[0];
-                    $name = "Nettoyer Pièce " . $room[0];
+                    $roomName = ($modelType == 'viomivacuum') ? $room[1] : 'Pièce ' . $room[0];
+                    $name = "Nettoyer " . $roomName;
 
                     log::add(__CLASS__, 'debug', '  -- creating cmd ' . $name);
 
@@ -395,9 +403,10 @@ class dreame extends eqLogic {
                         $cmd->setOrder($order_cmd);
                         $cmd->setEqLogic_id($this->getId());
                         $cmd->setName($name);
-                        $cmd->setConfiguration('roomId', "[" . $room[0] . "]");
                         $cmd->setLogicalId($logicalId);
                     }
+                    $action_arg = str_replace('#room_id#', $room[0], $configFile['rooms']['action_arg']);
+                    $cmd->setConfiguration('roomId', $action_arg);
                     utils::a2o($cmd, $command);
                     $cmd->save();
                     $order_cmd++;
@@ -420,7 +429,7 @@ class dreame extends eqLogic {
 
         if (!empty($ip) && !empty($token)) {
             $call = ($modelType == 'genericmiot' && $cmd != 'status') ? ' call' : '';
-            $val = ($value === '') ? '' :  escapeshellarg($value);
+            $val = ($value === '') ? '' : (is_int($value) ? escapeshellarg($value) : $value);
             $exec = system::getCmdSudo() . " " . self::getVenvPath() . "miiocli -o json_pretty " . $modelType . " --ip " . $ip . " --token " . $token . $call . " " . $cmd . " " . $val .  " >&1 2>" . $errorFile;
             log::add(__CLASS__, 'debug', 'CMD BY ' . $modelType . " => " . $exec);
             exec($exec, $outputArray, $resultCode);
