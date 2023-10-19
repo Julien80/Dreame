@@ -1,4 +1,16 @@
 {
+    "rooms": {
+        "request": "get_rooms",
+        "action_arg": "-r #room_id#",
+        "cmd": {
+            "type": "action",
+            "subtype": "other",
+            "isVisible": 1,
+            "configuration": {
+                "request": "start_with_room"
+            }
+        }
+    },
     "cmds": [
         {
             "logicalId": "battary_life",

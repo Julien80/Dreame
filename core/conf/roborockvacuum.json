@@ -1,6 +1,7 @@
 {
     "rooms": {
         "request": "get_room_mapping",
+        "action_arg": "[#room_id#]",
         "cmd": {
             "type": "action",
             "subtype": "other",
