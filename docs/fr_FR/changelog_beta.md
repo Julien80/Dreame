@@ -4,6 +4,10 @@
 >
 >S'il n'y a pas d'information sur la mise à jour, c'est que celle-ci concerne uniquement de la mise à jour de documentation, de traduction ou de texte.
 
+# 19/10/2023
+
+- Gestion des pièces pour viomivacuum
+
 # 07/09/2023
 
 - Réinstallation des dépendances nécessaire : mise en place d'un venv pour utiliser python 3.8 & co
