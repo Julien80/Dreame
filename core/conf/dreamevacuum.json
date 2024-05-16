@@ -206,7 +206,7 @@
             "subtype": "other",
             "isVisible": 1,
             "configuration": {
-                "request": "locate"
+                "request": "identify"
             }
         },
         {
